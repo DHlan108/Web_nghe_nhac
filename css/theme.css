@@ -1,0 +1,42 @@
+/* ===============================
+   MUSIC APP - GLOBAL THEME
+   =============================== */
+
+:root {
+
+  /* ===== BACKGROUND ===== */
+  --bg-main: #252432;
+  --bg-card: #2d2d39;
+  --bg-glass: rgba(0, 0, 0, 0.2);
+  --bg-input: rgba(0, 0, 0, 0.1);
+
+  /* ===== BRAND COLORS ===== */
+  --primary-pink: #e81cff;
+  --primary-blue: #40c9ff;
+
+  /* gradient chính toàn app */
+  --gradient-main: linear-gradient(
+    -45deg,
+    var(--primary-pink),
+    var(--primary-blue)
+  );
+
+  /* ===== GLOW EFFECT ===== */
+  --glow-pink: #fc00ff;
+  --glow-cyan: #00dbde;
+  --hover-glow: #45f3ff;
+
+  /* ===== TEXT ===== */
+  --text-main: #ffffff;
+  --text-muted: #999999;
+  --text-dark: #111111;
+
+  /* ===== BORDER / SHADOW ===== */
+  --border-light: rgba(255,255,255,0.5);
+  --shadow-inner: inset 0 10px 20px rgba(0,0,0,0.5);
+
+  /* ===== RADIUS ===== */
+  --radius-lg: 20px;
+  --radius-md: 15px;
+  --radius-sm: 12px;
+}
