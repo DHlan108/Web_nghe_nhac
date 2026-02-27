@@ -16,20 +16,22 @@
           <h2>
             Đăng nhập
           </h2>
-          <input type="text" placeholder="Tên đăng nhập">
-          <input type="password" placeholder="Mật khẩu">
-          <input type="submit" id="btnLogin" onclick="xulyDangnhap()" value="Đăng nhập" />
+          <input type="text" id="username" placeholder="Tên đăng nhập">
+          <input type="password" id="password" placeholder="Mật khẩu">
+
+          <input type="submit" id="btnLogin" onclick="event.preventDefault(); xulyDangnhap()" value="Đăng nhập" />
+          
           <div class="btns">
-            <a href="#">Quên mật khẩu?</a>
+            <a href="forgot_password.html">Quên mật khẩu?</a>
             <span>
-              Bạn chưa có tài khoản?<a href="#">Đăng kí</a>
+              Bạn chưa có tài khoản?<a href="register.html">Đăng kí</a>
             </span>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script src="js/auth.js"></script>
+  <script src="../js/auth.js"></script>
 </body>
 
 </html>
