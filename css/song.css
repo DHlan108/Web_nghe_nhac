@@ -58,7 +58,7 @@ button.normal {
 
 
 body {
-  margin-left: 200px;
+  margin-left: 160px;
 }
 
 /* header */
@@ -66,7 +66,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 80px;
+  padding: 20px clamp(20px, 5vw, 80px);
   background: rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
   z-index: 999;
@@ -81,9 +81,11 @@ body {
   background: linear-gradient(
     -45deg,
     var(--primary-pink),
-    var(--primary-blue));
+    var(--primary-blue));;
   border-radius: 30px;
-  padding: 3px;
+  padding: 3px 8px 3px 3px;
+
+  position: relative;
 }
 
 .search-box input{
@@ -91,8 +93,11 @@ body {
   outline: none;
   padding: 10px;
   font-size: 14px;
-  width: 400px;
-  border-radius: 30px 0 0 30px;
+  width: 500px;
+  border-radius: 30px;
+
+  z-index: 1; 
+  position: relative;
 }
 
 .search-box button {
@@ -100,12 +105,15 @@ body {
   background: linear-gradient(
     -45deg,
     var(--primary-pink),
-    var(--primary-blue));
+    var(--primary-blue));;
   border-radius: 50%;
   width: 35px;
   height: 35px;
   cursor: pointer;
   transition: 0.3s;
+
+  margin-left: -40px;
+  z-index: 2;
 }
 
 .search-box button:hover {
@@ -118,7 +126,7 @@ body {
   top: 0;
   left: 0;
   height: 100vh;
-  width: 200px;
+  width: 160px;
   background-color: #2d2d39;
   display: flex;
   flex-direction: column;
@@ -158,7 +166,7 @@ body {
 }
 
 .logout {
-  background: #e81cff;
+  background: #e81cff7d;
   color: white;
   border: none;
   padding: 10px 18px;
@@ -211,6 +219,7 @@ body {
 #feature .fe-box-1 h6 {
   font-size: 30px;
   color: #fff;
+  white-space: nowrap;
 }
 
 #feature .fe-box-2{
@@ -232,6 +241,7 @@ body {
 #feature .fe-box-2 h6 {
   font-size: 30px;
   color: #fff;
+  white-space: nowrap;
 }
 
 #feature .fe-box-3{
@@ -253,31 +263,33 @@ body {
 #feature .fe-box-3 h6 {
   font-size: 30px;
   color: #fff;
+  white-space: nowrap;
 }
 
 /* Bài hát nổi bật */
 #product1 {
     text-align: center;
+    white-space: nowrap;
 }
 
 #product1 .pro-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 25px;
-    padding-top: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    overflow-x: auto;
+    padding: 20px;
 }
 
 #product1 .pro {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 380px;
+  text-align: left;
+  align-items: center;
+  gap: 15px;
   padding: 15px;
-  border: 1px solid #e1d7e2;
-  border-radius: 25px;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.02);
-  transition: 0.3s ease;
+  transition: 0.3 ease;
+  position: relative;
 }
 
 #product1 .pro:hover {
@@ -289,33 +301,84 @@ body {
   box-shadow: 0 10 25px rgba(0, 0, 0, 0.15);
 }
 
+#product1 .img-box {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+#product1 .img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+#product1 .img-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+#product1 .play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 28px;
+  height: 28px;
+  color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  opacity: 0;
+  transition: 0.3s ease;
+}
+}
+
+#product1 .pro:hover .img-box::after {
+  opacity: 1;
+}
+
+#product1 .pro:hover .play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
 #product1 .pro img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 8px;
 }
 
 #product1 .pro .des {
-    text-align: start;
-    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
 }
 
 #product1 .pro .des span {
     color: black;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 #product1 .pro .des h5 {
   font-size: 20px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 48px; 
+  margin: 0;
+}
+
+#product1 .pro .des small {
+  font-size: 12px;
+  color: #000;
 }
 
 #product1 h2 {
     color: #111111;
+    padding-bottom: 30px;
 }
 
