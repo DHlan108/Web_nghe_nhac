@@ -10,13 +10,18 @@
     <div class="container">
         <div class="box">
             <div class="inner-box">
-                <div class="form">
+                <div class="form register-form">
                     <h2>Đăng ký</h2>
                     
                     <input type="text" id="reg-username" placeholder="Tên đăng nhập">
                     <input type="email" id="reg-email" placeholder="Email">
                     <input type="password" id="reg-password" placeholder="Mật khẩu">
-                    
+                    <div class="role-group">
+                        <select name="role" required>
+                            <option value="user">Người dùng</option>
+                            <option value="admin">Quản trị hệ thống</option>
+                        </select>
+                    </div>
                     <input type="submit" id="btnRegister" onclick="event.preventDefault(); xulyDangky()" value="Đăng ký" />
                     
                     <div class="btns">
