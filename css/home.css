@@ -58,7 +58,7 @@ button.normal {
 }
 
 body {
-  width: 100%;
+  margin-left: 200px;
 }
 
 /* header */
@@ -67,7 +67,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 20px 80px;
-  background: #e3e6f2;
+  background: rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
   z-index: 999;
   position: sticky;
@@ -75,40 +75,106 @@ body {
   left: 0;
 }
 
-#navbar {
+.search-box {
   display: flex;
   align-items: center;
-  justify-content: center;
+  background: linear-gradient(
+    -45deg,
+    var(--primary-pink),
+    var(--primary-blue));;
+  border-radius: 30px;
+  padding: 3px;
+}
+
+.search-box input{
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 14px;
+  width: 400px;
+  border-radius: 30px 0 0 30px;
+}
+
+.search-box button {
+  border: none;
+  background: linear-gradient(
+    -45deg,
+    var(--primary-pink),
+    var(--primary-blue));;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-box button:hover {
+  background: #40c9ff;
+  transform: scale(1.1);
+}
+
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 200px;
+  background-color: #2d2d39;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 40px;
 }
 
 #navbar li {
   list-style: none;
-  padding: 0 20px;
-  position: relative;
+  width: 100%;
+  padding: 15px 30px;
 }
 
 #navbar li a {
   text-decoration: none;
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: white;
+  display: block;
   transition: 0.3s ease;
 }
 
 #navbar li a:hover,
 #navbar li a.active {
-  color: #088178;
+  color: #e81cff;
 }
 
 #navbar li a.active::after,
 #navbar li.a:hover::after {
   content: "";
   width: 30%;
-  background: #088178;
+  background: #bb09cf;
   height: 2px;
   position: absolute;
   bottom: -4px;
   left: 20px;
+}
+
+.logout {
+  background: #e81cff7d;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s ease;
+}
+
+.logout:hover {
+  background: #e81cff;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #c22ad36e;
 }
 
 .logo {
@@ -117,7 +183,10 @@ body {
 }
 
 #hero {
-  background-image: url("../img/bia.jpg");
+  background: linear-gradient(
+    -45deg,
+    var(--primary-pink),
+    var(--primary-blue));
   height: 90vh;
   width: 100%;
   background-size: cover;
@@ -138,12 +207,12 @@ body {
 }
 
 #hero p {
-  color: #33cc66;
+  color: #fff;
   font-size: 50px;
 }
 
 .play-btn {
-  background: #33cc99;
+  background: #2d2d39;
   color: white;
   font-size: 28px;
   font-weight: bold;
@@ -155,7 +224,7 @@ body {
 }
 
 .play-btn:hover {
-  background-color: #00b386;
+  background-color: #2d2d39;
   transform: scale(1.15);
-  box-shadow: 0 0 20px #33cc99, 0 0 40px #33cc99, 0 0 60px #00ffcc;
+  box-shadow: 0 0 20px #40c9ff, 0 0 40px #00dbde, 0 0 60px #45f3ff;
 }
