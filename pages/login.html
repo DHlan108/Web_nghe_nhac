@@ -18,13 +18,19 @@
           </h2>
           <input type="text" id="username" placeholder="Tên đăng nhập">
           <input type="password" id="password" placeholder="Mật khẩu">
+          <div class="role-group">
+              <select name="role" required>
+                  <option value="user">Người dùng</option>
+                  <option value="admin">Quản trị hệ thống</option>
+              </select>
+          </div>
 
           <input type="submit" id="btnLogin" onclick="event.preventDefault(); xulyDangnhap()" value="Đăng nhập" />
           
           <div class="btns">
             <a href="forgot_password.html">Quên mật khẩu?</a>
             <span>
-              Bạn chưa có tài khoản?<a href="register.html">Đăng kí</a>
+              Bạn chưa có tài khoản?<a href="register.html">Đăng ký</a>
             </span>
           </div>
         </div>

@@ -93,10 +93,20 @@ body {
   width: 80%;
   transition: 0.5s;
 }
+/* REGISTER PAGE ONLY */
+
+.register-form {
+  gap: 6px;   /* giảm khoảng cách */
+}
+
+.register-form input,
+.register-form .role-group {
+  margin-bottom: 5px;
+}
 /*title*/
 .form h2 {
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.1em;
   font-weight: 600;
   color: var(--primary-pink);
 }
@@ -113,6 +123,32 @@ body {
 
 .form input::placeholder {
   color: var(--text-muted);
+}
+/* ROLE SELECT */
+.role-group {
+  width: 100%;
+}
+
+.role-group select {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.1);
+  color: #fff;
+  cursor: pointer;
+}
+
+.role-group select option {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* Hover effect */
+.role-group select:hover {
+  box-shadow: 0 0 5px var(--primary-pink);
 }
 /*button*/
 .form input[type="submit"] {
@@ -139,6 +175,7 @@ body {
   width: 100%;
   align-items: center;
   justify-content: center;
+  gap: 5px;
 }
 
 .btns> {
