@@ -3,18 +3,21 @@ async function xulyDangnhap() {
     // 1. Lấy dữ liệu từ 2 ô input
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
-
+    const role = document.getElementById("login-role").value;
     // Kiểm tra xem người dùng có để trống không
     if (user === "" || pass === "") {
         alert("Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!");
         return;
     }
-
+    if (!role) {
+    alert("Vui lòng chọn vai trò!");
+    return;
+    }
     // 2. Gói dữ liệu để gửi đi
     const formData = new FormData();
     formData.append('username', user);
     formData.append('password', pass);
-
+    formData.append('role', role);
     // 3. Gửi sang PHP bằng Fetch API
     try {
         const response = await fetch('../api/login.php', {
@@ -43,9 +46,9 @@ async function xulyDangky() {
     const user = document.getElementById("reg-username").value;
     const email = document.getElementById("reg-email").value;
     const pass = document.getElementById("reg-password").value;
-
+    const role = document.getElementById("reg-role").value;
     // 2. Kiểm tra không được để trống
-    if (user === "" || email === "" || pass === "") {
+    if (user === "" || email === "" || pass === ""|| role === "") {
         alert("Vui lòng điền đầy đủ thông tin!");
         return;
     }
@@ -55,7 +58,7 @@ async function xulyDangky() {
     formData.append('username', user);
     formData.append('email', email);
     formData.append('password', pass);
-
+    formData.append('role', role);
     // 4. Gửi sang file PHP
     try {
         const response = await fetch('../api/register.php', {
