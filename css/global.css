@@ -1,1 +1,85 @@
 /*layout chung*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+body{
+  margin:0;
+  padding:0;
+  overflow-x:hidden;
+}
+.layout{
+  display: flex;
+  width:100%;
+}
+#sidebar{
+  width:200px;
+  flex-shrink:0;
+}
+.main{
+  flex: 1;
+  display: flex;
+  min-width:0;
+  flex-direction: column;
+}
+
+.content{
+  flex: 1;
+  overflow-x: auto;
+  width:100%;
+}
+
+/* hero section */
+
+#hero {
+  background: linear-gradient(
+    -45deg,
+    var(--primary-pink),
+    var(--primary-blue)
+  );
+  height: 90vh;
+  width: 100%;
+  background-size: cover;
+  background-position: top 25% right 0;
+  padding: 0 80px;
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+}
+
+#hero h2 {
+  font-size: 150px;
+  padding-bottom: 70px;
+  white-space: nowrap;
+}
+
+#hero p {
+  color: #fff;
+  font-size: 50px;
+  white-space: nowrap;
+}
+
+.play-btn {
+  background: #2d2d39;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  padding: 20px 50px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.play-btn:hover {
+  background-color: #2d2d39;
+  transform: scale(1.15);
+  box-shadow: 0 0 20px #40c9ff, 0 0 40px #00dbde, 0 0 60px #45f3ff;
+}

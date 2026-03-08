@@ -4,366 +4,359 @@
     <head>
     <meta charset="UTF-8">
     <title>My Music</title>
-    <link rel="stylesheet" href="../css/song.css">
     <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/component.css">
     <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/song.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+<div class="layout">
 
-    <!-- HEADER -->
-    <section id="header">
-        <a href="#"><img src="../img/logo.jpg" class="logo"></a>
+    <!-- SIDEBAR -->
+    <div id="sidebar-container"></div>
 
-        <div class="search-box">
-            <input type="text" placeholder="Tìm bài hát, nghệ sĩ...">
-            <button>
-                <i class="fa-solid fa-search"></i>
-            </button>
-        </div>
+    <!-- MAIN -->
+    <div class="main">
 
-        <div>
-            <ul id="navbar">
-                <li><a href="home.html">TRANG CHỦ</a></li>
-                <li><a class="active" href="song.html">BÀI HÁT</a></li>
-                <li><a href="album.html">ALBUM</a></li>
-                <li><a href="artist.html">NGHỆ SĨ</a></li>
-                <li><a href="playlist.html">THƯ VIỆN</a></li>
-                <li><a href="profile.html">TÀI KHOẢN</a></li>
-            </ul>
-        </div>
+        <!-- HEADER -->
+        <div id="navbar-container"></div>
 
-        <button class="logout">
-            <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
+        <!-- CONTENT -->
+        <main class="content">
 
-    </section>
+            <!-- Danh mục -->
+            <section id="feature" class="section-p1">
+                <div class="fe-box-1">
+                    <h6>Bài Hát Nổi Bật</h6>
+                </div>
 
-    <!-- Danh mục -->
-     <section id="feature" class="section-p1">
-        <div class="fe-box-1">
-            <h6>Bài Hát Nổi Bật</h6>
-        </div>
+                <div class="fe-box-2">
+                    <h6>Bài Hát Mới Ra</h6>
+                </div>
 
-        <div class="fe-box-2">
-            <h6>Bài Hát Mới Ra</h6>
-        </div>
+                <div class="fe-box-3">
+                    <h6>Tất Cả Bài Hát</h6>
+                </div>
+            </section>
 
-        <div class="fe-box-3">
-            <h6>Tất Cả Bài Hát</h6>
-        </div>
-     </section>
+            <!-- Bài hát nổi bật-->
+            <section id="product1" class="section-p1">
+                <h2>Bài Hát Nổi Bật</h2>
+                
+                <div class="pro-container">
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/lover.png" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Daylight</h5>
+                            <span>Taylor Swift</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-    <!-- Bài hát nổi bật-->
-     <section id="product1" class="section-p1">
-        <h2>Bài Hát Nổi Bật</h2>
-        
-        <div class="pro-container">
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/lover.png" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Daylight</h5>
-                    <span>Taylor Swift</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/lover.png" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Cornelia Street</h5>
+                            <span>Taylor Swift</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/lover.png" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Cornelia Street</h5>
-                    <span>Taylor Swift</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/coup d'etat.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>CROOKED</h5>
+                            <span>G-DRAGON</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/coup d'etat.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>CROOKED</h5>
-                    <span>G-DRAGON</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/m-tp.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Buông Đôi Tay Nhau Ra</h5>
+                            <span>Sơn Tùng M-TP</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/m-tp.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Buông Đôi Tay Nhau Ra</h5>
-                    <span>Sơn Tùng M-TP</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/batnolen.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>DANCING IN THE DARK</h5>
+                            <span>SOOBIN</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/batnolen.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>DANCING IN THE DARK</h5>
-                    <span>SOOBIN</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/99.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Anh Đã Ổn Hơn</h5>
+                            <span>RTP MCK</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/99.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Anh Đã Ổn Hơn</h5>
-                    <span>RTP MCK</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/99.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Badtrip</h5>
+                            <span>RTP MCK</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/99.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Badtrip</h5>
-                    <span>RTP MCK</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/baotang.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Nếu Những Tiếc Nuối</h5>
+                            <span>Vũ.</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/baotang.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
                 </div>
-                <div class="des">
-                    <h5>Nếu Những Tiếc Nuối</h5>
-                    <span>Vũ.</span>
-                    <small>2019</small>
-                </div>
-            </div>
+            </section>
 
-        </div>
-     </section>
+            <!-- Bài hát mới ra -->
+            <section id="product1" class="section-p1">
+                <h2>Bài Hát Mới Ra</h2>
+                
+                <div class="pro-container">
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/lover.png" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Daylight</h5>
+                            <span>Taylor Swift</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-     <!-- Bài hát mới ra -->
-      <section id="product1" class="section-p1">
-        <h2>Bài Hát Mới Ra</h2>
-        
-        <div class="pro-container">
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/lover.png" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Daylight</h5>
-                    <span>Taylor Swift</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/lover.png" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Cornelia Street</h5>
+                            <span>Taylor Swift</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/lover.png" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Cornelia Street</h5>
-                    <span>Taylor Swift</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/coup d'etat.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>CROOKED</h5>
+                            <span>G-DRAGON</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/coup d'etat.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>CROOKED</h5>
-                    <span>G-DRAGON</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/m-tp.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Buông Đôi Tay Nhau Ra</h5>
+                            <span>Sơn Tùng M-TP</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/m-tp.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Buông Đôi Tay Nhau Ra</h5>
-                    <span>Sơn Tùng M-TP</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/batnolen.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>DANCING IN THE DARK</h5>
+                            <span>SOOBIN</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/batnolen.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>DANCING IN THE DARK</h5>
-                    <span>SOOBIN</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/99.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Anh Đã Ổn Hơn</h5>
+                            <span>RTP MCK</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/99.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Anh Đã Ổn Hơn</h5>
-                    <span>RTP MCK</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/99.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Badtrip</h5>
+                            <span>RTP MCK</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/99.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Badtrip</h5>
-                    <span>RTP MCK</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/baotang.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Nếu Những Tiếc Nuối</h5>
+                            <span>Vũ.</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/baotang.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
                 </div>
-                <div class="des">
-                    <h5>Nếu Những Tiếc Nuối</h5>
-                    <span>Vũ.</span>
-                    <small>2019</small>
-                </div>
-            </div>
+            </section>
 
-        </div>
-      </section>
+            <section id="product1" class="section-p1">
+                <h2>Tất Cả Bài Hát</h2>
+                
+                <div class="pro-container">
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/lover.png" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Daylight</h5>
+                            <span>Taylor Swift</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-      <section id="product1" class="section-p1">
-        <h2>Tất Cả Bài Hát</h2>
-        
-        <div class="pro-container">
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/lover.png" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Daylight</h5>
-                    <span>Taylor Swift</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/lover.png" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Cornelia Street</h5>
+                            <span>Taylor Swift</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/lover.png" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Cornelia Street</h5>
-                    <span>Taylor Swift</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/coup d'etat.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>CROOKED</h5>
+                            <span>G-DRAGON</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/coup d'etat.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>CROOKED</h5>
-                    <span>G-DRAGON</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/m-tp.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Buông Đôi Tay Nhau Ra</h5>
+                            <span>Sơn Tùng M-TP</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/m-tp.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Buông Đôi Tay Nhau Ra</h5>
-                    <span>Sơn Tùng M-TP</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/batnolen.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>DANCING IN THE DARK</h5>
+                            <span>SOOBIN</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/batnolen.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>DANCING IN THE DARK</h5>
-                    <span>SOOBIN</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/99.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Anh Đã Ổn Hơn</h5>
+                            <span>RTP MCK</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/99.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Anh Đã Ổn Hơn</h5>
-                    <span>RTP MCK</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/99.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Badtrip</h5>
+                            <span>RTP MCK</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/99.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
-                </div>
-                <div class="des">
-                    <h5>Badtrip</h5>
-                    <span>RTP MCK</span>
-                    <small>2019</small>
-                </div>
-            </div>
+                    <div class="pro">
+                        <div class="img-box">
+                            <img src="../img/baotang.jpg" alt="">
+                            <div class="play"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                        <div class="des">
+                            <h5>Nếu Những Tiếc Nuối</h5>
+                            <span>Vũ.</span>
+                            <small>2019</small>
+                        </div>
+                    </div>
 
-            <div class="pro">
-                <div class="img-box">
-                    <img src="../img/baotang.jpg" alt="">
-                    <div class="play"><i class="fa-solid fa-play"></i></div>
                 </div>
-                <div class="des">
-                    <h5>Nếu Những Tiếc Nuối</h5>
-                    <span>Vũ.</span>
-                    <small>2019</small>
-                </div>
-            </div>
+            </section>
+        </main>
 
-        </div>
-      </section>
+    </div>
+
+</div>
+    <!-- PLAYER -->
+    <div id="player-container"></div>
+<script src="../js/loadComponent.js"></script>
 </body>
 </html>
