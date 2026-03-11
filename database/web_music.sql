@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 19, 2026 at 10:34 AM
+-- Generation Time: Mar 11, 2026 at 08:19 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -107,30 +107,31 @@ CREATE TABLE `songs` (
   `artist_id` int(11) DEFAULT NULL,
   `album_id` int(11) DEFAULT NULL,
   `duration` int(11) DEFAULT NULL,
-  `release_year` int(11) DEFAULT NULL,
+  `release_date` date DEFAULT NULL,
   `file_path` varchar(255) NOT NULL,
-  `image_path` varchar(255) DEFAULT NULL
+  `image_path` varchar(255) DEFAULT NULL,
+  `listens` bigint(20) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `songs`
 --
 
-INSERT INTO `songs` (`id`, `title`, `artist_id`, `album_id`, `duration`, `release_year`, `file_path`, `image_path`) VALUES
-(1, 'người điên', 7, 7, 227, 2023, 'music/nguoi_dien.mp3', 'images/nguoi_dien.jpg'),
-(2, 'nữ siêu anh  hùng', 7, 7, 331, 2023, 'music/nu_sieu_anh_hung.mp3', 'images/nu_sieu_anh_hung.jpg'),
-(3, 'Anh đã ổn hơn', 6, 6, 314, 2023, 'music/anh_da_on_hon.mp3', 'images/anh_da_on_hon.jpg'),
-(4, 'Cuốn Cho Anh Một Điếu Nữa Đi', 6, 6, 305, 2023, 'music/cuon_cho_anh_mot_dieu_nua_di.mp3', 'images/cuon_cho_anh_mot_dieu_nua_di.jpg'),
-(5, 'Mây Khóc Vì Điều Gì', 5, 5, 334, 2024, 'music/may_khoc_vi_dieu_gi.mp3', 'images/may_khoc_vi_dieu_gi.jpg'),
-(6, 'Nếu Những Tiếc Nuối', 5, 5, 420, 2024, 'music/neu_nhung_tiec_nuoi.mp3', 'images/neu_nhung_tiec_nuoi.jpg'),
-(7, 'Sunset In The City - Deluxe Version', 4, 4, 345, 2024, 'music/sunset_in_the_city.mp3', 'images/sunset_in_the_city.jpg'),
-(8, 'DANCING IN THE DARK', 4, 4, 347, 2024, 'music/dancing_in_the_dark.mp3', 'images/dancing_in_the_dark.jpg'),
-(9, 'Buông Đôi Tay Nhau Ra', 3, 3, 347, 2017, 'music/buong_doi_tay_nhau_ra.mp3', 'images/buong_doi_tay_nhau_ra.jpg'),
-(10, 'Âm Thầm Bên Em', 3, 3, 453, 2017, 'music/am_tham_ben_em.mp3', 'images/am_tham_ben_em.jpg'),
-(11, 'Cornelia Street', 2, 2, 447, 2019, 'music/cornelia_street.mp3', 'images/cornelia_street.jpg'),
-(12, 'Daylight', 2, 2, 453, 2019, 'music/daylight.mp3', 'images/daylight.jpg'),
-(13, 'CROOKED', 1, 1, 344, 2013, 'music/crooked.mp3', 'images/crooked.jpg'),
-(14, 'BLACK', 1, 1, 323, 2013, 'music/black.mp3', 'images/black.jpg');
+INSERT INTO `songs` (`id`, `title`, `artist_id`, `album_id`, `duration`, `release_date`, `file_path`, `image_path`, `listens`) VALUES
+(1, 'người điên', 7, 7, 227, '2023-08-16', 'music/nguoi_dien.mp3', 'ai.jpg', 0),
+(2, 'nữ siêu anh  hùng', 7, 7, 331, '2023-08-16', 'music/nu_sieu_anh_hung.mp3', 'ai.jpg', 0),
+(3, 'Anh đã ổn hơn', 6, 6, 314, '2023-03-02', 'music/anh_da_on_hon.mp3', '99.jpg', 0),
+(4, 'Cuốn Cho Anh Một Điếu Nữa Đi', 6, 6, 305, '2023-03-02', 'music/cuon_cho_anh_mot_dieu_nua_di.mp3', '99.jpg', 0),
+(5, 'Mây Khóc Vì Điều Gì', 5, 5, 334, '2024-09-27', 'music/may_khoc_vi_dieu_gi.mp3', 'baotang.jpg', 0),
+(6, 'Nếu Những Tiếc Nuối', 5, 5, 420, '2024-09-27', 'music/neu_nhung_tiec_nuoi.mp3', 'baotang.jpg', 0),
+(7, 'Sunset In The City - Deluxe Version', 4, 4, 345, '2024-06-20', 'music/sunset_in_the_city.mp3', 'batnolen.jpg', 0),
+(8, 'DANCING IN THE DARK', 4, 4, 347, '2024-06-20', 'music/dancing_in_the_dark.mp3', 'batnolen.jpg', 0),
+(9, 'Buông Đôi Tay Nhau Ra', 3, 3, 347, '2017-04-01', 'music/buong_doi_tay_nhau_ra.mp3', 'm-tp.jpg', 0),
+(10, 'Âm Thầm Bên Em', 3, 3, 453, '2023-04-01', 'music/am_tham_ben_em.mp3', 'm-tp.jpg', 0),
+(11, 'Cornelia Street', 2, 2, 447, '2019-08-23', 'music/cornelia_street.mp3', 'lover.png', 0),
+(12, 'Daylight', 2, 2, 453, '2019-08-23', 'music/daylight.mp3', 'lover.png', 0),
+(13, 'CROOKED', 1, 1, 344, '2013-09-05', 'music/crooked.mp3', 'coup d\'etat.jpg', 0),
+(14, 'BLACK', 1, 1, 323, '2013-09-05', 'music/black.mp3', 'coup d\'etat.jpg', 0);
 
 -- --------------------------------------------------------
 

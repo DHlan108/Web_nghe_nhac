@@ -18,11 +18,12 @@ body{
   width:200px;
   flex-shrink:0;
 }
-.main{
+.main {
   flex: 1;
   display: flex;
-  min-width:0;
+  min-width: 0;
   flex-direction: column;
+  padding-top: 100px; 
 }
 
 .content{

@@ -2,7 +2,6 @@
 header('Content-Type: application/json; charset=utf-8');
 require_once 'db_connect.php';
 
-// Dùng JOIN để lấy tên ca sĩ từ bảng artists dựa vào artist_id
 $sql = "SELECT 
             songs.id,
             songs.title,
@@ -11,11 +10,14 @@ $sql = "SELECT
             songs.release_date,
             artists.name AS artist_name
         FROM songs
-        JOIN artists ON songs.artist_id = artists.id";
-        
+        JOIN artists ON songs.artist_id = artists.id
+        ORDER BY songs.release_date DESC
+        LIMIT 6";
+
 $result = $conn->query($sql);
 
 $songs = array();
+
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $songs[] = $row;
