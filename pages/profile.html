@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/theme.css">
     <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="../css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
@@ -31,17 +30,19 @@
             <div class="box">
             <div class="inner-box">
                 <div class="form">
-                <h2>
-                    Thông tin cá nhân 
-                </h2>
-                <input type="text" id="username" placeholder="Tên đăng nhập">
-                <input type="password" id="password" placeholder="Mật khẩu">
-                <div class="role-group">
-                    
-                </div>
-                <div class="btns">
-                    <a href="forgot_password.html">Bạn muốn đổi mật khẩu?</a>
-                </div>
+                    <div class="profile-card">
+
+                    <h2>Thông Tin Cá Nhân</h2>
+
+                    <p>Tên người dùng: <span id="username"></span></p>
+
+                    <p>Email: <span id="email"></span></p>
+
+                    <p>Vai trò: <span id="role"></span></p>
+
+                    </div>
+
+                    </div>
                 </div>
             </div>
             </div>
@@ -54,6 +55,6 @@
     <!-- PLAYER -->
     <div id="player-container"></div>
 <script src="../js/loadComponent.js"></script>
-
+<script src="../js/loadProfile.js"></script>
 </body>
 </html>
