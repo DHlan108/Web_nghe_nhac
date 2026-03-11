@@ -31,7 +31,7 @@ async function xulyDangnhap() {
         if (result.success) {
             alert("Đăng nhập thành công với quyền: " + result.role);
             // Chuyển hướng sang trang chủ (bộ khung index.html)
-            window.location.href = "../index.html"; 
+            window.location.href = "home.html"; 
         } else {
             alert("Đăng nhập thất bại: " + result.message);
         }
