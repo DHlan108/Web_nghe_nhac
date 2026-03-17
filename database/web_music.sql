@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2026 at 08:19 AM
+-- Generation Time: Mar 17, 2026 at 04:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -31,21 +31,22 @@ CREATE TABLE `albums` (
   `id` int(11) NOT NULL,
   `title` varchar(150) NOT NULL,
   `artist_id` int(11) DEFAULT NULL,
-  `release_year` int(11) DEFAULT NULL
+  `release_year` int(11) DEFAULT NULL,
+  `cover_image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `albums`
 --
 
-INSERT INTO `albums` (`id`, `title`, `artist_id`, `release_year`) VALUES
-(1, 'COUP D`ETAT', 1, 2013),
-(2, 'Lover', 2, 2019),
-(3, 'm-tp M-TP', 3, 2017),
-(4, 'BẬT NÓ LÊN', 4, 2024),
-(5, 'Bảo tàng của nuối tiếc', 5, 2024),
-(6, '99%', 6, 2023),
-(7, 'ái', 7, 2023);
+INSERT INTO `albums` (`id`, `title`, `artist_id`, `release_year`, `cover_image`) VALUES
+(1, 'COUP D`ETAT', 1, 2013, 'coup d\'etat.jpg'),
+(2, 'Lover', 2, 2019, 'lover.png'),
+(3, 'm-tp M-TP', 3, 2017, 'm-tp.jpg'),
+(4, 'BẬT NÓ LÊN', 4, 2024, 'batnolen.jpg'),
+(5, 'Bảo tàng của nuối tiếc', 5, 2024, 'baotang.jpg'),
+(6, '99%', 6, 2023, '99.jpg'),
+(7, 'ái', 7, 2023, 'ai.jpg');
 
 -- --------------------------------------------------------
 
@@ -56,21 +57,22 @@ INSERT INTO `albums` (`id`, `title`, `artist_id`, `release_year`) VALUES
 CREATE TABLE `artists` (
   `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL,
-  `country` varchar(50) NOT NULL
+  `country` varchar(50) NOT NULL,
+  `avatar` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `artists`
 --
 
-INSERT INTO `artists` (`id`, `name`, `country`) VALUES
-(1, 'G-Dragon', 'Hàn Quốc'),
-(2, 'Taylor Swift', 'Hoa Kỳ'),
-(3, 'Sơn Tùng MTP', 'Việt Nam'),
-(4, 'SOOBIN', 'Việt Nam'),
-(5, 'VŨ', 'Việt Nam'),
-(6, 'RPT MCK', 'Việt Nam'),
-(7, 'tlinh', 'Việt Nam');
+INSERT INTO `artists` (`id`, `name`, `country`, `avatar`) VALUES
+(1, 'G-Dragon', 'Hàn Quốc', 'gd.jpg'),
+(2, 'Taylor Swift', 'Hoa Kỳ', 'taylorswift.jpg'),
+(3, 'Sơn Tùng MTP', 'Việt Nam', 'sontung.jpg'),
+(4, 'SOOBIN', 'Việt Nam', 'soobin.jpg'),
+(5, 'VŨ', 'Việt Nam', 'vu.jpg'),
+(6, 'RPT MCK', 'Việt Nam', 'mck.jpg'),
+(7, 'tlinh', 'Việt Nam', 'tlinh.jpg');
 
 -- --------------------------------------------------------
 
@@ -144,16 +146,18 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('user','admin') DEFAULT 'user'
+  `role` enum('user','admin') DEFAULT 'user',
+  `ava_user` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
-(1, 'admin01', 'admin01@gmail.com', '$2a$10$abcxyzHashGia', 'admin'),
-(2, 'user01', 'user01@gmail.com', '$2a$10$abcxyzHashGia', 'user');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `ava_user`) VALUES
+(1, 'admin01', 'admin01@gmail.com', '$2a$10$abcxyzHashGia', 'admin', NULL),
+(2, 'user01', 'user01@gmail.com', '$2a$10$abcxyzHashGia', 'user', NULL),
+(3, 'maichi', 'mchi17082005@gmail.com', '$2y$10$f8oBZ4ZrLW3Y7Kv52EYZM.ZuV.6Oq3pFhqyws1v27nC7dTSgeVVUq', 'user', NULL);
 
 --
 -- Indexes for dumped tables
@@ -234,7 +238,7 @@ ALTER TABLE `songs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
