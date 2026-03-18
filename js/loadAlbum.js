@@ -1,22 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
+  fetch("/Web_nghe_nhac/api/get_album.php")
+    .then((res) => res.json())
 
-fetch("../api/get_album.php")
+    .then((data) => {
+      if (!data.success) return;
 
-.then(res => res.json())
+      const container = document.getElementById("all-album-list");
 
-.then(data => {
-
-    if(!data.success) return;
-
-    const container = document.getElementById("album-container");
-
-    data.albums.forEach(album => {
-
+      data.albums.forEach((album) => {
         const html = `
         <div class="pro">
 
             <div class="img-box">
-                <img src="../img/${album.cover}" alt="">
+                <img src="../img/${album.cover_image}" alt="">
                 <div class="play">
                     <i class="fa-solid fa-play"></i>
                 </div>
@@ -24,7 +20,7 @@ fetch("../api/get_album.php")
 
             <div class="des">
                 <h5>${album.title}</h5>
-                <span>${album.artist}</span>
+                <span>${album.artist_name}</span>
                 <small>${album.release_year}</small>
             </div>
 
@@ -32,9 +28,6 @@ fetch("../api/get_album.php")
         `;
 
         container.innerHTML += html;
-
+      });
     });
-
-});
-
 });
