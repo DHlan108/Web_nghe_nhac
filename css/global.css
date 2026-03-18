@@ -1,4 +1,10 @@
+
+html{
+  scroll-behavior: smooth;
+}
+
 /*layout chung*/
+
 * {
   margin: 0;
   padding: 0;

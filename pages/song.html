@@ -31,17 +31,19 @@
 
             <!-- Danh mục -->
             <section id="feature" class="section-p1">
-                <div class="fe-box-1">
+
+                <div class="fe-box-1" onclick="scrollToSection('featured-songs')">
                     <h6>Bài Hát Nổi Bật</h6>
                 </div>
 
-                <div class="fe-box-2">
+                <div class="fe-box-2" onclick="scrollToSection('new-songs')">
                     <h6>Bài Hát Mới Ra</h6>
                 </div>
 
-                <div class="fe-box-3">
+                <div class="fe-box-3" onclick="scrollToSection('all-songs')">
                     <h6>Tất Cả Bài Hát</h6>
                 </div>
+
             </section>
 
     <!-- Bài hát nổi bật-->
@@ -78,6 +80,16 @@
     <script src="../js/loadComponent.js"></script>
     <script src="../js/song.js"></script>
 
-            
+    <script>
+    function scrollToSection(id){
+        const section = document.getElementById(id);
+
+        window.scrollTo({
+            top: section.offsetTop - 100,
+            behavior: "smooth"
+        });
+    }
+    </script>
+
 </body>
 </html>

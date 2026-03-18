@@ -8,7 +8,7 @@ $sql = "SELECT
             songs.title,
             songs.file_path,
             songs.image_path,
-            songs.release_date,
+            YEAR(songs.release_date) AS release_year,
             artists.name AS artist_name
         FROM songs
         JOIN artists ON songs.artist_id = artists.id";

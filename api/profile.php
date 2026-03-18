@@ -15,7 +15,7 @@ if (!$user_id) {
     exit;
 }
 
-$sql = "SELECT id, username, email, role FROM users WHERE id = ?";
+$sql = "SELECT id, username, email, role, ava_user FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -32,8 +32,10 @@ if ($result->num_rows > 0) {
             'username' => $user['username'],
             'email' => $user['email'],
             'role' => $user['role'],
+            'ava_user' => $user['ava_user']
         ]
     ]);
+
 
 } else {
 
