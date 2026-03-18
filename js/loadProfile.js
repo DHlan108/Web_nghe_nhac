@@ -6,22 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("edit-modal");
     const cancelBtn = document.getElementById("cancel-btn");
     const saveBtn = document.getElementById("save-btn");
-
-    const avatarInput = document.getElementById("edit-avatar");
-    const avatarPreview = document.getElementById("edit-avatar-preview");
-
-    if (avatarPreview && avatar) {
-        avatarPreview.src = avatar.src;
-    }
-
-    if (avatarInput) {
-        avatarInput.onchange = () => {
-            const file = avatarInput files[0];
-            if (file) {
-                avatarPreview.src = URL.createObjectURL(file);
-            }
-        };
-    }
+    
 
     // bật form
     editBtn.onclick = () => {
