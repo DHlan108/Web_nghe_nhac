@@ -29,6 +29,11 @@ async function xulyDangnhap() {
 
         // 4. Xử lý kết quả
         if (result.success) {
+            // Lưu vào localStorage để các trang khác lấy được
+            localStorage.setItem("role", result.role);
+            localStorage.setItem("user_id", result.user_id);
+            localStorage.setItem("username", result.username);
+            
             alert("Đăng nhập thành công với quyền: " + result.role);
             // Chuyển hướng sang trang chủ (bộ khung index.html)
             window.location.href = "home.html"; 
