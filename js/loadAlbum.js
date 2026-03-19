@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       data.albums.forEach((album) => {
         const html = `
-        <div class="album-card">
+        <div class="album-card" onclick="openAlbumModal(${album.id}, '${album.title}', '${album.artist_name}', '${album.release_year}', '${album.cover_image}')">
             <div class="album-img">
                 <img src="../img/${album.cover_image}" alt="">
                 <div class="album-play">
@@ -107,10 +107,8 @@ function initScroll() {
 
     container.addEventListener("mouseleave", () => (isDown = false));
     
-    // 🌟 🌟 🌟 SỬA ĐỔI: Gộp isDown = false và checkScrollStatus khi mouseup xong
     container.addEventListener("mouseup", () => {
       isDown = false;
-      // Thêm một chút delay để scroll bar kịp cập nhật giá trị scrollLeft sau khi kéo thả xong
       setTimeout(checkScrollStatus, 50); 
     });
 
@@ -122,4 +120,58 @@ function initScroll() {
       container.scrollLeft = scrollLeft - walk;
     });
   });
+}
+// ================= LOGIC MODAL ALBUM =================
+const modal = document.getElementById("album-modal");
+const closeBtn = document.querySelector(".close-album-modal");
+
+// Đóng Modal khi bấm nút X
+closeBtn.addEventListener("click", () => {
+    modal.classList.remove("show");
+});
+
+// Đóng Modal khi click ra ngoài khung đen
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("show");
+});
+
+// Hàm mở Modal và gọi API lấy bài hát
+function openAlbumModal(albumId, title, artist, year, cover) {
+    // 1. Gắn thông tin album vào Header của Modal
+    document.getElementById("modal-album-img").src = `../img/${cover}`;
+    document.getElementById("modal-album-title").innerText = title;
+    document.getElementById("modal-album-artist").innerText = `${artist} • ${year}`;
+    
+    const songListContainer = document.getElementById("modal-song-list");
+    songListContainer.innerHTML = "<p style='color:#a7a7a7;'>Đang tải bài hát...</p>";
+    
+    // 2. Hiện Modal lên
+    modal.classList.add("show");
+
+    // 3. Gọi API lấy danh sách bài hát 
+    fetch(`/Web_nghe_nhac/api/get_albumsong.php?album_id=${albumId}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success || data.songs.length === 0) {
+                songListContainer.innerHTML = "<p style='color:#a7a7a7;'>Album này chưa có bài hát nào.</p>";
+                return;
+            }
+
+            // Đổ danh sách bài hát ra
+            songListContainer.innerHTML = "";
+            data.songs.forEach((song, index) => {
+                songListContainer.innerHTML += `
+                    <div class="modal-song-item" onclick="playSong(${song.id})">
+                        <i class="fa-solid fa-music"></i>
+                        <div class="song-info">
+                            <h4 style="font-size:15px; margin:0;">${song.title}</h4>
+                        </div>
+                    </div>
+                `;
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            songListContainer.innerHTML = "<p style='color:red;'>Lỗi tải dữ liệu!</p>";
+        });
 }
