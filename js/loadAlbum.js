@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // ================= FETCH DATA =================
   fetch("/Web_nghe_nhac/api/get_album.php")
     .then((res) => res.json())
     .then((data) => {
@@ -7,10 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const featuredContainer = document.getElementById("featured-album-list");
       const newContainer = document.getElementById("new-album-list");
       const allContainer = document.getElementById("all-album-list");
-      
-      if(allContainer) allContainer.innerHTML = "";
-      if(featuredContainer) featuredContainer.innerHTML = "";
-      if(newContainer) newContainer.innerHTML = "";
+
+      if (allContainer) allContainer.innerHTML = "";
+      if (featuredContainer) featuredContainer.innerHTML = "";
+      if (newContainer) newContainer.innerHTML = "";
 
       data.albums.forEach((album) => {
         const html = `
@@ -24,18 +25,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <div class="album-info">
                 <h5 title="${album.title}">${album.title}</h5>
-                    <span class="description" title="${album.artist_name} • ${album.release_year}">
-                        ${album.artist_name} • ${album.release_year}
-                    </span>
+                <span class="description">
+                    ${album.artist_name} • ${album.release_year}
+                </span>
             </div>
-
         </div>
         `;
 
-        if(allContainer) allContainer.innerHTML += html;
-        // Tạm thời đổ chung data vào Nổi bật và Mới ra để test giao diện (bạn có thể xóa nếu API tách riêng)
-        if(featuredContainer) featuredContainer.innerHTML += html;
-        if(newContainer) newContainer.innerHTML += html;
+        if (allContainer) allContainer.innerHTML += html;
+        if (featuredContainer) featuredContainer.innerHTML += html;
+        if (newContainer) newContainer.innerHTML += html;
       });
+
+      // ================= SCROLL + DRAG =================
+      setTimeout(() => {
+        initScroll();
+      }, 100);
     });
 });
+
+function initScroll() {
+  document.querySelectorAll(".album-wrapper").forEach((wrapper) => {
+    const container = wrapper.querySelector(".pro-container");
+    const btnLeft = wrapper.querySelector(".scroll-btn.left");
+    const btnRight = wrapper.querySelector(".scroll-btn.right");
+
+    if (!container) return;
+
+    // 👉 Scroll button
+    btnRight?.addEventListener("click", () => {
+      container.scrollBy({ left: 400, behavior: "smooth" });
+    });
+
+    btnLeft?.addEventListener("click", () => {
+      container.scrollBy({ left: -400, behavior: "smooth" });
+    });
+
+    // 👉 Drag
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    container.addEventListener("mousedown", (e) => {
+      isDown = true;
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+    });
+
+    container.addEventListener("mouseleave", () => (isDown = false));
+    container.addEventListener("mouseup", () => (isDown = false));
+
+    container.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 2;
+      container.scrollLeft = scrollLeft - walk;
+    });
+  });
+}

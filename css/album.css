@@ -1,117 +1,161 @@
 /* Container bọc ngoài cùng */
 .pro-container {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 24px;
-    padding: 10px 0 20px 0; 
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none; /* Ẩn thanh cuộn cho IE/Edge */
-    scrollbar-width: none;    /* Ẩn thanh cuộn cho Firefox */
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 24px;
+  padding: 10px 0 20px 0;
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* Ẩn thanh cuộn cho IE/Edge */
+  width: 100%;
+  cursor: grab;
 }
-
+.pro-container:active {
+  cursor: grabbing; /* Đổi con trỏ khi đang kéo */
+}
 /* Ẩn thanh cuộn cho Chrome/Safari */
 .pro-container::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* Thẻ Album Card */
 .album-card {
-    flex: 0 0 180px; 
-    /* Dùng màu xám đen trong suốt để màu gradient của trang lọt qua */
-    background: rgba(255, 255, 255, 0.04); 
-    padding: 16px;
-    border-radius: 8px;
-    transition: background 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
+  flex: 0 0 auto;
+  /* Dùng màu xám đen trong suốt để màu gradient của trang lọt qua */
+  background: var(--border-light);
+  padding: 16px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  user-select: none;
 }
 
 .album-card:hover {
-    background: rgba(255, 255, 255, 0.1); /* Sáng lên một chút khi hover */
+  background: rgba(255, 255, 255, 0.1); /* Sáng lên một chút khi hover */
 }
 
 /* Phần chứa ảnh */
 .album-img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    position: relative;
-    margin-bottom: 16px;
-    border-radius: 6px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .album-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 /* Nút Play */
 .album-play {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    width: 48px;
-    height: 48px;
-    background: var(--gradient-main); 
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-main); 
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-    z-index: 2;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-main);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  z-index: 2;
 }
 
 /* Thêm hiệu ứng phát sáng khi hover trực tiếp vào nút Play */
 .album-play:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px var(--hover-glow); 
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--hover-glow);
 }
 
 .album-card:hover .album-play {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .album-play:hover {
-    transform: scale(1.05);
-    background: var(--gradient-main);
+  transform: scale(1.05);
+  background: var(--gradient-main);
 }
 
 /* --- PHẦN CHỮ --- */
 .album-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .album-info h5 {
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-    margin: 0 0 4px 0; 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Cắt ngang tiêu đề 1 dòng */
+  color: var(--text-dark);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Cắt ngang tiêu đề 1 dòng */
 }
 
 .album-info .description {
-    color: #a7a7a7; 
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.4;
-    
-    /* Cắt chữ ở dòng thứ 2 và thêm dấu ... */
-    display: -webkit-box;
-    -webkit-line-clamp: 2; 
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal; 
+  color: #a7a7a7;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+
+  /* Cắt chữ ở dòng thứ 2 và thêm dấu ... */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+.album-wrapper {
+  position: relative; /* Để định vị nút cuộn absolute theo khung này */
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: var(--bg-card, #2d2d39);
+  color: var(--text-main, #fff);
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scroll-btn:hover {
+  background: var(--gradient-main);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.scroll-btn.left {
+  left: -20px; /* Thụt ra ngoài một chút */
+}
+
+.scroll-btn.right {
+  right: -20px;
 }

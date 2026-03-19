@@ -1,73 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-    <head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>My Music</title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="../css/song.css">
-    <link rel="stylesheet" href="../css/album.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/component.css" />
+    <link rel="stylesheet" href="../css/song.css" />
+    <link rel="stylesheet" href="../css/album.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
 
-</head>
+  <body>
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div id="sidebar-container"></div>
 
-<body>
-
-<div class="layout">
-
-    <!-- SIDEBAR -->
-    <div id="sidebar-container"></div>
-
-    <!-- MAIN -->
-    <div class="main">
-
+      <!-- MAIN -->
+      <div class="main">
         <!-- HEADER -->
         <div id="navbar-container"></div>
 
         <!-- CONTENT -->
         <main class="content">
+          <section id="feature" class="section-p1">
+            <div class="fe-box-1">
+              <h6>Album Nổi Bật</h6>
+            </div>
+            <div class="fe-box-2">
+              <h6>Album Mới Ra</h6>
+            </div>
+            <div class="fe-box-3">
+              <h6>Tất Cả Album</h6>
+            </div>
+          </section>
 
-            <main class="content">
+          <section id="featured-albums" class="song-section section-p1">
+            <h2>Album Nổi Bật</h2>
+            <div class="album-wrapper">
+              <button class="scroll-btn left">❮</button>
+              <div class="pro-container" id="featured-album-list"></div>
+              <button class="scroll-btn right">❯</button>
+            </div>
+          </section>
 
-                <section id="feature" class="section-p1">
-                    <div class="fe-box-1">
-                        <h6>Album Nổi Bật</h6>
-                    </div>
-                    <div class="fe-box-2">
-                        <h6>Album Mới Ra</h6>
-                    </div>
-                    <div class="fe-box-3">
-                        <h6>Tất Cả Album</h6>
-                    </div>
-                </section>
+          <section id="new-albums" class="song-section section-p1">
+            <h2>Album Mới Ra</h2>
+            <div class="album-wrapper">
+              <button class="scroll-btn left">❮</button>
+              <div class="pro-container" id="new-album-list"></div>
+              <button class="scroll-btn right">❯</button>
+            </div>
+          </section>
 
-                <section id="featured-albums" class="song-section section-p1">
-                    <h2>Album Nổi Bật</h2>
-                    <div class="pro-container" id="featured-album-list">
-                        </div>
-                </section>
-
-                <section id="new-albums" class="song-section section-p1">
-                    <h2>Album Mới Ra</h2>
-                    <div class="pro-container" id="new-album-list">
-                        </div>
-                </section>
-
-                <section id="all-albums" class="song-section section-p1">
-                    <h2>Tất Cả Album</h2>
-                    <div class="pro-container" id="all-album-list">
-                        </div>
-                </section>
-
+          <section id="all-albums" class="song-section section-p1">
+            <h2>Tất Cả Album</h2>
+            <div class="album-wrapper">
+              <button class="scroll-btn left">❮</button>
+              <div class="pro-container" id="all-album-list"></div>
+              <button class="scroll-btn right">❯</button>
+            </div>
+          </section>
         </main>
-
+      </div>
     </div>
-
-</div>
     <!-- PLAYER -->
     <div id="player-container"></div>
-<script src="../js/loadComponent.js"></script>
-<script src="../js/loadAlbum.js"></script>
-</body>
+    <script src="../js/loadComponent.js"></script>
+    <script src="../js/loadAlbum.js"></script>
+  </body>
 </html>
