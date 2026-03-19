@@ -48,6 +48,8 @@ if ($result->num_rows > 0) {
         echo json_encode([
             'success' => true, 
             'message' => 'Đăng nhập thành công',
+            'user_id' => $row['id'],
+            'username' => $row['username'],
             'role' => $row['role'] 
         ]);
         
