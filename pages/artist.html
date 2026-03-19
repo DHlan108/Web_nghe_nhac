@@ -1,58 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-    <head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>My Music</title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/component.css" />
+    <link rel="stylesheet" href="../css/song.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
 
-</head>
+  <body>
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div id="sidebar-container"></div>
 
-<body>
-
-<div class="layout">
-
-    <!-- SIDEBAR -->
-    <div id="sidebar-container"></div>
-
-    <!-- MAIN -->
-    <div class="main">
-
+      <!-- MAIN -->
+      <div class="main">
         <!-- HEADER -->
         <div id="navbar-container"></div>
 
         <!-- CONTENT -->
         <main class="content">
-
-            <section id="product1" class="section-p1">
-
+          <section id="product1" class="section-p1">
             <h2>Nghệ Sĩ</h2>
 
             <div class="pro-container" id="artist-container">
-
-            <!-- JS sẽ render artists ở đây -->
-
+              <!-- JS sẽ render artists ở đây -->
             </div>
-            </section>
+          </section>
 
-            <section class="section-p1">
-
+          <section class="section-p1">
             <h2 id="artist-name"></h2>
 
             <div class="pro-container" id="song-container"></div>
-
-            </section>
-
+          </section>
         </main>
-
+      </div>
     </div>
-
-</div>
     <!-- PLAYER -->
     <div id="player-container"></div>
-<script src="../js/loadComponent.js"></script>
-<script src="../js/loadArtist.js"></script>
-</body>
+    <script src="../js/loadComponent.js"></script>
+    <script src="../js/loadArtist.js"></script>
+  </body>
 </html>

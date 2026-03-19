@@ -28,6 +28,8 @@
 
         <!-- CONTENT -->
         <main class="content">
+            <div id="admin-tools"></div>
+       
 
             <!-- Danh mục -->
             <section id="feature" class="section-p1">
@@ -75,6 +77,40 @@
 
 </main>
 
+<div id="song-modal" class="modal">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h2 id="modal-title">Thêm bài hát</h2>
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+    </div>
+
+    <div class="modal-body">
+      <label>Tên bài hát</label>
+      <input id="song-title" type="text">
+
+      <label>ID nghệ sĩ</label>
+      <input id="song-artist" type="number">
+
+      <label>ID album (có thể bỏ trống)</label>
+    <input id="song-album">
+
+      <label>Ngày phát hành</label>
+      <input id="song-date" type="date">
+      
+      <label>Đường dẫn file</label>
+      <input id="song-file" type="text">
+
+      <label>Đường dẫn ảnh</label>
+      <input id="song-image" type="text">
+
+    </div>
+
+    <button class="btn-submit" onclick="submitSong()">Lưu</button>
+
+  </div>
+</div>
+
 </div>
 </div>
     <script src="../js/loadComponent.js"></script>
@@ -90,6 +126,7 @@
         });
     }
     </script>
+
 
 </body>
 </html>
