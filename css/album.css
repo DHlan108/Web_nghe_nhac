@@ -8,6 +8,7 @@
   overflow-y: hidden;
   scroll-behavior: smooth;
   -ms-overflow-style: none; /* Ẩn thanh cuộn cho IE/Edge */
+  scrollbar-width: none;
   width: 100%;
   cursor: grab;
 }
@@ -18,10 +19,15 @@
 .pro-container::-webkit-scrollbar {
   display: none;
 }
-
+.album-section h2 {
+    color: var(--text-dark);
+    padding-bottom: 30px;
+}
 /* Thẻ Album Card */
 .album-card {
-  flex: 0 0 auto;
+  flex: 0 0 180px;
+  width: 180px;
+  min-width: 180px;
   /* Dùng màu xám đen trong suốt để màu gradient của trang lọt qua */
   background: var(--border-light);
   padding: 16px;
@@ -30,8 +36,9 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  min-width: 180px;
   user-select: none;
+  max-height: 270px;
+  height: 100%;
 }
 
 .album-card:hover {
@@ -95,6 +102,8 @@
 .album-info {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  overflow: hidden;
 }
 
 .album-info h5 {
@@ -141,12 +150,15 @@
   cursor: pointer;
   z-index: 10;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transition: all 0.2s ease;
+  transition: all 0.2s ease, opacity 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
 }
-
+.album-wrapper:hover .scroll-btn {
+  opacity: 1;
+}
 .scroll-btn:hover {
   background: var(--gradient-main);
   transform: translateY(-50%) scale(1.1);

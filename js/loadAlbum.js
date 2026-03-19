@@ -52,16 +52,49 @@ function initScroll() {
 
     if (!container) return;
 
+    // 🌟 🌟 🌟 SỬA ĐỔI: Hàm kiểm tra trạng thái cuộn để ẩn/hiện nút kịch
+    function checkScrollStatus() {
+      if (btnLeft && btnRight) {
+        // Nếu ở đầu danh sách (scrollLeft <= 0), ẩn nút trái
+        if (container.scrollLeft <= 0) {
+          // Dùng visibility:hidden để nút vẫn chiếm diện tích nhưng không nhìn thấy
+          btnLeft.style.visibility = "hidden"; 
+        } else {
+          btnLeft.style.visibility = "visible";
+        }
+
+        // Nếu ở cuối danh sách (scrollLeft + chiều rộng container >= tổng chiều rộng nội dung), ẩn nút phải
+        // Chúng ta cần một chút dung sai (ví dụ 2px) vì sai số làm tròn của trình duyệt
+        const maxScrollLeft = container.scrollWidth - container.clientWidth;
+        if (container.scrollLeft >= maxScrollLeft - 2) {
+          btnRight.style.visibility = "hidden";
+        } else {
+          btnRight.style.visibility = "visible";
+        }
+      }
+    }
+
     // 👉 Scroll button
     btnRight?.addEventListener("click", () => {
+      // Vì JS này đã xóa scroll-behavior: smooth trong CSS,
+      // ta cần ép behavior smooth ở đây để nút bấm vẫn cuộn mượt.
       container.scrollBy({ left: 400, behavior: "smooth" });
+      // Sau khi cuộn xong (smooth cuộn khoảng 0.3s), ta check lại trạng thái nút
+      setTimeout(checkScrollStatus, 350);
     });
 
     btnLeft?.addEventListener("click", () => {
       container.scrollBy({ left: -400, behavior: "smooth" });
+      setTimeout(checkScrollStatus, 350);
     });
 
-    // 👉 Drag
+    // 🌟 🌟 🌟 THÊM MỚI: Lắng nghe sự kiện scroll trên container
+    container.addEventListener("scroll", checkScrollStatus);
+
+    // 🌟 🌟 🌟 THÊM MỚI: Gọi hàm kiểm tra lần đầu khi trang tải xong
+    checkScrollStatus();
+
+    // 👉 Drag (giữ nguyên logic drag, chỉ gộp mouseup lại)
     let isDown = false;
     let startX;
     let scrollLeft;
@@ -73,7 +106,13 @@ function initScroll() {
     });
 
     container.addEventListener("mouseleave", () => (isDown = false));
-    container.addEventListener("mouseup", () => (isDown = false));
+    
+    // 🌟 🌟 🌟 SỬA ĐỔI: Gộp isDown = false và checkScrollStatus khi mouseup xong
+    container.addEventListener("mouseup", () => {
+      isDown = false;
+      // Thêm một chút delay để scroll bar kịp cập nhật giá trị scrollLeft sau khi kéo thả xong
+      setTimeout(checkScrollStatus, 50); 
+    });
 
     container.addEventListener("mousemove", (e) => {
       if (!isDown) return;
