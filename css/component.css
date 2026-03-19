@@ -139,6 +139,25 @@
   bottom: -4px;
   left: 20px;
 }
+
+.profile-header{
+display:flex;
+align-items:flex-end;
+gap:30px;
+
+height:250px;
+padding:40px;
+
+background:linear-gradient(
+180deg,
+#9aa27c,
+#121212
+);
+
+color:white;
+border-radius:30px;
+}
+
 /* ===== PLAYER ===== */
 #player {
   position: fixed;

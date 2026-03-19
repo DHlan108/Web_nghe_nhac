@@ -33,17 +33,19 @@
 
             <!-- Danh mục -->
             <section id="feature" class="section-p1">
-                <div class="fe-box-1">
+
+                <div class="fe-box-1" onclick="scrollToSection('featured-songs')">
                     <h6>Bài Hát Nổi Bật</h6>
                 </div>
 
-                <div class="fe-box-2">
+                <div class="fe-box-2" onclick="scrollToSection('new-songs')">
                     <h6>Bài Hát Mới Ra</h6>
                 </div>
 
-                <div class="fe-box-3">
+                <div class="fe-box-3" onclick="scrollToSection('all-songs')">
                     <h6>Tất Cả Bài Hát</h6>
                 </div>
+
             </section>
 
     <!-- Bài hát nổi bật-->
@@ -75,11 +77,56 @@
 
 </main>
 
+<div id="song-modal" class="modal">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h2 id="modal-title">Thêm bài hát</h2>
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+    </div>
+
+    <div class="modal-body">
+      <label>Tên bài hát</label>
+      <input id="song-title" type="text">
+
+      <label>ID nghệ sĩ</label>
+      <input id="song-artist" type="number">
+
+      <label>ID album (có thể bỏ trống)</label>
+    <input id="song-album">
+
+      <label>Ngày phát hành</label>
+      <input id="song-date" type="date">
+      
+      <label>Đường dẫn file</label>
+      <input id="song-file" type="text">
+
+      <label>Đường dẫn ảnh</label>
+      <input id="song-image" type="text">
+
+    </div>
+
+    <button class="btn-submit" onclick="submitSong()">Lưu</button>
+
+  </div>
+</div>
+
 </div>
 </div>
     <script src="../js/loadComponent.js"></script>
     <script src="../js/song.js"></script>
 
-            
+    <script>
+    function scrollToSection(id){
+        const section = document.getElementById(id);
+
+        window.scrollTo({
+            top: section.offsetTop - 100,
+            behavior: "smooth"
+        });
+    }
+    </script>
+
+
 </body>
 </html>

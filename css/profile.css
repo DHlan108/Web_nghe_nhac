@@ -1,0 +1,141 @@
+
+.profile-container{
+margin-top:80px;
+padding:30px;
+}
+
+.profile-avatar img{
+width:150px;
+height:150px;
+
+border-radius:50%;
+object-fit:cover;
+}
+
+.profile-name{
+    font-size: 70px;
+    font-weight: 900;
+    margin: 10px 0;
+}
+
+.profile-label{
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.profile-detail{
+    padding-top: 10px;
+    font-size: 15px;
+    opacity: 0.9;
+}
+
+.edit-btn{
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background: #e81cff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.hidden{
+    display: none;
+}
+
+.modal-content{
+    position: relative;
+    background: #121212;
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    animation: fadeIn 0.3s ease;
+}
+
+
+
+.modal-content input{
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+}
+
+.modal-actions{
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.modal-actions button{
+    background-color: #e81cff;
+    padding: 8px, 16px;
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: small;
+    font-weight: bold;
+    color: white;
+}
+
+.modal-actions button:hover {
+    transform: scale(1.03);
+}
+
+.close-btn{
+position: absolute;
+top: 10px;
+right: 15px;
+
+background: none;
+border: none;
+font-size: 24px;
+color: white;
+cursor: pointer;
+}
+
+.close-btn{
+position: absolute;
+top: 10px;
+right: 15px;
+
+background: none;
+border: none;
+font-size: 24px;
+color: white;
+cursor: pointer;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-content{
+position: relative;
+}

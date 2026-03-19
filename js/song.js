@@ -1,6 +1,9 @@
 
 const role = localStorage.getItem("role") || "user"
 console.log("ROLE", role)
+
+let currentEditId = null
+
 function createSong(song){
 return `
 
@@ -14,17 +17,27 @@ return `
 </div>
 
 <div class="des">
-<h5>${song.title}</h5>
-<span>${song.artist_name}</span>
-<small>${song.release_date ? song.release_date.split("-")[0] : ""}</small>
-</div>
+  <h5>${song.title}</h5>
 
-${role === "admin" ? `
-<div class="admin-btn">
-<button onclick="editSong(${song.id})">✏️</button>
-<button onclick="deleteSong(${song.id})">🗑</button>
+  <span class="artist">${song.artist_name}</span>
+
+  <div class="bottom-row">
+    <small class="year">
+      ${song.release_date ? song.release_date.split("-")[0] : ""}
+    </small>
+
+    ${role === "admin" ? `
+    <div class="admin-btn-row">
+      <button class="btn-edit" onclick='openModal("edit", ${JSON.stringify(song).replace(/'/g, "&apos;")})'>
+        <i class="fa-regular fa-pen-to-square"></i>
+      </button>
+      <button class="btn-delete" onclick="deleteSong(${song.id})">
+        <i class="fa-regular fa-trash-can"></i>
+      </button>
+    </div>
+    ` : ""}
+  </div>
 </div>
-` : ""}
 
 </div>
 
@@ -43,7 +56,7 @@ console.log("🛠️ Admin tools element:", adminTools)
 if(role === "admin"){
 console.log("✅ set admin button")
 adminTools.innerHTML = `
-<button onclick="addNewSong()" class="admin-add-btn" style="padding:25px 80px; font-size:26px; font-weight:900; margin-bottom:40px; margin-top:20px; background:linear-gradient(135deg, #5B6FD8 0%, #7B5FB8 100%); color:white; border:3px solid #6B78D8; border-radius:15px; box-shadow:0 10px 40px rgba(91, 111, 216, 0.6); cursor:pointer; width:100%; max-width:1000px; text-transform:uppercase; letter-spacing:1.5px; transition:all 0.3s ease; display:block; margin-left:auto; margin-right:auto;">
+<button onclick="openModal('add')" class="admin-add-btn" style="padding:25px 80px; font-size:26px; font-weight:900; margin-bottom:40px; margin-top:20px; background:linear-gradient(135deg, #5B6FD8 0%, #7B5FB8 100%); color:white; border:3px solid #6B78D8; border-radius:15px; box-shadow:0 10px 40px rgba(91, 111, 216, 0.6); cursor:pointer; width:100%; max-width:1000px; text-transform:uppercase; letter-spacing:1.5px; transition:all 0.3s ease; display:block; margin-left:auto; margin-right:auto;">
 <span style="color: #FF9500; font-weight: bold; margin-right: 8px;">+</span> Thêm bài hát mới
 </button>
 `
@@ -53,22 +66,28 @@ const featured = document.getElementById("featured-list")
 const newsong = document.getElementById("new-list")
 const allsong = document.getElementById("all-list")
 
-// tránh bị lặp
-featured.innerHTML = ""
-newsong.innerHTML = ""
-allsong.innerHTML = ""
+if(featured) featured.innerHTML = ""
+if(newsong) newsong.innerHTML = ""
+if(allsong) allsong.innerHTML = ""
 
-data.forEach(song=>{
+let allHTML = ""
+let featuredHTML = ""
 
-allsong.innerHTML += createSong(song)
+data.forEach(song => {
+  allHTML += createSong(song)
 
-if(song.listens && song.listens > 1000){
-featured.innerHTML += createSong(song)
-}
+  if(song.listens && song.listens > 1000){
+    featuredHTML += createSong(song)
+  }
+})
+
+if(allsong) allsong.innerHTML = allHTML
+if(featured) featured.innerHTML = featuredHTML
+
 
 })
 console.log("✅ Render song xong")
-})
+
 .catch(err => console.error("❌ Error fetch:", err))
 
 function deleteSong(id){
@@ -92,68 +111,69 @@ location.reload()
 
 }
 
-function editSong(id){
+function openModal(mode, song = null){
+  document.getElementById("song-modal").style.display = "flex"
 
-let title = prompt("Chỉnh sửa tên bài hát:")
-if(title === null) return
+  if(mode === "add"){
+    currentEditId = null
+    document.getElementById("modal-title").innerText = "Thêm bài hát"
 
-let artist_id = prompt("Nhập ID ca sĩ:\n1=G-Dragon, 2=Taylor Swift, 3=Sơn Tùng, 4=SOOBIN, 5=VŨ, 6=RPT MCK, 7=tlinh")
-if(artist_id === null || artist_id === "") return
+    document.getElementById("song-title").value = ""
+    document.getElementById("song-artist").value = ""
+    document.getElementById("song-file").value = ""
+    document.getElementById("song-album").value = ""
+    document.getElementById("song-image").value = ""
+    document.getElementById("song-date").value = ""
+  }
 
-let release_date = prompt("Nhập ngày phát hành (YYYY-MM-DD ví dụ: 2024-06-20):")
-if(release_date === null) return
+  if(mode === "edit"){
+    currentEditId = song.id
+    document.getElementById("modal-title").innerText = "Sửa bài hát"
 
-if(confirm("Lưu thay đổi?")){
-
-fetch("../api/update_song.php",{
-method: "POST",
-headers: {
-"Content-Type": "application/x-www-form-urlencoded"
-},
-body: `id=${id}&title=${encodeURIComponent(title)}&artist_id=${artist_id}&release_date=${encodeURIComponent(release_date)}`
-})
-.then(res=>res.json())
-.then(data=>{
-alert(data.message)
-if(data.success) location.reload()
-})
-.catch(err => alert("Lỗi kết nối: " + err))
-
+    document.getElementById("song-title").value = song.title
+    document.getElementById("song-artist").value = song.artist_id || ""
+    document.getElementById("song-album").value = song.album_id
+    document.getElementById("song-file").value = song.file_path
+    document.getElementById("song-image").value = song.image_path
+    document.getElementById("song-date").value = song.release_date
+  }
 }
 
+function closeModal(){
+  document.getElementById("song-modal").style.display = "none"
 }
 
-function addNewSong(){
+// ===== SUBMIT (ADD + EDIT) =====
+function submitSong(){
+  const title = document.getElementById("song-title").value
+  const artist_id = document.getElementById("song-artist").value
+  const album_id = document.getElementById("song-album").value.trim()
+  const file_path = document.getElementById("song-file").value
+  const image_path = document.getElementById("song-image").value
+  const release_date = document.getElementById("song-date").value
 
-let title = prompt("Nhập tên bài hát:")
-if(title === null || title === "") return
+  let url = ""
+  let body = ""
 
-let artist_id = prompt("Nhập ID ca sĩ:\n1=G-Dragon, 2=Taylor Swift, 3=Sơn Tùng, 4=SOOBIN, 5=VŨ, 6=RPT MCK, 7=tlinh")
-if(artist_id === null || artist_id === "") return
+  if(currentEditId){
+    url = "../api/update_song.php"
+    body = `id=${currentEditId}&title=${encodeURIComponent(title)}&artist_id=${artist_id}&album_id=${album_id !== "" ? album_id : ""}&release_date=${release_date}`
+  } else {
+    url = "../api/song_create.php"
+    body = body = `title=${encodeURIComponent(title)}&artist_id=${artist_id}&album_id=${album_id !== "" ? album_id : ""}&file_path=${encodeURIComponent(file_path)}&image_path=${encodeURIComponent(image_path)}&release_date=${release_date}`
+  }
 
-let file_path = prompt("Nhập đường dẫn file nhạc (ví dụ: music/song.mp3):")
-if(file_path === null || file_path === "") return
-
-let image_path = prompt("Nhập đường dẫn ảnh (ví dụ: ai.jpg):")
-if(image_path === null || image_path === "") return
-
-let release_date = prompt("Nhập ngày phát hành (YYYY-MM-DD ví dụ: 2024-06-20):")
-if(release_date === null || release_date === "") return
-
-if(!confirm("Thêm bài hát mới?")) return
-
-fetch("../api/song_create.php",{
-method: "POST",
-headers: {
-"Content-Type": "application/x-www-form-urlencoded"
-},
-body: `title=${encodeURIComponent(title)}&artist_id=${artist_id}&file_path=${encodeURIComponent(file_path)}&image_path=${encodeURIComponent(image_path)}&release_date=${encodeURIComponent(release_date)}`
-})
-.then(res=>res.json())
-.then(data=>{
-alert(data.message)
-if(data.success) location.reload()
-})
-.catch(err => alert("Lỗi kết nối: " + err))
-
+  fetch(url,{
+    method:"POST",
+    headers:{"Content-Type":"application/x-www-form-urlencoded"},
+    body: body
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    alert(data.message)
+    if(data.success){
+      closeModal()
+      location.reload()
+    }
+  })
 }
