@@ -60,8 +60,6 @@ fetch("../component/sidebar.html")
       }
     });
 
-//loadSidebar();
-
 
 fetch("../component/player.html")
   .then((res) => res.text())

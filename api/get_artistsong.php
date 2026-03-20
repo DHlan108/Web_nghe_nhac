@@ -5,7 +5,7 @@ require_once 'db_connect.php';
 
 $artist_id = $_GET['id'];
 
-$sql = "SELECT title, release_year
+$sql = "SELECT title, release_date, image_path
         FROM songs
         WHERE artist_id = ?";
 
