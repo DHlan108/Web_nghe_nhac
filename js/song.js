@@ -56,7 +56,7 @@ console.log("🛠️ Admin tools element:", adminTools)
 if(role === "admin"){
 console.log("✅ set admin button")
 adminTools.innerHTML = `
-<button onclick="openModal('add')" class="admin-add-btn" style="padding:25px 80px; font-size:26px; font-weight:900; margin-bottom:40px; margin-top:20px; background:linear-gradient(135deg, #5B6FD8 0%, #7B5FB8 100%); color:white; border:3px solid #6B78D8; border-radius:15px; box-shadow:0 10px 40px rgba(91, 111, 216, 0.6); cursor:pointer; width:100%; max-width:1000px; text-transform:uppercase; letter-spacing:1.5px; transition:all 0.3s ease; display:block; margin-left:auto; margin-right:auto;">
+<button onclick="openModal('add')" class="admin-add-btn" style="padding:25px 80px; font-size:26px; font-weight:900; margin-bottom:40px; margin-top:20px; background: linear-gradient(135deg, #40c9ff, #e81cff); color:white; border-radius:15px; box-shadow:0 10px 40px rgba(91, 111, 216, 0.6); cursor:pointer; width:100%; max-width:1000px; text-transform:uppercase; letter-spacing:1.5px; transition:all 0.3s ease; display:block; margin-left:auto; margin-right:auto;">
 <span style="color: #FF9500; font-weight: bold; margin-right: 8px;">+</span> Thêm bài hát mới
 </button>
 `
