@@ -2,13 +2,11 @@
 header('Content-Type: application/json');
 require_once 'db_connect.php';
 
-$id = $_POST['id'] ?? 0;
+$id = $_POST['id'] ?? '';
 $title = $_POST['title'] ?? '';
-$artist_id = $_POST['artist_id'] ?? 0;
-$album_id = isset($_POST['album_id']) && $_POST['album_id'] !== ''
-    ? (int)$_POST['album_id']
-    : NULL;
-$release_date = $_POST['release_date'] ?? '';
+$artist_id = $_POST['artist_id'] ?? '';
+$release_year = $_POST['release_year'] ?? '';
+$cover_image = $_POST['cover_image'] ?? '';
 
 
 if($id == 0){
