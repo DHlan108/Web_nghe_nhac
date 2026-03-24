@@ -3,7 +3,22 @@ const role = localStorage.getItem("role") || "user";
 let currentEditAlbumId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ================= FETCH DATA (Giữ nguyên logic của nhóm) =================
+    const closeBtn = document.querySelector(".close-album-modal");
+    if (closeBtn) {
+        closeBtn.addEventListener("click", closeAlbumModal);
+    }
+
+    // Đóng khi click ra ngoài vùng modal
+    window.addEventListener("click", (e) => {
+        const modal = document.getElementById("album-modal");
+        const adminModal = document.getElementById("album-admin-modal");
+        if (e.target === modal) {
+            closeAlbumModal();
+        }
+        if (e.target === adminModal) {
+            closeAlbumModalAdmin();
+        }
+    });
     fetch("/Web_nghe_nhac/api/get_album.php")
         .then((res) => res.json())
         .then((data) => {
@@ -21,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
            data.albums.forEach((album) => {
             // SỬA LỖI 2 & 3: Dùng class admin-controls thống nhất với CSS và truyền ID nghệ sĩ đúng cách
               const html = `
-             <div class="album-card" onclick="openAlbumModal(${album.id}, '${album.title.replace(/'/g, "\\'")}', '${album.artist_name.replace(/'/g, "\\'")}', '${album.release_year}', '${album.cover_image}')">
+            <div class="album-card" onclick="openAlbumModal(${album.id}, '${album.title.replace(/'/g, "\\'")}', '${album.artist_name.replace(/'/g, "\\'")}', '${album.release_year}', '${album.cover_image}')">
             <div class="album-img">
             <img src="../img/${album.cover_image}" alt="${album.title}">
             <div class="album-play">
@@ -153,6 +168,13 @@ function openAlbumModal(albumId, title, artist, year, cover) {
                     </div>`;
             });
         });
+}
+
+function closeAlbumModal() {
+    const modal = document.getElementById("album-modal");
+    if (modal) {
+        modal.classList.remove("show"); // Gỡ bỏ class show để ẩn modal
+    }
 }
 
 // ================= CÁC HÀM ADMIN MỚI (BỔ SUNG) =================
