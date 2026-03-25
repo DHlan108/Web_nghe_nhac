@@ -354,10 +354,10 @@
     margin-top: 40px;
 }
 
-/* Nút thêm album nằm bên phải tiêu đề */
+/* NUT THEM ALBUM*/
 .admin-add-btn-main {
     position: absolute;
-    right: 0;
+    right: 20px;
     top: 5px; /* Điều chỉnh số này để nó ngang hàng với chữ 'Tất cả album' */
     background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
     color: white;
@@ -366,7 +366,7 @@
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
-    z-index: 10;
+    z-index: 10;  
 }
 
 /* Nút SỬA/XÓA bên PHẢI ảnh */
@@ -486,7 +486,4 @@
     color: #b3b3b3;
     border: none;
     cursor: pointer;
-}
-#all-albums {
-    position: relative; /* Bắt buộc có để nút căn theo section này */
 }
