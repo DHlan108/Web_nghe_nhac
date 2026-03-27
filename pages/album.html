@@ -26,17 +26,17 @@
 
         <!-- CONTENT -->
         <main class="content">
-          <section id="feature" class="section-p1">
-            <div class="fe-box-1">
-              <h6>Album Nổi Bật</h6>
-            </div>
-            <div class="fe-box-2">
-              <h6>Album Mới Ra</h6>
-            </div>
-            <div class="fe-box-3">
-              <h6>Tất Cả Album</h6>
-            </div>
-            </section>
+           <section id="feature" class="section-p1">
+           <div class="fe-box-1" onclick="scrollToSection('featured-albums')">
+            <h6>Album Nổi Bật</h6>
+           </div>
+           <div class="fe-box-2" onclick="scrollToSection('new-albums')">
+            <h6>Album Mới Ra</h6>
+       </div>
+           <div class="fe-box-3" onclick="scrollToSection('all-albums')">
+            <h6>Tất Cả Album</h6>
+        </div>
+      </section>
 
           <section id="featured-albums" class="album-section section-p1">
             <h2>Album Nổi Bật</h2>
@@ -85,8 +85,9 @@
 </div>
     <!-- PLAYER -->
     <div id="player-container"></div>
+    
     <script src="../js/loadComponent.js"></script>
-    <script src="../js/loadAlbum.js"></script>
+    <script src="../js/search.js"></script>  <script src="../js/loadAlbum.js"></script>
     
     <div id="album-admin-modal" class="admin-modal">
     <div class="admin-modal-content">
