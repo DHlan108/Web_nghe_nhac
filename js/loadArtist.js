@@ -1,31 +1,63 @@
-fetch("../api/get_artist.php")
-.then(res => res.json())
-.then(data => {
+let globalArtists = []; // 1. Thêm kho lưu trữ dữ liệu
 
-    if(!data.success) return;
+// 2. Gom đoạn fetch và vẽ của cậu vào một hàm để search có thể gọi lại
+function renderArtistList(artists, isSearching = false) {
     const container = document.getElementById("artist-container");
-    data.artists.forEach(artist => {
+    const songSection = document.querySelector(".song-section");
+    const artistHeader = document.querySelector("#product1 h2");
 
+    if (!container) return;
+    container.innerHTML = ""; // Xóa nội dung cũ để vẽ lại từ đầu
+
+    // Logic làm gọn giao diện giống trang Song/Album cậu muốn
+    if (isSearching) {
+        if (songSection) songSection.style.display = "none";
+        if (artistHeader) artistHeader.innerText = "Kết quả tìm kiếm nghệ sĩ";
+    } else {
+        if (songSection) songSection.style.display = "block";
+        if (artistHeader) artistHeader.innerText = "Nghệ Sĩ";
+    }
+
+    // --- GIỮ NGUYÊN 100% MẪU HTML CỦA CẬU ---
+    artists.forEach(artist => {
         const html = `
-            <div class="artist-card" onclick="loadArtistSongs(${artist.id},'${artist.name}')">
-
+            <div class="artist-card" onclick="loadArtistSongs(${artist.id},'${artist.name.replace(/'/g, "\\'")}')">
                 <div class="artist-img">
                     <img src="../img/${artist.avatar}">
                 </div>
-
                 <div class="artist-info">
                     <h5>${artist.name}</h5>
                     <span>${artist.country}</span>
                 </div>
-
             </div>
             `;
-
         container.innerHTML += html;
-
     });
+}
 
+// 3. Chạy fetch dữ liệu khi trang load xong
+document.addEventListener("DOMContentLoaded", () => {
+    fetch("../api/get_artist.php")
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) return;
+            globalArtists = data.artists; // Lưu dữ liệu vào kho
+
+            // Hiển thị ban đầu
+            renderArtistList(globalArtists);
+
+            // 4. KẾT NỐI TÌM KIẾM
+            if (typeof MusicSearchEngine !== 'undefined') {
+                MusicSearchEngine.initGlobalSearch((keyword) => {
+                    const isTyping = keyword.trim() !== "";
+                    const filtered = MusicSearchEngine.process(globalArtists, { keyword: keyword });
+                    renderArtistList(filtered, isTyping);
+                });
+            }
+        });
 });
+
+// 5. HÀM LOAD BÀI HÁT (GIỮ NGUYÊN 100% CODE CỦA CẬU)
 function loadArtistSongs(id, name) {
     document.getElementById("artist-name").innerText = "Bài hát của " + name;
 
@@ -41,9 +73,7 @@ function loadArtistSongs(id, name) {
             }
 
             data.songs.forEach(song => {
-                // Tách lấy năm từ chuỗi 2024-09-27 thành 2024
                 const year = song.release_date ? song.release_date.split('-')[0] : "";
-
                 const html = `
                     <div class="pro">
                         <div class="img-box">
@@ -60,6 +90,8 @@ function loadArtistSongs(id, name) {
                 `;
                 container.innerHTML += html;
             });
+            // Cuộn xuống để xem bài hát
+            window.scrollTo({ top: document.querySelector('.song-section').offsetTop - 100, behavior: 'smooth' });
         })
         .catch(err => console.error("Lỗi fetch bài hát:", err));
 }
