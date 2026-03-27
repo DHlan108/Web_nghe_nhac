@@ -11,8 +11,8 @@ return `
 
 <div class="img-box">
 <img src="../img/${song.image_path}">
-<div class="play">
-<i class="fa-solid fa-play"></i>
+<div class="play" onclick="playSongDirectly('${song.title}', '${song.artist_name}', '../${song.file_path}', '../img/${song.image_path}')">
+    <i class="fa-solid fa-play"></i>
 </div>
 </div>
 
@@ -47,14 +47,14 @@ return `
 fetch("../api/get_song.php")
 .then(res=>res.json())
 .then(data=>{
-console.log("✅ Fetch data thành công:", data)
-console.log("👤 Role:", role)
+console.log(" Fetch data thành công:", data)
+console.log(" Role:", role)
 
 const adminTools = document.getElementById("admin-tools")
-console.log("🛠️ Admin tools element:", adminTools)
+console.log(" Admin tools element:", adminTools)
 
 if(role === "admin"){
-console.log("✅ set admin button")
+console.log(" set admin button")
 adminTools.innerHTML = `
 <button onclick="openModal('add')" class="admin-add-btn" style="padding:25px 80px; font-size:26px; font-weight:900; margin-bottom:40px; margin-top:20px; background:linear-gradient(135deg, #5B6FD8 0%, #7B5FB8 100%); color:white; border:3px solid #6B78D8; border-radius:15px; box-shadow:0 10px 40px rgba(91, 111, 216, 0.6); cursor:pointer; width:100%; max-width:1000px; text-transform:uppercase; letter-spacing:1.5px; transition:all 0.3s ease; display:block; margin-left:auto; margin-right:auto;">
 <span style="color: #FF9500; font-weight: bold; margin-right: 8px;">+</span> Thêm bài hát mới
@@ -83,11 +83,7 @@ data.forEach(song => {
 
 if(allsong) allsong.innerHTML = allHTML
 if(featured) featured.innerHTML = featuredHTML
-
-
 })
-console.log("✅ Render song xong")
-
 .catch(err => console.error("❌ Error fetch:", err))
 
 function deleteSong(id){

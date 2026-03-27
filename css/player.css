@@ -1,0 +1,59 @@
+/* Ép thanh nhạc nằm dưới cùng và có màu */
+.player-footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 70px !important;
+    background: linear-gradient(90deg, #7303c0, #ec38bc) !important; /* Tím sang hồng */
+    display: flex !important;
+    align-items: center !important;
+    z-index: 100000 !important; /* Cao nhất để không bị che */
+    color: white !important;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+}
+
+.player-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.player-song-info {
+    display: flex;
+    align-items: center;
+    flex: 0,8;
+}
+
+.player-main-controls {
+    flex: 2; /* Chiếm nhiều diện tích nhất */
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap: 20px;
+}
+
+.controls-btns {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0 !important;
+}
+
+.controls-btns button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    margin: 0 15px;
+    cursor: pointer;
+}
+
+.progress-slider {
+    width: 80%;
+    cursor: pointer;
+    accent-color: #ffffff;
+}
