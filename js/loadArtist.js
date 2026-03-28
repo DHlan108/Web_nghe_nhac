@@ -1,15 +1,16 @@
-let globalArtists = []; // 1. Thêm kho lưu trữ dữ liệu
 
-// 2. Gom đoạn fetch và vẽ của cậu vào một hàm để search có thể gọi lại
+let globalArtists = []; 
+const userRole = localStorage.getItem("role") || "user";
+
+// 1. Định nghĩa hàm render trước để các chỗ khác gọi được
 function renderArtistList(artists, isSearching = false) {
     const container = document.getElementById("artist-container");
     const songSection = document.querySelector(".song-section");
     const artistHeader = document.querySelector("#product1 h2");
 
     if (!container) return;
-    container.innerHTML = ""; // Xóa nội dung cũ để vẽ lại từ đầu
+    container.innerHTML = ""; 
 
-    // Logic làm gọn giao diện giống trang Song/Album cậu muốn
     if (isSearching) {
         if (songSection) songSection.style.display = "none";
         if (artistHeader) artistHeader.innerText = "Kết quả tìm kiếm nghệ sĩ";
@@ -18,35 +19,44 @@ function renderArtistList(artists, isSearching = false) {
         if (artistHeader) artistHeader.innerText = "Nghệ Sĩ";
     }
 
-    // --- GIỮ NGUYÊN 100% MẪU HTML CỦA CẬU ---
     artists.forEach(artist => {
         const html = `
-            <div class="artist-card" onclick="loadArtistSongs(${artist.id},'${artist.name.replace(/'/g, "\\'")}')">
-                <div class="artist-img">
+            <div class="artist-card" onclick="loadArtistSongs(${artist.id},'${artist.name}')">
+                <div class="artist-img" style="position: relative;">
                     <img src="../img/${artist.avatar}">
+                    ${userRole === "admin" ? `
+                    <div class="admin-controls" style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; z-index: 10;">
+                        <button class="btn-edit" onclick="event.stopPropagation(); prepareEditArtist(${artist.id}, '${artist.name.replace(/'/g, "\\'")}', '${artist.country.replace(/'/g, "\\'")}', '${artist.avatar}')" style="background: rgba(0,0,0,0.6); color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer;">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        <button class="btn-delete" onclick="event.stopPropagation(); deleteArtist(${artist.id})" style="background: rgba(255,0,0,0.6); color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer;">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+                    ` : ""}
                 </div>
                 <div class="artist-info">
                     <h5>${artist.name}</h5>
                     <span>${artist.country}</span>
                 </div>
-            </div>
-            `;
+            </div>`;
         container.innerHTML += html;
     });
-}
+} // Đóng hàm render chuẩn xác
 
-// 3. Chạy fetch dữ liệu khi trang load xong
+// 2. Sự kiện DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
+    // KHAI BÁO BIẾN Ở ĐÂY ĐỂ DÒNG 86 KHÔNG BỊ LỖI
+    const container = document.getElementById("artist-container");
+    const arrowsBox = document.querySelector(".arrows-box");
+
     fetch("../api/get_artist.php")
         .then(res => res.json())
         .then(data => {
             if (!data.success) return;
-            globalArtists = data.artists; // Lưu dữ liệu vào kho
+            globalArtists = data.artists; 
+            renderArtistList(globalArtists); // Gọi hàm render
 
-            // Hiển thị ban đầu
-            renderArtistList(globalArtists);
-
-            // 4. KẾT NỐI TÌM KIẾM
             if (typeof MusicSearchEngine !== 'undefined') {
                 MusicSearchEngine.initGlobalSearch((keyword) => {
                     const isTyping = keyword.trim() !== "";
@@ -54,7 +64,33 @@ document.addEventListener("DOMContentLoaded", () => {
                     renderArtistList(filtered, isTyping);
                 });
             }
-        });
+        })
+        .catch(err => console.error("Lỗi fetch:", err));
+
+    // PHẦN ADMIN (Dòng 86 của cậu đây)
+    if(userRole === "admin" && container){
+        container.style.display = "grid";
+        container.style.gridTemplateRows = "repeat(2, auto)"; 
+        container.style.gridAutoFlow = "column";            
+        container.style.gridAutoColumns = "max-content";    
+        container.style.gap = "20px";
+        container.style.overflowX = "auto";                
+        container.style.overflowY = "hidden";              
+        container.style.paddingBottom = "20px";
+        container.style.scrollBehavior = "smooth";
+
+        if(!document.getElementById("btn-add-artist")){
+            const btnAdd = `<button id="btn-add-artist" onclick="openArtistModal()" style="margin-bottom:20px; padding:10px 20px; background:#1db954; color:white; border:none; border-radius:20px; cursor:pointer; font-weight:bold;">+ Thêm Nghệ Sĩ</button>`;
+            container.parentElement.insertBefore(document.createRange().createContextualFragment(btnAdd), container);
+        }
+        
+        if (arrowsBox) {
+            arrowsBox.style.display = "flex";
+            arrowsBox.style.justifyContent = "flex-end"; 
+            arrowsBox.style.marginTop = "-40px";         
+            arrowsBox.style.paddingRight = "20px";       
+        }
+    }
 });
 
 // 5. HÀM LOAD BÀI HÁT (GIỮ NGUYÊN 100% CODE CỦA CẬU)
@@ -94,4 +130,85 @@ function loadArtistSongs(id, name) {
             window.scrollTo({ top: document.querySelector('.song-section').offsetTop - 100, behavior: 'smooth' });
         })
         .catch(err => console.error("Lỗi fetch bài hát:", err));
+}
+
+let currentEditArtistId = null;
+
+// 2. Hàm mở Modal để thêm mới
+function openArtistModal() {
+    currentEditArtistId = null; // Reset ID về null để biết là thêm mới
+    document.getElementById("admin-artist-modal-title").innerText = "Thêm Nghệ Sĩ";
+    // Xóa sạch dữ liệu cũ trong form
+    document.getElementById("adm-artist-name").value = "";
+    document.getElementById("adm-artist-country").value = "";
+    document.getElementById("adm-artist-avatar").value = "";
+    document.getElementById("artist-admin-modal").style.display = "flex";
+}
+
+// 3. Hàm mở Modal để sửa (Hàm này sẽ được nút bút chì gọi)
+function prepareEditArtist(id, name, country, avatar) {
+    currentEditArtistId = id; // Lưu ID lại
+    document.getElementById("admin-artist-modal-title").innerText = "Sửa Thông Tin Nghệ Sĩ";
+    // Đổ dữ liệu cũ vào các ô input
+    document.getElementById("adm-artist-name").value = name;
+    document.getElementById("adm-artist-country").value = country;
+    document.getElementById("adm-artist-avatar").value = avatar;
+    document.getElementById("artist-admin-modal").style.display = "flex";
+}
+
+// 4. HÀM CHÍNH: Xử lý khi nhấn nút "Lưu" (Đã đổi tên thành submitArtist)
+function submitArtist() {
+    const name = document.getElementById("adm-artist-name").value;
+    const country = document.getElementById("adm-artist-country").value;
+    const avatar = document.getElementById("adm-artist-avatar").value;
+
+    if (!name) {
+        alert("Vui lòng nhập tên nghệ sĩ!");
+        return;
+    }
+
+    const formData = new URLSearchParams();
+    if (currentEditArtistId) formData.append("id", currentEditArtistId); // Gửi ID nếu đang sửa
+    formData.append("name", name);
+    formData.append("country", country);
+    formData.append("avatar", avatar);
+
+    // Quyết định gọi API Create hay Update dựa trên currentEditArtistId
+    const url = currentEditArtistId ? "../api/update_artist.php" : "../api/create_artist.php";
+
+    fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) {
+            alert(data.message || "Thành công!");
+            document.getElementById('artist-admin-modal').style.display='none'; // Đóng modal
+            location.reload(); // Load lại trang
+        } else {
+            alert("Lỗi từ server: " + data.message);
+        }
+    })
+    .catch(err => {
+        console.error("Lỗi:", err);
+        alert("Không thể kết nối tới server. Hãy kiểm tra lại file PHP!");
+    });
+}
+
+// 5. Hàm xóa
+function deleteArtist(id) {
+    if(confirm("Bạn có chắc chắn muốn xóa nghệ sĩ này không?")) {
+        fetch("../api/delete_artist.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `id=${id}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) location.reload();
+            else alert("Lỗi khi xóa: " + data.message);
+        });
+    }
 }

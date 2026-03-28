@@ -170,28 +170,31 @@ function closeAlbumModalAdmin() {
 }
 
 function submitAlbum() {
-    const id = currentEditAlbumId;
-    const title = document.getElementById('adm-album-title').value;
-    const artist_id = document.getElementById('adm-album-artist').value;
-    const release_year = document.getElementById('adm-album-year').value;
-    const cover_image = document.getElementById('adm-album-image').value;
+    // 1. Lấy dữ liệu từ Form
+    const id = currentEditAlbumId; 
+    const title = document.getElementById('adm-album-title').value.trim();
+    const artist_id = document.getElementById('adm-album-artist').value.trim();
+    const release_year = document.getElementById('adm-album-year').value.trim();
+    const cover_image = document.getElementById('adm-album-image').value.trim();
 
+    // 2. Kiểm tra dữ liệu đầu vào
     if (!title || !artist_id) {
         alert("Vui lòng nhập đầy đủ tên và ID nghệ sĩ!");
         return;
     }
 
+    // 3. Đóng gói dữ liệu (Dùng URLSearchParams cho chuẩn với headers bên dưới)
     const params = new URLSearchParams();
-    if (id) params.append('id', id); // Gửi ID để PHP biết là Update
+    if (id) params.append('id', id); 
     params.append('title', title);
     params.append('artist_id', artist_id);
     params.append('release_year', release_year);
     params.append('cover_image', cover_image);
 
-    // SỬA TẠI ĐÂY: Đổi từ edit_album.php thành update_album.php
+    // 4. Xác định URL (Nếu không có id thì CHẮC CHẮN là create)
     const url = id ? "../api/update_album.php" : "../api/create_album.php";
 
-    console.log("Đang gọi API:", url, "với ID:", id);
+    console.log("Gửi dữ liệu tới:", url, "Data:", params.toString());
 
     fetch(url, {
         method: 'POST',
@@ -199,21 +202,23 @@ function submitAlbum() {
         body: params.toString()
     })
     .then(res => {
-        // Kiểm tra xem phản hồi có phải là JSON không
+        // Kiểm tra xem phản hồi có ok không (tránh lỗi 500/404)
+        if (!res.ok) throw new Error("Server trả về lỗi " + res.status);
         return res.json();
     })
     .then(result => {
-        if (result.success) {
-            alert(result.message);
+        if (result && result.success) {
+            alert(result.message || "Thao tác thành công!");
             closeAlbumModalAdmin();
-            location.reload(); // Tải lại trang để cập nhật giao diện
+            location.reload(); 
         } else {
-            alert("Lỗi từ Server: " + result.message);
+            // Nếu result undefined hoặc success = false
+            alert("Lỗi: " + (result ? result.message : "Phản hồi từ server trống"));
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert("Không thể kết nối tới update_album.php. Kiểm tra lại đường dẫn file!");
+        console.error('Chi tiết lỗi:', error);
+        alert("Có lỗi xảy ra! Hãy kiểm tra tab Network để xem file PHP có lỗi cú pháp không.");
     });
 }
 
@@ -233,6 +238,7 @@ function prepareEditAlbum(id, title, artistId, year, image) {
     document.getElementById("album-admin-modal").style.display = "flex";
 }
 function deleteAlbum(id) {
+
     if (confirm("Bạn có chắc chắn muốn xóa album này?")) {
         fetch("../api/delete_album.php", {
             method: "POST",
@@ -302,4 +308,5 @@ function scrollToSection(id) {
             behavior: "smooth"
         });
     }
+
 }

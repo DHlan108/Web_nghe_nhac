@@ -53,5 +53,41 @@
     <script src="../js/loadComponent.js"></script>
     <script src="../js/search.js"></script>
     <script src="../js/loadArtist.js"></script>
+
+    <!-- nghe_si -->
+     <div id="artist-admin-modal" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h2 id="admin-artist-modal-title" style="color: white;">Quản Lý Nghệ Sĩ</h2>
+            <span onclick="document.getElementById('artist-admin-modal').style.display='none'" style="cursor: pointer; color: white; font-size: 24px;">&times;</span>
+        </div>
+        <div class="admin-modal-body">
+            <div class="input-group">
+                <label>Tên Nghệ Sĩ</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="adm-artist-name">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Quốc gia</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-earth-americas"></i>
+                    <input type="text" id="adm-artist-country">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Ảnh đại diện (tên file trong /img)</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-image"></i>
+                    <input type="text" id="adm-artist-avatar">
+                </div>
+            </div>
+        </div>
+        <div class="admin-modal-footer">
+            <button class="btn-submit" onclick="submitArtist()" style="width: 100%;">Lưu Nghệ Sĩ</button>
+        </div>
+        </div>
+        </div>
   </body>
 </html>
