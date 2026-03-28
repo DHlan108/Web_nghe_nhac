@@ -26,17 +26,17 @@
 
         <!-- CONTENT -->
         <main class="content">
-          <section id="feature" class="section-p1">
-            <div class="fe-box-1">
-              <h6>Album Nổi Bật</h6>
-            </div>
-            <div class="fe-box-2">
-              <h6>Album Mới Ra</h6>
-            </div>
-            <div class="fe-box-3">
-              <h6>Tất Cả Album</h6>
-            </div>
-          </section>
+           <section id="feature" class="section-p1">
+           <div class="fe-box-1" onclick="scrollToSection('featured-albums')">
+            <h6>Album Nổi Bật</h6>
+           </div>
+           <div class="fe-box-2" onclick="scrollToSection('new-albums')">
+            <h6>Album Mới Ra</h6>
+       </div>
+           <div class="fe-box-3" onclick="scrollToSection('all-albums')">
+            <h6>Tất Cả Album</h6>
+        </div>
+      </section>
 
           <section id="featured-albums" class="album-section section-p1">
             <h2>Album Nổi Bật</h2>
@@ -85,7 +85,51 @@
 </div>
     <!-- PLAYER -->
     <div id="player-container"></div>
+    
     <script src="../js/loadComponent.js"></script>
-    <script src="../js/loadAlbum.js"></script>
+    <script src="../js/search.js"></script>  <script src="../js/loadAlbum.js"></script>
+    
+    <div id="album-admin-modal" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h2 id="admin-modal-title" style="color: white; margin-bottom: 20px;">Thêm Album Mới</h2>
+            <span class="close-modal" onclick="closeAlbumModalAdmin()" style="cursor: pointer; color: white; font-size: 24px;">&times;</span>
+        </div>
+        <div class="admin-modal-body">
+            <div class="input-group">
+                <label>Tên Album</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-compact-disc"></i>
+                    <input type="text" id="adm-album-title" placeholder="Nhập tên album...">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>ID Nghệ sĩ</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <input type="number" id="adm-album-artist" placeholder="Nhập ID nghệ sĩ...">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Năm phát hành</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <input type="number" id="adm-album-year" placeholder="Ví dụ: 2024">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>File ảnh (trong thư mục img)</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-image"></i>
+                    <input type="text" id="adm-album-image" placeholder="Ví dụ: album_cover.jpg">
+                </div>
+            </div>
+        </div>
+        <div class="admin-modal-footer">
+            <button class="btn-submit" onclick="submitAlbum()" style="width: 100%; background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); border-radius: 25px; padding: 12px; border: none; color: white; font-weight: bold; cursor: pointer;">Lưu</button>
+        </div>
+    </div>
+</div>
+<span class="close-album-modal" onclick="closeAlbumModal()"><i class="fa-solid fa-xmark"></i></span>
   </body>
 </html>

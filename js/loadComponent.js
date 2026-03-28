@@ -34,55 +34,26 @@ fetch("../component/sidebar.html")
   .then((res) => res.text())
   .then((data) => {
     document.getElementById("sidebar-container").innerHTML = data;
-
-    const currentPage =
-      window.location.pathname.split("/").pop() || "home.html";
-    const links = document.querySelectorAll("#sidebar a");
-
-            links.forEach(link => {
-                const href = link.getAttribute("href");
-                
-                if (href === currentPage) {
-                    link.classList.add("active");
-                } else {
-                    link.classList.remove("active");
-                }
-            });
-        });
-
+    const currentPage = window.location.pathname.split("/").pop() || "home.html";
+    const links = document.querySelectorAll("#sidebar a"); // Khai báo bên trong block
     links.forEach((link) => {
-      const href = link.getAttribute("href");
-
-      if (href === currentPage) {
+      if (link.getAttribute("href") === currentPage) {
         link.classList.add("active");
-      } else {
-        link.classList.remove("active");
       }
     });
+  });
 
-
+// 3. LOAD PLAYER (Quan trọng nhất)
 fetch("../component/player.html")
   .then((res) => res.text())
   .then((data) => {
     document.getElementById("player-container").innerHTML = data;
-  });
 
-document.addEventListener("click", (e) => {
-  if (e.target.closest(".logout")) {
-    const ok = confirm("Đăng xuất khỏi tài khoản này?");
-    if (!ok) return;
-
-    fetch("../api/logout.php", {
-      method: "POST"
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        window.location.href = "login.html";
-      }
-    })
-    .catch(() => {
-      alert("Lỗi đăng xuất!");
-    });
-  }
-});
+    // Chỉ chèn script xử lý nhạc KHI VÀ CHỈ KHI HTML đã xuất hiện
+    if (!document.querySelector('script[src="../js/player.js"]')) {
+      const script = document.createElement("script");
+      script.src = "../js/player.js";
+      document.body.appendChild(script);
+    }
+  })
+  .catch(err => console.error("Lỗi tải thanh nhạc:", err));

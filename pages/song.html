@@ -8,72 +8,51 @@
     <link rel="stylesheet" href="../css/component.css">
     <link rel="stylesheet" href="../css/song.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <link rel="stylesheet" href="../css/player.css">
 </head>
 
-
-
 <body>
-
     <div class="layout">
-
     <!-- SIDEBAR -->
     <div id="sidebar-container"></div>
-
     <!-- MAIN -->
     <div class="main">
-
         <!-- HEADER -->
         <div id="navbar-container"></div>
-
         <!-- CONTENT -->
         <main class="content">
             <div id="admin-tools"></div>
-       
 
             <!-- Danh mục -->
             <section id="feature" class="section-p1">
-
                 <div class="fe-box-1" onclick="scrollToSection('featured-songs')">
                     <h6>Bài Hát Nổi Bật</h6>
                 </div>
-
                 <div class="fe-box-2" onclick="scrollToSection('new-songs')">
                     <h6>Bài Hát Mới Ra</h6>
                 </div>
-
                 <div class="fe-box-3" onclick="scrollToSection('all-songs')">
                     <h6>Tất Cả Bài Hát</h6>
                 </div>
-
             </section>
-
     <!-- Bài hát nổi bật-->
-        <section id="featured-songs" class="song-section section-p1">
+             <section id="featured-songs" class="song-section section-p1">
             <h2>Bài Hát Nổi Bật</h2>
-
             <div class="pro-container" id="featured-list">
-
             </div>
-
         </section>
-
     <!-- Bài hát mới ra -->
-        <section id="new-songs" class="song-section section-p1">
+            <section id="new-songs" class="song-section section-p1">
             <h2>Bài Hát Mới Ra</h2>
             <div class="pro-container" id="new-list">
             </div>
         </section>
-
     <!-- Tất cả bài hát -->
-        <section id="all-songs" class="song-section section-p1">
+            <section id="all-songs" class="song-section section-p1">
             <h2>Tất Cả Bài Hát</h2>
             <div class="pro-container" id="all-list">
-
             </div>
-
         </section>
-
 
 </main>
 
@@ -93,11 +72,11 @@
       <input id="song-artist" type="number">
 
       <label>ID album (có thể bỏ trống)</label>
-    <input id="song-album">
+      <input id="song-album">
 
       <label>Ngày phát hành</label>
       <input id="song-date" type="date">
-      
+
       <label>Đường dẫn file</label>
       <input id="song-file" type="text">
 
@@ -105,28 +84,30 @@
       <input id="song-image" type="text">
 
     </div>
-
     <button class="btn-submit" onclick="submitSong()">Lưu</button>
 
   </div>
 </div>
-
 </div>
 </div>
     <script src="../js/loadComponent.js"></script>
+    <script src="../js/search.js"></script>
     <script src="../js/song.js"></script>
-
+    <script src="../js/main.js"></script>
     <script>
     function scrollToSection(id){
         const section = document.getElementById(id);
-
-        window.scrollTo({
-            top: section.offsetTop - 100,
-            behavior: "smooth"
-        });
+        if(section) {
+            window.scrollTo({
+                top: section.offsetTop - 100,
+                behavior: "smooth"
+            });
+        }
     }
     </script>
 
-
+<div id="player-container"></div>
 </body>
+ 
+
 </html>
