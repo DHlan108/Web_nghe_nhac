@@ -19,29 +19,37 @@ function renderArtistList(artists, isSearching = false) {
         if (artistHeader) artistHeader.innerText = "Nghệ Sĩ";
     }
 
-    artists.forEach(artist => {
-        const html = `
-            <div class="artist-card" onclick="loadArtistSongs(${artist.id},'${artist.name}')">
-                <div class="artist-img" style="position: relative;">
-                    <img src="../img/${artist.avatar}">
-                    ${userRole === "admin" ? `
-                    <div class="admin-controls" style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; z-index: 10;">
-                        <button class="btn-edit" onclick="event.stopPropagation(); prepareEditArtist(${artist.id}, '${artist.name.replace(/'/g, "\\'")}', '${artist.country.replace(/'/g, "\\'")}', '${artist.avatar}')" style="background: rgba(0,0,0,0.6); color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer;">
-                            <i class="fa-regular fa-pen-to-square"></i>
-                        </button>
-                        <button class="btn-delete" onclick="event.stopPropagation(); deleteArtist(${artist.id})" style="background: rgba(255,0,0,0.6); color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer;">
-                            <i class="fa-regular fa-trash-can"></i>
-                        </button>
-                    </div>
-                    ` : ""}
+artists.forEach(artist => {
+    const html = `
+        <div class="artist-card" onclick="loadArtistSongs(${artist.id},'${artist.name}')">
+            
+            <div class="artist-img">
+                <img src="../img/${artist.avatar}">
+            </div>
+
+            <div class="artist-info">
+                <h5>${artist.name}</h5>
+                <span>${artist.country}</span>
+
+                ${userRole === "admin" ? `
+                <div class="artist-admin-controls">
+                    <button class="btn-edit"
+                        onclick="event.stopPropagation(); prepareEditArtist(${artist.id}, '${artist.name.replace(/'/g, "\\'")}', '${artist.country.replace(/'/g, "\\'")}', '${artist.avatar}')">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+
+                    <button class="btn-delete"
+                        onclick="event.stopPropagation(); deleteArtist(${artist.id})">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
                 </div>
-                <div class="artist-info">
-                    <h5>${artist.name}</h5>
-                    <span>${artist.country}</span>
-                </div>
-            </div>`;
-        container.innerHTML += html;
-    });
+                ` : ""}
+            </div>
+        </div>`;
+    
+    container.innerHTML += html;
+});
+
 } // Đóng hàm render chuẩn xác
 
 // 2. Sự kiện DOMContentLoaded
@@ -80,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         container.style.scrollBehavior = "smooth";
 
         if(!document.getElementById("btn-add-artist")){
-            const btnAdd = `<button id="btn-add-artist" onclick="openArtistModal()" style="margin-bottom:20px; padding:10px 20px; background:#1db954; color:white; border:none; border-radius:20px; cursor:pointer; font-weight:bold;">+ Thêm Nghệ Sĩ</button>`;
+            const btnAdd = `<button id="btn-add-artist" onclick="openArtistModal()" style="margin-bottom:20px; padding:10px 20px; background:linear-gradient(135deg, #002aff 0%, #ff0080 100%); color:white; border:none; border-radius:20px; cursor:pointer; font-weight:bold;">+ Thêm Nghệ Sĩ</button>`;
             container.parentElement.insertBefore(document.createRange().createContextualFragment(btnAdd), container);
         }
         

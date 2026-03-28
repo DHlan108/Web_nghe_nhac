@@ -487,3 +487,24 @@
     border: none;
     cursor: pointer;
 }
+
+
+
+.artist-admin-controls {
+    position: static; /* QUAN TRỌNG */
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.artist-admin-controls button {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.7);
+}
+
