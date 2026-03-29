@@ -1,0 +1,40 @@
+
+.notification-wrapper {
+    position: relative;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#bell-icon {
+    font-size: 20px;
+}
+
+.notification-popup {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 250px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.notification-popup input,
+.notification-popup textarea {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 5px;
+}
+
+.notification-popup button {
+    width: 100%;
+    padding: 6px;
+    background: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

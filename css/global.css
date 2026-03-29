@@ -20,16 +20,32 @@ body{
   display: flex;
   width:100%;
 }
+#header {
+  position: fixed;
+  top: 0;
+  left: 200px; /* bằng width sidebar */
+  width: calc(100% - 200px);
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #ccc;
+  z-index: 10000;
+}
 #sidebar{
-  width:200px;
-  flex-shrink:0;
+  width: 200px;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
 }
 .main {
   flex: 1;
   display: flex;
   min-width: 0;
   flex-direction: column;
-  padding-top: 100px; 
 }
 
 .content{
