@@ -33,10 +33,19 @@ object-fit:cover;
     margin-top: 20px;
     padding: 10px 20px;
     border: none;
-    background: #e81cff;
+    background: linear-gradient(
+    -45deg,
+    var(--primary-pink),
+    var(--primary-blue)
+  );
     color: white;
     border-radius: 20px;
     cursor: pointer;
+    font-weight: 550;
+}
+
+.edit-btn:hover {
+     transform: scale(1.03);
 }
 
 .modal{
@@ -68,6 +77,7 @@ object-fit:cover;
     flex-direction: column;
     gap: 15px;
     animation: fadeIn 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
 
 
@@ -85,8 +95,12 @@ object-fit:cover;
 }
 
 .modal-actions button{
-    background-color: #e81cff;
-    padding: 8px, 16px;
+    background: linear-gradient(
+    -45deg,
+    var(--primary-pink),
+    var(--primary-blue)
+  );
+    padding: 8px 16px;
     width: 80px;
     height: 40px;
     border: none;
@@ -99,18 +113,6 @@ object-fit:cover;
 
 .modal-actions button:hover {
     transform: scale(1.03);
-}
-
-.close-btn{
-position: absolute;
-top: 10px;
-right: 15px;
-
-background: none;
-border: none;
-font-size: 24px;
-color: white;
-cursor: pointer;
 }
 
 .close-btn{

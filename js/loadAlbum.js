@@ -1,3 +1,4 @@
+let globalAlbums = [];
 // 1. Khai báo role và biến tạm ngay đầu file
 const role = localStorage.getItem("role") || "user";
 let currentEditAlbumId = null;
@@ -19,74 +20,45 @@ document.addEventListener("DOMContentLoaded", () => {
             closeAlbumModalAdmin();
         }
     });
-    fetch("/Web_nghe_nhac/api/get_album.php")
+   fetch("/Web_nghe_nhac/api/get_album.php")
         .then((res) => res.json())
         .then((data) => {
             if (!data.success) return;
+            globalAlbums = data.albums; // Lưu vào kho để tìm kiếm
 
-            const featuredContainer = document.getElementById("featured-album-list");
-            const newContainer = document.getElementById("new-album-list");
-            const allContainer = document.getElementById("all-album-list");
-
-            // Reset nội dung cũ
-            if (allContainer) allContainer.innerHTML = "";
-            if (featuredContainer) featuredContainer.innerHTML = "";
-            if (newContainer) newContainer.innerHTML = "";
-
-           data.albums.forEach((album) => {
-            // SỬA LỖI 2 & 3: Dùng class admin-controls thống nhất với CSS và truyền ID nghệ sĩ đúng cách
-              const html = `
-            <div class="album-card" onclick="openAlbumModal(${album.id}, '${album.title.replace(/'/g, "\\'")}', '${album.artist_name.replace(/'/g, "\\'")}', '${album.release_year}', '${album.cover_image}')">
-            <div class="album-img">
-            <img src="../img/${album.cover_image}" alt="${album.title}">
-            <div class="album-play">
-                <i class="fa-solid fa-play"></i>
-            </div>
-
-            ${role === "admin" ? `
-            <div class="admin-controls">
-                <button class="btn-edit" onclick="event.stopPropagation(); prepareEditAlbum(${album.id}, '${album.title.replace(/'/g, "\\'")}', ${album.artist_id}, '${album.release_year}', '${album.cover_image}')">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </button>
-                <button class="btn-delete" onclick="event.stopPropagation(); deleteAlbum(${album.id})">
-                    <i class="fa-regular fa-trash-can"></i>
-                </button>
-            </div>
-            ` : ""}
-        </div>
-
-        <div class="album-info">
-            <h5 title="${album.title}">${album.title}</h5>
-            <span class="description">${album.artist_name} • ${album.release_year}</span>
-        </div>
-    </div>`;
-
-            if (allContainer) allContainer.innerHTML += html;
-            if (newContainer) newContainer.innerHTML += html;
-            if (featuredContainer) featuredContainer.innerHTML += html;
-            });
-
-            // === TÍNH NĂNG MỚI: CHÈN NÚT "THÊM ALBUM" CHO ADMIN ===
-            if (role === "admin") {
-            const firstSection = document.querySelector('.album-section');
-            // Chỉ chèn nếu TRÊN TRANG CHƯA CÓ nút này
-            if (firstSection && !document.querySelector('.admin-add-btn-main')) {
-            firstSection.style.position = 'relative';
-            const btnAdd = `
-            <button class="admin-add-btn-main" onclick="openAlbumModalAdmin('add')">
-                <i class="fa-solid fa-plus"></i> Thêm Album
-            </button>`;
-            firstSection.insertAdjacentHTML('afterbegin', btnAdd);
+            // --- BẮT ĐẦU PHẦN SỬA ---
+            // 1. Kết nối bộ máy tìm kiếm (search.js)
+            // 1. Kết nối bộ máy tìm kiếm (search.js)
+    if (typeof MusicSearchEngine !== 'undefined') {
+        MusicSearchEngine.initGlobalSearch((keyword) => {
+            const isTyping = keyword.trim() !== ""; // Kiểm tra xem có đang gõ không
+            const filtered = MusicSearchEngine.process(globalAlbums, { keyword: keyword });
+            
+            // Truyền filtered và trạng thái isTyping vào hàm vẽ
+            refreshAlbumDisplay(filtered, isTyping);
+            
+            // ĐÃ BỎ lệnh window.scrollTo ở đây để tối ưu trải nghiệm
+        });
     }
-}
 
-            // Khởi tạo scroll sau khi load xong (Logic của nhóm)
-            setTimeout(() => {
-                initScroll();
-            }, 100);
+            // 2. Hiển thị dữ liệu ban đầu
+            refreshAlbumDisplay(globalAlbums);
+            // --- KẾT THÚC PHẦN SỬA ---
+
+            // === Giữ nguyên đoạn hiện nút "Thêm Album" cho Admin bên dưới của cậu ===
+            if (role === "admin") {
+                const firstSection = document.querySelector('.album-section');
+                if (firstSection && !document.querySelector('.admin-add-btn-main')) {
+                    const btnAdd = `<button class="admin-add-btn-main" onclick="openAlbumModalAdmin('add')"><i class="fa-solid fa-plus"></i> Thêm Album</button>`;
+                    firstSection.insertAdjacentHTML('afterbegin', btnAdd);
+                }
+            }
+            setTimeout(() => { initScroll(); }, 100);
+        })
+        .catch((err) => {
+            console.error("Lỗi khi tải album:", err);
         });
 });
-
 // ================= LOGIC CUỘN & DRAG (GIỮ NGUYÊN 100% CỦA NHÓM) =================
 function initScroll() {
     document.querySelectorAll(".album-wrapper").forEach((wrapper) => {
@@ -198,28 +170,31 @@ function closeAlbumModalAdmin() {
 }
 
 function submitAlbum() {
-    const id = currentEditAlbumId;
-    const title = document.getElementById('adm-album-title').value;
-    const artist_id = document.getElementById('adm-album-artist').value;
-    const release_year = document.getElementById('adm-album-year').value;
-    const cover_image = document.getElementById('adm-album-image').value;
+    // 1. Lấy dữ liệu từ Form
+    const id = currentEditAlbumId; 
+    const title = document.getElementById('adm-album-title').value.trim();
+    const artist_id = document.getElementById('adm-album-artist').value.trim();
+    const release_year = document.getElementById('adm-album-year').value.trim();
+    const cover_image = document.getElementById('adm-album-image').value.trim();
 
+    // 2. Kiểm tra dữ liệu đầu vào
     if (!title || !artist_id) {
         alert("Vui lòng nhập đầy đủ tên và ID nghệ sĩ!");
         return;
     }
 
+    // 3. Đóng gói dữ liệu (Dùng URLSearchParams cho chuẩn với headers bên dưới)
     const params = new URLSearchParams();
-    if (id) params.append('id', id); // Gửi ID để PHP biết là Update
+    if (id) params.append('id', id); 
     params.append('title', title);
     params.append('artist_id', artist_id);
     params.append('release_year', release_year);
     params.append('cover_image', cover_image);
 
-    // SỬA TẠI ĐÂY: Đổi từ edit_album.php thành update_album.php
+    // 4. Xác định URL (Nếu không có id thì CHẮC CHẮN là create)
     const url = id ? "../api/update_album.php" : "../api/create_album.php";
 
-    console.log("Đang gọi API:", url, "với ID:", id);
+    console.log("Gửi dữ liệu tới:", url, "Data:", params.toString());
 
     fetch(url, {
         method: 'POST',
@@ -227,21 +202,23 @@ function submitAlbum() {
         body: params.toString()
     })
     .then(res => {
-        // Kiểm tra xem phản hồi có phải là JSON không
+        // Kiểm tra xem phản hồi có ok không (tránh lỗi 500/404)
+        if (!res.ok) throw new Error("Server trả về lỗi " + res.status);
         return res.json();
     })
     .then(result => {
-        if (result.success) {
-            alert(result.message);
+        if (result && result.success) {
+            alert(result.message || "Thao tác thành công!");
             closeAlbumModalAdmin();
-            location.reload(); // Tải lại trang để cập nhật giao diện
+            location.reload(); 
         } else {
-            alert("Lỗi từ Server: " + result.message);
+            // Nếu result undefined hoặc success = false
+            alert("Lỗi: " + (result ? result.message : "Phản hồi từ server trống"));
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert("Không thể kết nối tới update_album.php. Kiểm tra lại đường dẫn file!");
+        console.error('Chi tiết lỗi:', error);
+        alert("Có lỗi xảy ra! Hãy kiểm tra tab Network để xem file PHP có lỗi cú pháp không.");
     });
 }
 
@@ -261,6 +238,7 @@ function prepareEditAlbum(id, title, artistId, year, image) {
     document.getElementById("album-admin-modal").style.display = "flex";
 }
 function deleteAlbum(id) {
+
     if (confirm("Bạn có chắc chắn muốn xóa album này?")) {
         fetch("../api/delete_album.php", {
             method: "POST",
@@ -273,4 +251,62 @@ function deleteAlbum(id) {
             else alert("Lỗi khi xóa!");
         });
     }
+}
+function refreshAlbumDisplay(data, isSearching = false) {
+    const featuredSec = document.getElementById("featured-albums");
+    const newSec = document.getElementById("new-albums");
+    const allList = document.getElementById("all-album-list");
+
+    if (isSearching) {
+        // KHI TÌM KIẾM: Ẩn toàn bộ các mục phụ, chỉ hiện mục Tất cả
+        if (featuredSec) featuredSec.style.display = "none";
+        if (newSec) newSec.style.display = "none";
+    } else {
+        // KHI BÌNH THƯỜNG: Hiện lại và chia 6 bài
+        if (featuredSec) featuredSec.style.display = "block";
+        if (newSec) newSec.style.display = "block";
+
+        const hotData = MusicSearchEngine.process(data, { sortBy: 'hot', limit: 6 });
+        const newData = MusicSearchEngine.process(data, { sortBy: 'new', limit: 6 });
+
+        document.getElementById("featured-album-list").innerHTML = hotData.map(createAlbumHTML).join('');
+        document.getElementById("new-album-list").innerHTML = newData.map(createAlbumHTML).join('');
+    }
+
+    // Mục Tất cả luôn hiển thị kết quả khớp với dữ liệu truyền vào
+    if (allList) allList.innerHTML = data.map(createAlbumHTML).join('');
+    
+    setTimeout(initScroll, 150);
+}
+function createAlbumHTML(album) {
+    return `
+    <div class="album-card" onclick="openAlbumModal(${album.id}, '${album.title.replace(/'/g, "\\'")}', '${album.artist_name.replace(/'/g, "\\'")}', '${album.release_year}', '${album.cover_image}')">
+        <div class="album-img">
+            <img src="../img/${album.cover_image}" alt="${album.title}">
+            <div class="album-play"><i class="fa-solid fa-play"></i></div>
+            ${role === "admin" ? `
+            <div class="admin-controls">
+                <button class="btn-edit" onclick="event.stopPropagation(); prepareEditAlbum(${album.id}, '${album.title.replace(/'/g, "\\'")}', ${album.artist_id}, '${album.release_year}', '${album.cover_image}')">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+                <button class="btn-delete" onclick="event.stopPropagation(); deleteAlbum(${album.id})">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            </div>` : ""}
+        </div>
+        <div class="album-info">
+            <h5 title="${album.title}">${album.title}</h5>
+            <span class="description">${album.artist_name} • ${album.release_year}</span>
+        </div>
+    </div>`;
+}
+function scrollToSection(id) {
+    const section = document.getElementById(id);
+    if (section) {
+        window.scrollTo({
+            top: section.offsetTop - 100, // Trừ đi khoảng cách Navbar
+            behavior: "smooth"
+        });
+    }
+
 }

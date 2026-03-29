@@ -404,7 +404,6 @@ button.normal {
 }
 
 .modal-body label {
-  display: flex;
   font-size: 13px;
   color: #ffffff;
 }
