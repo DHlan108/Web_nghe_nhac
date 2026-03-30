@@ -1,7 +1,7 @@
 <?php
 session_start();
 header('Content-Type: application/json; charset=utf-8');
-require_once 'connect.php';
+require_once 'db_connect.php';
 
 // =======================
 // 1. TRẢ ROLE USER

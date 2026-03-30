@@ -16,7 +16,7 @@ fetch("../component/navbar.html")
 // --- 2. LOGIC THÔNG BÁO ---
 function initNotificationLogic() {
     // Lấy Role từ server
-    fetch('get_notification.php?action=get_role')
+    fetch('../api/get_notification.php?action=get_role')
         .then(res => res.json())
         .then(data => {
             const userRole = data.role;
@@ -37,7 +37,7 @@ function initNotificationLogic() {
                     form.onsubmit = function(e) {
                         e.preventDefault();
                         const formData = new FormData(this);
-                        fetch('get_notification.php', {
+                        fetch('../api/get_notification.php', {
                             method: 'POST',
                             body: formData
                         })
@@ -60,7 +60,7 @@ function initNotificationLogic() {
 }
 
 function checkNotification() {
-    fetch(`get_notification.php?last_id=${lastNotificationId}`)
+    fetch(`../api/get_notification.php?last_id=${lastNotificationId}`)
         .then(res => res.json())
         .then(data => {
             if (data && data.id) {
@@ -102,7 +102,13 @@ fetch("../component/sidebar.html")
   .then((res) => res.text())
   .then((data) => {
     document.getElementById("sidebar-container").innerHTML = data;
-    // Xử lý active link...
+    const currentPage = window.location.pathname.split("/").pop() || "home.html";
+    const links = document.querySelectorAll("#sidebar a");
+    links.forEach((link) => {
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+    });
   });
 
 fetch("../component/player.html")
