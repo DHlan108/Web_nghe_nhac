@@ -12,7 +12,7 @@
   <!-- 🔔 ICON CHUÔNG -->
   <div class="notification-wrapper">
     <i class="fa-solid fa-bell" id="bell-icon"></i>
-
+    <span id="notification-badge" class="badge" style="display: none;">0</span>
     <!-- POPUP FORM -->
     <div class="notification-popup" id="notification-popup">
       <form id="form">
@@ -20,6 +20,11 @@
         <textarea name="content" placeholder="Nội dung" required></textarea>
         <button type="submit">Gửi</button>
       </form>
+    </div>
+
+    <div class="notification-list-container" id="user-notification-list">
+      <h4>Thông báo gần đây</h4>
+      <div id="list-items"></div>
     </div>
   </div>
 
