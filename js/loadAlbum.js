@@ -26,9 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!data.success) return;
             globalAlbums = data.albums; // Lưu vào kho để tìm kiếm
 
-            // --- BẮT ĐẦU PHẦN SỬA ---
-            // 1. Kết nối bộ máy tìm kiếm (search.js)
-            // 1. Kết nối bộ máy tìm kiếm (search.js)
     if (typeof MusicSearchEngine !== 'undefined') {
         MusicSearchEngine.initGlobalSearch((keyword) => {
             const isTyping = keyword.trim() !== ""; // Kiểm tra xem có đang gõ không
@@ -45,14 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
             refreshAlbumDisplay(globalAlbums);
             // --- KẾT THÚC PHẦN SỬA ---
 
-            // === Giữ nguyên đoạn hiện nút "Thêm Album" cho Admin bên dưới của cậu ===
             if (role === "admin") {
-                const firstSection = document.querySelector('.album-section');
-                if (firstSection && !document.querySelector('.admin-add-btn-main')) {
-                    const btnAdd = `<button class="admin-add-btn-main" onclick="openAlbumModalAdmin('add')"><i class="fa-solid fa-plus"></i> Thêm Album</button>`;
-                    firstSection.insertAdjacentHTML('afterbegin', btnAdd);
-                }
+            const holder = document.getElementById('admin-btn-holder');
+            if (holder && !document.querySelector('.admin-add-btn-main')) {
+            const btnAdd = `<button class="admin-add-btn-main" onclick="openAlbumModalAdmin('add')"><i class="fa-solid fa-plus"></i> Thêm Album</button>`;
+            holder.innerHTML = btnAdd; // Chèn vào đúng container
             }
+        }
             setTimeout(() => { initScroll(); }, 100);
         })
         .catch((err) => {
@@ -258,11 +254,11 @@ function refreshAlbumDisplay(data, isSearching = false) {
     const allList = document.getElementById("all-album-list");
 
     if (isSearching) {
-        // KHI TÌM KIẾM: Ẩn toàn bộ các mục phụ, chỉ hiện mục Tất cả
+       
         if (featuredSec) featuredSec.style.display = "none";
         if (newSec) newSec.style.display = "none";
     } else {
-        // KHI BÌNH THƯỜNG: Hiện lại và chia 6 bài
+       
         if (featuredSec) featuredSec.style.display = "block";
         if (newSec) newSec.style.display = "block";
 

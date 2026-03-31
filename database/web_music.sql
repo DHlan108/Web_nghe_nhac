@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2026 at 04:13 PM
+-- Generation Time: Mar 28, 2026 at 09:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -41,7 +41,7 @@ CREATE TABLE `albums` (
 
 INSERT INTO `albums` (`id`, `title`, `artist_id`, `release_year`, `cover_image`) VALUES
 (1, 'COUP D`ETAT', 1, 2013, 'coup d\'etat.jpg'),
-(2, 'Lover', 2, 2019, 'lover.png'),
+(2, 'Loverr', 2, 2019, 'lover.png'),
 (3, 'm-tp M-TP', 3, 2017, 'm-tp.jpg'),
 (4, 'BẬT NÓ LÊN', 4, 2024, 'batnolen.jpg'),
 (5, 'Bảo tàng của nuối tiếc', 5, 2024, 'baotang.jpg'),
@@ -72,7 +72,22 @@ INSERT INTO `artists` (`id`, `name`, `country`, `avatar`) VALUES
 (4, 'SOOBIN', 'Việt Nam', 'soobin.jpg'),
 (5, 'VŨ', 'Việt Nam', 'vu.jpg'),
 (6, 'RPT MCK', 'Việt Nam', 'mck.jpg'),
-(7, 'tlinh', 'Việt Nam', 'tlinh.jpg');
+(7, 'tlinh', 'Việt Nam', 'tlinh.jpg'),
+(8, 'Obito', 'Việt Nam', 'obito.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_active` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -83,8 +98,18 @@ INSERT INTO `artists` (`id`, `name`, `country`, `avatar`) VALUES
 CREATE TABLE `playlists` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL
+  `name` varchar(150) NOT NULL,
+  `playlist_image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `playlists`
+--
+
+INSERT INTO `playlists` (`id`, `user_id`, `name`, `playlist_image`) VALUES
+(3, 3, 'chill', 'playlist_1774585370.png'),
+(21, 3, 'Nhạc rap', NULL),
+(22, 1, 'nhạc đi ngủ', 'playlist_1774682177.jpg');
 
 -- --------------------------------------------------------
 
@@ -96,6 +121,18 @@ CREATE TABLE `playlist_songs` (
   `playlist_id` int(11) NOT NULL,
   `song_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `playlist_songs`
+--
+
+INSERT INTO `playlist_songs` (`playlist_id`, `song_id`) VALUES
+(3, 3),
+(3, 4),
+(3, 5),
+(3, 13),
+(21, 13),
+(22, 1);
 
 -- --------------------------------------------------------
 
@@ -133,7 +170,8 @@ INSERT INTO `songs` (`id`, `title`, `artist_id`, `album_id`, `duration`, `releas
 (11, 'Cornelia Street', 2, 2, 447, '2019-08-23', 'music/cornelia_street.mp3', 'lover.png', 0),
 (12, 'Daylight', 2, 2, 453, '2019-08-23', 'music/daylight.mp3', 'lover.png', 0),
 (13, 'CROOKED', 1, 1, 344, '2013-09-05', 'music/crooked.mp3', 'coup d\'etat.jpg', 0),
-(14, 'BLACK', 1, 1, 323, '2013-09-05', 'music/black.mp3', 'coup d\'etat.jpg', 0);
+(14, 'BLACK', 1, 1, 323, '2013-09-05', 'music/black.mp3', 'coup d\'etat.jpg', 0),
+(43, 'Badtrip', 6, 6, NULL, '2023-03-02', 'music/bad_trip.mp3', '99.jpg', 0);
 
 -- --------------------------------------------------------
 
@@ -155,9 +193,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `ava_user`) VALUES
-(1, 'admin01', 'admin01@gmail.com', '$2a$10$abcxyzHashGia', 'admin', NULL),
+(1, 'admin01', 'admin01@gmail.com', '$2y$10$Az2SsYgJc3H.16XBB2jwzuGIIbQaAJEAiBsyJv1rqCzm4xNVTv0Ha', 'admin', NULL),
 (2, 'user01', 'user01@gmail.com', '$2a$10$abcxyzHashGia', 'user', NULL),
-(3, 'maichi', 'mchi17082005@gmail.com', '$2y$10$f8oBZ4ZrLW3Y7Kv52EYZM.ZuV.6Oq3pFhqyws1v27nC7dTSgeVVUq', 'user', NULL);
+(3, 'maichi', 'mchi17082005@gmail.com', '$2y$10$f8oBZ4ZrLW3Y7Kv52EYZM.ZuV.6Oq3pFhqyws1v27nC7dTSgeVVUq', 'user', 'avatar_1774424371.webp');
 
 --
 -- Indexes for dumped tables
@@ -174,6 +212,12 @@ ALTER TABLE `albums`
 -- Indexes for table `artists`
 --
 ALTER TABLE `artists`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -214,25 +258,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `albums`
 --
 ALTER TABLE `albums`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `artists`
 --
 ALTER TABLE `artists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `playlists`
 --
 ALTER TABLE `playlists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `songs`
 --
 ALTER TABLE `songs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `users`

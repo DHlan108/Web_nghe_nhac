@@ -356,19 +356,26 @@
 
 /* NUT THEM ALBUM*/
 .admin-add-btn-main {
+    right: 80px;
     position: absolute;
-    right: 20px;
-    top: 5px; /* Điều chỉnh số này để nó ngang hàng với chữ 'Tất cả album' */
+    top: -65px; /* Đẩy lên trên để ngang hàng với tiêu đề hoặc dưới nút Tất cả album */
     background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 10px 24px; /* Tăng padding để nút to ra */
+    border-radius: 25px;
     font-weight: bold;
+    font-size: 15px; /* Tăng nhẹ font chữ */
     cursor: pointer;
-    z-index: 10;  
+    z-index: 10;
+    transition: 0.3s ease;
+    min-width: 150px;
 }
 
+admin-add-btn-main:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
 /* Nút SỬA/XÓA bên PHẢI ảnh */
 .admin-controls {
     position: absolute;
