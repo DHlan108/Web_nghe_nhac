@@ -21,7 +21,10 @@
 }
 .album-section h2 {
     color: var(--text-dark);
-    padding-bottom: 30px;
+    padding-bottom: 10px;
+    line-height: 1.2;
+    margin-bottom: 10px; 
+    margin-top: 10px;    
 }
 /* Thẻ Album Card */
 .album-card {
@@ -166,11 +169,11 @@
 }
 
 .scroll-btn.left {
-  left: -20px; /* Thụt ra ngoài một chút */
+  left: -50px; /* Thụt ra ngoài một chút */
 }
 
 .scroll-btn.right {
-  right: -20px;
+  right: -50px;
 }
 /* --- MODAL ALBUM DETAIL --- */
 .album-modal-overlay {
@@ -277,7 +280,7 @@
   flex: 0 0 200px;
   width: 200px;
   min-width: 200px;
-  background: var(--border-light);
+  background: none !important;
   padding: 18px;
   border-radius: 12px;
   transition: all 0.3s ease;
@@ -350,7 +353,7 @@
   transform: translateY(0);
 }
 .album-section {
-    position: relative; /* Làm điểm tựa cho nút */
+    position: relative; 
     margin-top: 40px;
 }
 
@@ -358,8 +361,8 @@
 .admin-add-btn-main {
     right: 80px;
     position: absolute;
-    top: -65px; /* Đẩy lên trên để ngang hàng với tiêu đề hoặc dưới nút Tất cả album */
-    background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+    top: -40px; 
+    background: linear-gradient(135deg, #002aff 0%, #ff0080 100%);
     color: white;
     border: none;
     padding: 10px 24px; /* Tăng padding để nút to ra */
@@ -372,7 +375,7 @@
     min-width: 150px;
 }
 
-admin-add-btn-main:hover {
+.admin-add-btn-main:hover {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
@@ -400,7 +403,7 @@ admin-add-btn-main:hover {
     transition: 0.2s;
 }
 
-.btn-edit:hover { background: #2196F3 !important; }
+.btn-edit:hover { background: linear-gradient(135deg, #002aff 0%, #ff0080 100%); }
 .btn-delete:hover { background: #f44336 !important; }
 
 /* Container Modal */
@@ -495,10 +498,39 @@ admin-add-btn-main:hover {
     cursor: pointer;
 }
 
+/* NÚT THÊM ARTIST */
+#artist-container {
+    margin-top: -50px; 
+    margin-left: -10px;  
+}
+#product1 {
+    position: relative;
+    margin-top: 80px; 
+}
 
-
+.admin-add-btn-artist {
+    position: absolute;
+    top: 20px;     
+    right: 20px;   
+    
+    background: linear-gradient(135deg, #002aff 0%, #ff0080 100%);
+    color: white;
+    border: none;
+    padding: 10px 24px; 
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 15px; 
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s ease;
+    min-width: 150px;
+}
+.admin-add-btn-artist:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 0, 128, 0.3);
+}
 .artist-admin-controls {
-    position: static; /* QUAN TRỌNG */
+    position: static; 
     display: flex;
     justify-content: center;
     gap: 8px;

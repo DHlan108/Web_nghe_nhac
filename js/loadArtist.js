@@ -86,11 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
         container.style.overflowY = "hidden";              
         container.style.paddingBottom = "20px";
         container.style.scrollBehavior = "smooth";
-
-        if(!document.getElementById("btn-add-artist")){
-            const btnAdd = `<button id="btn-add-artist" onclick="openArtistModal()" style="margin-bottom:20px; padding:10px 20px; background:linear-gradient(135deg, #002aff 0%, #ff0080 100%); color:white; border:none; border-radius:20px; cursor:pointer; font-weight:bold;">+ Thêm Nghệ Sĩ</button>`;
-            container.parentElement.insertBefore(document.createRange().createContextualFragment(btnAdd), container);
-        }
         
         if (arrowsBox) {
             arrowsBox.style.display = "flex";
