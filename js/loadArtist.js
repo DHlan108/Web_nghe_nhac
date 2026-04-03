@@ -75,8 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Lỗi fetch:", err));
 
-    // PHẦN ADMIN (Dòng 86 của cậu đây)
     if(userRole === "admin" && container){
+        const section = document.getElementById("product1");
+        if (section && !document.querySelector(".admin-add-btn-artist")) {
+            const addBtn = document.createElement("button");
+            addBtn.className = "admin-add-btn-artist";
+            addBtn.innerHTML = "+ Thêm Nghệ Sĩ";
+            addBtn.onclick = openArtistModal; // Gán sự kiện mở modal
+            section.appendChild(addBtn);
+        }
         container.style.display = "grid";
         container.style.gridTemplateRows = "repeat(2, auto)"; 
         container.style.gridAutoFlow = "column";            

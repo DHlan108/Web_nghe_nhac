@@ -304,5 +304,4 @@ function scrollToSection(id) {
             behavior: "smooth"
         });
     }
-
 }

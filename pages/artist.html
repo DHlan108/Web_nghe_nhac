@@ -28,12 +28,10 @@
         <main class="content">
           <section id="product1" class="section-p1">
               <h2>Nghệ Sĩ</h2>
-              <button class="admin-add-btn-artist" onclick="openArtistModal()">
-              + Thêm Nghệ sĩ
-              </button>
-              <div class="artist-wrapper">
+                  <div class="artist-wrapper">
                   <button class="scroll-btn left" id="artist-btn-left"><i class="fa-solid fa-chevron-left"></i></button>
-                        <div class="pro-container" id="artist-container">
+                  
+                  <div class="pro-container" id="artist-container">
                       </div>
 
                   <button class="scroll-btn right" id="artist-btn-right"><i class="fa-solid fa-chevron-right"></i></button>
@@ -44,7 +42,10 @@
             <h2 id="artist-name"></h2>
             <div class="pro-container" id="song-container"></div>
           </section>
-         </main>
+            <div class="artist-play">
+              <i class="fa-solid fa-play"></i>
+            </div>
+        </main>
       </div>
     </div>
     <!-- PLAYER -->
@@ -57,8 +58,8 @@
      <div id="artist-admin-modal" class="admin-modal">
     <div class="admin-modal-content">
         <div class="admin-modal-header">
-            <h2 id="admin-artist-modal-title">Quản Lý Nghệ Sĩ</h2>
-            <span class="close-modal" onclick="closeArtistModal()">×</span>
+            <h2 id="admin-artist-modal-title" style="color: white;">Quản Lý Nghệ Sĩ</h2>
+            <span onclick="document.getElementById('artist-admin-modal').style.display='none'" style="cursor: pointer; color: white; font-size: 24px;">&times;</span>
         </div>
         <div class="admin-modal-body">
             <div class="input-group">
@@ -84,7 +85,7 @@
             </div>
         </div>
         <div class="admin-modal-footer">
-            <button class="btn-submit" onclick="submitArtist()">Lưu</button>
+            <button class="btn-submit" onclick="submitArtist()" style="width: 100%;">Lưu Nghệ Sĩ</button>
         </div>
         </div>
         </div>
