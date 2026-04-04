@@ -182,3 +182,42 @@ fetch("../component/player.html")
       document.body.appendChild(script);
     }
   });
+
+  
+function loadMainContent(url) {
+    fetch(url)
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Tìm nội dung mới từ file fetch về
+            const newContent = doc.getElementById('main-content');
+            const targetContainer = document.getElementById('main-content');
+            
+            if (newContent && targetContainer) {
+                // 1. Thay thế HTML
+                targetContainer.innerHTML = newContent.innerHTML;
+                
+                // 2. Ép trình duyệt chạy lại các thẻ <script> nằm trong nội dung mới
+                const scripts = targetContainer.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    
+                    // Copy toàn bộ attributes (src, type...)
+                    Array.from(oldScript.attributes).forEach(attr => {
+                        newScript.setAttribute(attr.name, attr.value);
+                    });
+                    
+                    // Copy nội dung text bên trong script (nếu có)
+                    if (oldScript.innerHTML) {
+                        newScript.innerHTML = oldScript.innerHTML;
+                    }
+                    
+                    // Thay thế script cũ bằng script mới để kích hoạt nó chạy
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            }
+        })
+        .catch(err => console.error("Lỗi khi chuyển trang:", err));
+}

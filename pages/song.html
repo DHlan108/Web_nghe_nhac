@@ -53,8 +53,9 @@
             <div class="pro-container" id="all-list">
             </div>
         </section>
-
 </main>
+</div>
+</div>
 
 <div id="song-modal" class="modal">
   <div class="modal-content">
@@ -85,15 +86,13 @@
 
     </div>
     <button class="btn-submit" onclick="submitSong()">Lưu</button>
-
   </div>
 </div>
-</div>
-</div>
-    <script src="../js/loadComponent.js"></script>
-    <script src="../js/search.js"></script>
-    <script src="../js/song.js"></script>
-    <script src="../js/main.js"></script>
+    <div id="player-container"></div>
+    <script src="../js/loadComponent.js" defer></script>
+    <script src="../js/search.js" defer></script>
+    <script src="../js/song.js" defer></script>
+    <script src="../js/main.js" defer></script>
     <script>
     function scrollToSection(id){
         const section = document.getElementById(id);
@@ -105,9 +104,5 @@
         }
     }
     </script>
-
-<div id="player-container"></div>
 </body>
- 
-
 </html>
