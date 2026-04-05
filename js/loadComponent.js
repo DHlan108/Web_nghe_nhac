@@ -1,29 +1,154 @@
-// Biến lưu trữ ID thông báo cuối cùng
 let lastNotificationId = 0;
 let isFirstLoad = true;
-// --- 1. LOAD NAVBAR ---
+let notificationCount = 0;
+
+// =========================================================
+// MẢNH GHÉP 1: BỘ ĐỊNH TUYẾN & LAZY LOAD JS/CSS
+// =========================================================
+// Khai báo bản đồ (Map) kết nối Trang -> Hàm khởi tạo -> File JS tương ứng
+const pageConfig = {
+    'home.html': { initFn: 'initHomePage', jsFile: '../js/main.js' },
+    'song.html': { initFn: 'initSongPage', jsFile: '../js/song.js' },
+    'album.html': { initFn: 'initAlbumPage', jsFile: '../js/loadAlbum.js' },
+    'artist.html': { initFn: 'initArtistPage', jsFile: '../js/loadArtist.js' },
+    'playlist.html': { initFn: 'initPlaylistPage', jsFile: '../js/playlist.js' },
+    'profile.html': { initFn: 'initProfilePage', jsFile: '../js/loadProfile.js' }
+};
+
+function triggerPageLogic(url) {
+    const pageName = url.split("/").pop().split("?")[0] || "home.html";
+    const config = pageConfig[pageName];
+
+    if (config) {
+        // Nếu hàm đã được nạp vào hệ thống rồi -> Gọi luôn
+        if (typeof window[config.initFn] === 'function') {
+            window[config.initFn]();
+        } else {
+            // Nếu chưa có -> Tự động tạo thẻ <script> để nạp file JS tương ứng
+            const script = document.createElement('script');
+            script.src = config.jsFile;
+            script.onload = () => {
+                // Đợi JS load xong thì gọi hàm
+                if (typeof window[config.initFn] === 'function') {
+                    window[config.initFn]();
+                }
+            };
+            document.body.appendChild(script);
+        }
+    }
+}
+
+// =========================================================
+// MẢNH GHÉP 2: HÀM CHUYỂN TRANG KHÔNG RELOAD (CÓ NẠP CSS)
+// =========================================================
+function loadMainContentSPA(url) {
+    fetch(url)
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // 1. Cập nhật HTML phần ruột
+            const newContent = doc.getElementById('main-content');
+            const targetContainer = document.getElementById('main-content');
+            
+            if (newContent && targetContainer) {
+                targetContainer.innerHTML = newContent.innerHTML;
+            }
+
+            // 2. TỰ ĐỘNG NẠP CSS CỦA TRANG MỚI (Khắc phục lỗi vỡ layout)
+            const newStyles = doc.querySelectorAll('link[rel="stylesheet"]');
+            newStyles.forEach(style => {
+                const href = style.getAttribute('href');
+                // Nếu CSS này chưa có trong trang hiện tại thì thêm vào
+                if (href && !document.querySelector(`link[href="${href}"]`)) {
+                    const newStyle = document.createElement('link');
+                    newStyle.rel = 'stylesheet';
+                    newStyle.href = href;
+                    document.head.appendChild(newStyle);
+                }
+            });
+
+            // 3. Gọi hàm kích hoạt JS
+            triggerPageLogic(url); 
+        })
+        .catch(err => console.error("Lỗi khi chuyển trang SPA:", err));
+}
+
+// =========================================================
+// MẢNH GHÉP 3: XỬ LÝ F5 VÀ NÚT BACK CỦA TRÌNH DUYỆT
+// =========================================================
+document.addEventListener("DOMContentLoaded", () => {
+    // Khi F5, chạy script của trang hiện tại
+    triggerPageLogic(window.location.pathname);
+});
+
+window.addEventListener("popstate", () => {
+    // Khi bấm nút Back/Forward, tự động chuyển trang
+    loadMainContentSPA(window.location.pathname);
+});
+
+// =========================================================
+// CÁC LOGIC CŨ GIỮ NGUYÊN (Navbar, Sidebar, Player, Thông báo)
+// =========================================================
+
+// --- LOAD NAVBAR ---
 fetch("../component/navbar.html")
   .then((res) => res.text())
   .then((data) => {
     document.getElementById("navbar-container").innerHTML = data;
-
-    // Sau khi Navbar đã lên hình, bắt đầu xử lý Thông báo & Logout
     initNotificationLogic();
     initLogoutLogic();
-  })
-  .catch(err => console.error("Lỗi tải Navbar:", err));
+  });
 
-// --- 2. LOGIC THÔNG BÁO ---
+// --- LOAD SIDEBAR (Gắn sự kiện click chuyển trang SPA) ---
+fetch("../component/sidebar.html")
+  .then((res) => res.text())
+  .then((data) => {
+    document.getElementById("sidebar-container").innerHTML = data;
+    const currentPage = window.location.pathname.split("/").pop() || "home.html";
+    const links = document.querySelectorAll("#sidebar a");
+    
+    links.forEach((link) => {
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+
+      // SỰ KIỆN CLICK MENU
+      link.addEventListener("click", function (e) {
+        e.preventDefault(); 
+        const targetUrl = this.getAttribute("href");
+        
+        document.querySelectorAll("#sidebar a").forEach(a => a.classList.remove("active"));
+        this.classList.add("active");
+
+        window.history.pushState({ path: targetUrl }, '', targetUrl);
+        loadMainContentSPA(targetUrl);
+      });
+    });
+  });
+
+// --- LOAD PLAYER ---
+fetch("../component/player.html")
+  .then((res) => res.text())
+  .then((data) => {
+    document.getElementById("player-container").innerHTML = data;
+    if (!document.querySelector('script[src="../js/player.js"]')) {
+      const script = document.createElement("script");
+      script.src = "../js/player.js";
+      document.body.appendChild(script);
+    }
+  });
+
+// --- LOGIC THÔNG BÁO ---
 function initNotificationLogic() {
     fetch('../api/get_notification.php?action=get_all')
     .then(res => res.json())
     .then(data => {
-        if (data && data.length > 0) {
-            // Gán ID lớn nhất vào biến để làm mốc "đã xem"
-            lastNotificationId = data[0].id; 
-        }
-        isFirstLoad = false; // Đã load xong lần đầu
+        if (data && data.length > 0) lastNotificationId = data[0].id; 
+        isFirstLoad = false;
     });
+
     fetch('../api/get_notification.php?action=get_role')
     .then(res => res.json())
     .then(data => {
@@ -36,17 +161,13 @@ function initNotificationLogic() {
             bell.onclick = (e) => {
                 e.stopPropagation();
                 if (userRole === 'admin') {
-                    // Admin: Đóng/Mở form soạn tin
                     adminPopup.style.display = adminPopup.style.display === 'block' ? 'none' : 'block';
                     const form = document.getElementById('form');
                     if (form) {
                         form.onsubmit = function(e) {
                             e.preventDefault();
                             const formData = new FormData(this);
-                            fetch('../api/get_notification.php', {
-                                method: 'POST',
-                                body: formData
-                            })
+                            fetch('../api/get_notification.php', { method: 'POST', body: formData })
                             .then(res => res.json())
                             .then(data => {
                                 alert(data.message);
@@ -54,23 +175,19 @@ function initNotificationLogic() {
                                     form.reset();
                                     adminPopup.style.display = 'none';
                                 }
-                            })
-                            .catch(err => console.error("Lỗi gửi tin:", err));
+                            });
                         };
                     }
                 } else {
-                    // User: Đóng/Mở danh sách tin cũ
                     const isVisible = userList.style.display === 'block';
                     userList.style.display = isVisible ? 'none' : 'block';
-                    if (!isVisible) loadOldNotifications(); // Chỉ load khi mở ra
+                    if (!isVisible) loadOldNotifications(); 
                 }
-                notificationCount = 0; // Reset số đếm
+                notificationCount = 0; 
                 updateBadge(0);
             };
         }
     });
-
-    // Vòng lặp kiểm tra thông báo mới (5 giây/lần) cho mọi đối tượng
     setInterval(checkNotification, 5000);
 }
 
@@ -78,17 +195,14 @@ function loadOldNotifications() {
     fetch('../api/get_notification.php?action=get_all')
     .then(res => res.json())
     .then(data => {
-        if (data.length > 0 && lastNotificationId === 0) {
-            lastNotificationId = data[0].id; 
-        }
+        if (data.length > 0 && lastNotificationId === 0) lastNotificationId = data[0].id; 
         const container = document.getElementById('list-items');
-        container.innerHTML = ''; // Xóa cũ load mới
-        
+        if(!container) return;
+        container.innerHTML = ''; 
         if (data.length === 0) {
             container.innerHTML = '<p style="padding:10px;">Không có thông báo nào.</p>';
             return;
         }
-
         data.forEach(item => {
             const div = document.createElement('div');
             div.className = 'noti-item';
@@ -112,19 +226,11 @@ function checkNotification() {
 }
 
 function showNotification(title, content) {
-    new Audio('https://www.soundjay.com/buttons/beep-07a.mp3').play();
     const notifyDiv = document.createElement('div');
-    notifyDiv.className = 'admin-alert';
     notifyDiv.style = "position: fixed; bottom: 80px; right: 20px; background: #333; color: #fff; padding: 15px; border-radius: 8px; z-index: 10002;";
-    notifyDiv.innerHTML = `
-        <div style="font-weight: bold; margin-bottom: 5px;">🔔 ${title}</div>
-        <div style="font-size: 14px;">${content}</div>`;
+    notifyDiv.innerHTML = `<div style="font-weight: bold; margin-bottom: 5px;">🔔 ${title}</div><div style="font-size: 14px;">${content}</div>`;
     document.body.appendChild(notifyDiv);
-    setTimeout(() => {
-        notifyDiv.style.opacity = '0';
-        notifyDiv.style.transition = '0.5s';
-        setTimeout(() => notifyDiv.remove(), 5000);
-    }, 5000);
+    setTimeout(() => { notifyDiv.remove(); }, 5000);
 }
 
 function updateBadge(count) {
@@ -132,7 +238,6 @@ function updateBadge(count) {
     if (badge) {
         notificationCount += count;
         if (notificationCount > 0) {
-            // Nếu lớn hơn 9 thì hiện 9+, ngược lại hiện số thật
             badge.innerText = notificationCount > 9 ? '9+' : notificationCount;
             badge.style.display = 'block';
         } else {
@@ -140,7 +245,8 @@ function updateBadge(count) {
         }
     }
 }
-// --- 3. LOGIC LOGOUT ---
+
+// --- LOGOUT ---
 function initLogoutLogic() {
     const logoutBtn = document.getElementById("logout-btn");
     if (logoutBtn) {
@@ -149,75 +255,11 @@ function initLogoutLogic() {
                 fetch("../api/logout.php", { method: "POST" })
                 .then((response) => {
                     if (response.ok) {
-                        localStorage.removeItem("user");
+                        localStorage.clear();
                         window.location.href = "../pages/login.html";
                     }
                 });
             }
         };
     }
-}
-
-// --- 4. LOAD SIDEBAR & PLAYER ---
-fetch("../component/sidebar.html")
-  .then((res) => res.text())
-  .then((data) => {
-    document.getElementById("sidebar-container").innerHTML = data;
-    const currentPage = window.location.pathname.split("/").pop() || "home.html";
-    const links = document.querySelectorAll("#sidebar a");
-    links.forEach((link) => {
-      if (link.getAttribute("href") === currentPage) {
-        link.classList.add("active");
-      }
-    });
-  });
-
-fetch("../component/player.html")
-  .then((res) => res.text())
-  .then((data) => {
-    document.getElementById("player-container").innerHTML = data;
-    if (!document.querySelector('script[src="../js/player.js"]')) {
-      const script = document.createElement("script");
-      script.src = "../js/player.js";
-      document.body.appendChild(script);
-    }
-  });
-
-  
-function loadMainContent(url) {
-    fetch(url)
-        .then(res => res.text())
-        .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            // Tìm nội dung mới từ file fetch về
-            const newContent = doc.getElementById('main-content');
-            const targetContainer = document.getElementById('main-content');
-            
-            if (newContent && targetContainer) {
-                // 1. Thay thế HTML
-                targetContainer.innerHTML = newContent.innerHTML;
-                
-                // 2. Ép trình duyệt chạy lại các thẻ <script> nằm trong nội dung mới
-                const scripts = targetContainer.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    
-                    // Copy toàn bộ attributes (src, type...)
-                    Array.from(oldScript.attributes).forEach(attr => {
-                        newScript.setAttribute(attr.name, attr.value);
-                    });
-                    
-                    // Copy nội dung text bên trong script (nếu có)
-                    if (oldScript.innerHTML) {
-                        newScript.innerHTML = oldScript.innerHTML;
-                    }
-                    
-                    // Thay thế script cũ bằng script mới để kích hoạt nó chạy
-                    oldScript.parentNode.replaceChild(newScript, oldScript);
-                });
-            }
-        })
-        .catch(err => console.error("Lỗi khi chuyển trang:", err));
 }

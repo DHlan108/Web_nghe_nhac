@@ -184,6 +184,7 @@ button.normal {
   border-radius: 8px;
   opacity: 0;
   transition: 0.3s ease;
+  pointer-events: none;
 }
 
 .song-section .play {
@@ -200,6 +201,8 @@ button.normal {
   font-size: 20px;
   opacity: 0;
   transition: 0.3s ease;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 

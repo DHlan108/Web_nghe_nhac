@@ -5,7 +5,12 @@ require_once 'db_connect.php';
 
 $artist_id = $_GET['id'];
 
-$sql = "SELECT title, release_date, image_path
+$sql = "SELECT 
+            id,
+            title,
+            file_path,
+            image_path,
+            release_date
         FROM songs
         WHERE artist_id = ?";
 

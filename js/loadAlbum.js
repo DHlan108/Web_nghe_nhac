@@ -1,121 +1,122 @@
-let globalAlbums = [];
-// 1. Khai báo role và biến tạm ngay đầu file
-const role = localStorage.getItem("role") || "user";
-let currentEditAlbumId = null;
+// Khai báo biến toàn cục bằng var để tránh xung đột
+var globalAlbums = [];
+var currentEditAlbumId = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-    const closeBtn = document.querySelector(".close-album-modal");
+// =========================================================
+// 1. HÀM KHỞI TẠO TRANG ALBUM (Được gọi từ Router)
+// =========================================================
+window.initAlbumPage = function() {
+    console.log("🚀 Đang khởi tạo trang Album...");
+    var role = localStorage.getItem("role") || "user";
+
+    // Xử lý đóng modal khi click nút X
+    var closeBtn = document.querySelector(".close-album-modal");
     if (closeBtn) {
-        closeBtn.addEventListener("click", closeAlbumModal);
+        closeBtn.onclick = window.closeAlbumModal;
     }
 
-    // Đóng khi click ra ngoài vùng modal
-    window.addEventListener("click", (e) => {
-        const modal = document.getElementById("album-modal");
-        const adminModal = document.getElementById("album-admin-modal");
-        if (e.target === modal) {
-            closeAlbumModal();
-        }
-        if (e.target === adminModal) {
-            closeAlbumModalAdmin();
-        }
-    });
-   fetch("/Web_nghe_nhac/api/get_album.php")
-        .then((res) => res.json())
-        .then((data) => {
+    // Xử lý đóng modal khi click ra ngoài (Dùng onclick để không bị chồng chéo event trong SPA)
+    window.onclick = function(e) {
+        var modal = document.getElementById("album-modal");
+        var adminModal = document.getElementById("album-admin-modal");
+        if (e.target === modal) window.closeAlbumModal();
+        if (e.target === adminModal) window.closeAlbumModalAdmin();
+    };
+
+    fetch("/Web_nghe_nhac/api/get_album.php")
+        .then(res => res.json())
+        .then(data => {
             if (!data.success) return;
-            globalAlbums = data.albums; // Lưu vào kho để tìm kiếm
+            globalAlbums = data.albums; 
 
-    if (typeof MusicSearchEngine !== 'undefined') {
-        MusicSearchEngine.initGlobalSearch((keyword) => {
-            const isTyping = keyword.trim() !== ""; // Kiểm tra xem có đang gõ không
-            const filtered = MusicSearchEngine.process(globalAlbums, { keyword: keyword });
-            
-            // Truyền filtered và trạng thái isTyping vào hàm vẽ
-            refreshAlbumDisplay(filtered, isTyping);
-            
-            // ĐÃ BỎ lệnh window.scrollTo ở đây để tối ưu trải nghiệm
-        });
-    }
-
-            // 2. Hiển thị dữ liệu ban đầu
-            refreshAlbumDisplay(globalAlbums);
-            // --- KẾT THÚC PHẦN SỬA ---
-
-            if (role === "admin") {
-            const holder = document.getElementById('admin-btn-holder');
-            if (holder && !document.querySelector('.admin-add-btn-main')) {
-            const btnAdd = `<button class="admin-add-btn-main" onclick="openAlbumModalAdmin('add')"><i class="fa-solid fa-plus"></i> Thêm Album</button>`;
-            holder.innerHTML = btnAdd; // Chèn vào đúng container
+            // Kích hoạt thanh tìm kiếm
+            if (typeof window.MusicSearchEngine !== 'undefined') {
+                window.MusicSearchEngine.initGlobalSearch((keyword) => {
+                    var isTyping = keyword.trim() !== ""; 
+                    var filtered = window.MusicSearchEngine.process(globalAlbums, { keyword: keyword });
+                    window.refreshAlbumDisplay(filtered, isTyping, role);
+                });
             }
-        }
-            setTimeout(() => { initScroll(); }, 100);
+
+            // Hiển thị dữ liệu ban đầu
+            window.refreshAlbumDisplay(globalAlbums, false, role);
+
+            // Gắn nút Thêm Album cho Admin
+            if (role === "admin") {
+                var holder = document.getElementById('admin-btn-holder');
+                if (holder && !document.querySelector('.admin-add-btn-main')) {
+                    var btnAdd = `<button class="admin-add-btn-main" onclick="openAlbumModalAdmin('add')"><i class="fa-solid fa-plus"></i> Thêm Album</button>`;
+                    holder.innerHTML = btnAdd;
+                }
+            }
+            
+            setTimeout(() => { window.initScroll(); }, 100);
         })
-        .catch((err) => {
-            console.error("Lỗi khi tải album:", err);
-        });
-});
-// ================= LOGIC CUỘN & DRAG (GIỮ NGUYÊN 100% CỦA NHÓM) =================
-function initScroll() {
+        .catch(err => console.error("Lỗi khi tải album:", err));
+};
+
+// ================= LOGIC CUỘN & DRAG =================
+window.initScroll = function() {
     document.querySelectorAll(".album-wrapper").forEach((wrapper) => {
-        const container = wrapper.querySelector(".pro-container");
-        const btnLeft = wrapper.querySelector(".scroll-btn.left");
-        const btnRight = wrapper.querySelector(".scroll-btn.right");
+        var container = wrapper.querySelector(".pro-container");
+        var btnLeft = wrapper.querySelector(".scroll-btn.left");
+        var btnRight = wrapper.querySelector(".scroll-btn.right");
 
         if (!container) return;
 
         function checkScrollStatus() {
             if (btnLeft && btnRight) {
                 btnLeft.style.visibility = container.scrollLeft <= 0 ? "hidden" : "visible";
-                const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                var maxScrollLeft = container.scrollWidth - container.clientWidth;
                 btnRight.style.visibility = container.scrollLeft >= maxScrollLeft - 2 ? "hidden" : "visible";
             }
         }
 
-        btnRight?.addEventListener("click", () => {
+        // Xóa event listener cũ nếu có (bằng cách clone node hoặc ghi đè onclick)
+        if(btnRight) btnRight.onclick = () => {
             container.scrollBy({ left: 400, behavior: "smooth" });
             setTimeout(checkScrollStatus, 350);
-        });
+        };
 
-        btnLeft?.addEventListener("click", () => {
+        if(btnLeft) btnLeft.onclick = () => {
             container.scrollBy({ left: -400, behavior: "smooth" });
             setTimeout(checkScrollStatus, 350);
-        });
+        };
 
-        container.addEventListener("scroll", checkScrollStatus);
+        container.onscroll = checkScrollStatus;
         checkScrollStatus();
 
-        let isDown = false; let startX; let scrollLeft;
-        container.addEventListener("mousedown", (e) => {
+        var isDown = false; var startX; var scrollLeft;
+        container.onmousedown = (e) => {
             isDown = true;
             startX = e.pageX - container.offsetLeft;
             scrollLeft = container.scrollLeft;
-        });
-        container.addEventListener("mouseleave", () => (isDown = false));
-        container.addEventListener("mouseup", () => {
+        };
+        container.onmouseleave = () => (isDown = false);
+        container.onmouseup = () => {
             isDown = false;
             setTimeout(checkScrollStatus, 50);
-        });
-        container.addEventListener("mousemove", (e) => {
+        };
+        container.onmousemove = (e) => {
             if (!isDown) return;
             e.preventDefault();
-            const x = e.pageX - container.offsetLeft;
-            const walk = (x - startX) * 2;
+            var x = e.pageX - container.offsetLeft;
+            var walk = (x - startX) * 2;
             container.scrollLeft = scrollLeft - walk;
-        });
+        };
     });
-}
+};
 
-// ================= OPEN MODAL CHI TIẾT ALBUM (GIỮ NGUYÊN CỦA NHÓM) =================
-function openAlbumModal(albumId, title, artist, year, cover) {
-    const modal = document.getElementById("album-modal");
+// ================= OPEN MODAL CHI TIẾT ALBUM =================
+window.openAlbumModal = function(albumId, title, artist, year, cover) {
+    var modal = document.getElementById("album-modal");
     if (!modal) return;
 
     document.getElementById("modal-album-img").src = `../img/${cover}`;
     document.getElementById("modal-album-title").innerText = title;
     document.getElementById("modal-album-artist").innerText = `${artist} • ${year}`;
 
-    const songListContainer = document.getElementById("modal-song-list");
+    var songListContainer = document.getElementById("modal-song-list");
     songListContainer.innerHTML = "<p style='color:#a7a7a7;'>Đang tải bài hát...</p>";
 
     modal.classList.add("show");
@@ -130,28 +131,24 @@ function openAlbumModal(albumId, title, artist, year, cover) {
             }
             data.songs.forEach((song) => {
                 songListContainer.innerHTML += `
-                    <div class="modal-song-item" onclick="playSong(${song.id})">
+                    <div class="modal-song-item" onclick="playSongDirectly('${song.title.replace(/'/g, "\\'")}', '${artist.replace(/'/g, "\\'")}', '../${song.file_path}', '../img/${cover}')">
                         <i class="fa-solid fa-music"></i>
                         <div class="song-info"><h4>${song.title}</h4></div>
                     </div>`;
             });
         });
-}
+};
 
-function closeAlbumModal() {
-    const modal = document.getElementById("album-modal");
-    if (modal) {
-        modal.classList.remove("show"); // Gỡ bỏ class show để ẩn modal
-    }
-}
+window.closeAlbumModal = function() {
+    var modal = document.getElementById("album-modal");
+    if (modal) modal.classList.remove("show"); 
+};
 
-// ================= CÁC HÀM ADMIN MỚI (BỔ SUNG) =================
-
-function openAlbumModalAdmin(mode) {
+// ================= CÁC HÀM ADMIN =================
+window.openAlbumModalAdmin = function(mode) {
     if (mode === 'add') {
-        currentEditAlbumId = null; // Xóa ID cũ nếu có
+        currentEditAlbumId = null; 
         document.getElementById("admin-modal-title").innerText = "Thêm Album";
-        // Xóa sạch dữ liệu cũ trong form
         document.getElementById("adm-album-title").value = "";
         document.getElementById("adm-album-artist").value = "";
         document.getElementById("adm-album-year").value = "";
@@ -159,38 +156,32 @@ function openAlbumModalAdmin(mode) {
         
         document.getElementById("album-admin-modal").style.display = "flex";
     }
-}
+};
 
-function closeAlbumModalAdmin() {
+window.closeAlbumModalAdmin = function() {
     document.getElementById("album-admin-modal").style.display = "none";
-}
+};
 
-function submitAlbum() {
-    // 1. Lấy dữ liệu từ Form
-    const id = currentEditAlbumId; 
-    const title = document.getElementById('adm-album-title').value.trim();
-    const artist_id = document.getElementById('adm-album-artist').value.trim();
-    const release_year = document.getElementById('adm-album-year').value.trim();
-    const cover_image = document.getElementById('adm-album-image').value.trim();
+window.submitAlbum = function() {
+    var id = currentEditAlbumId; 
+    var title = document.getElementById('adm-album-title').value.trim();
+    var artist_id = document.getElementById('adm-album-artist').value.trim();
+    var release_year = document.getElementById('adm-album-year').value.trim();
+    var cover_image = document.getElementById('adm-album-image').value.trim();
 
-    // 2. Kiểm tra dữ liệu đầu vào
     if (!title || !artist_id) {
         alert("Vui lòng nhập đầy đủ tên và ID nghệ sĩ!");
         return;
     }
 
-    // 3. Đóng gói dữ liệu (Dùng URLSearchParams cho chuẩn với headers bên dưới)
-    const params = new URLSearchParams();
+    var params = new URLSearchParams();
     if (id) params.append('id', id); 
     params.append('title', title);
     params.append('artist_id', artist_id);
     params.append('release_year', release_year);
     params.append('cover_image', cover_image);
 
-    // 4. Xác định URL (Nếu không có id thì CHẮC CHẮN là create)
-    const url = id ? "../api/update_album.php" : "../api/create_album.php";
-
-    console.log("Gửi dữ liệu tới:", url, "Data:", params.toString());
+    var url = id ? "../api/update_album.php" : "../api/create_album.php";
 
     fetch(url, {
         method: 'POST',
@@ -198,43 +189,36 @@ function submitAlbum() {
         body: params.toString()
     })
     .then(res => {
-        // Kiểm tra xem phản hồi có ok không (tránh lỗi 500/404)
         if (!res.ok) throw new Error("Server trả về lỗi " + res.status);
         return res.json();
     })
     .then(result => {
         if (result && result.success) {
             alert(result.message || "Thao tác thành công!");
-            closeAlbumModalAdmin();
-            location.reload(); 
+            window.closeAlbumModalAdmin();
+            // THAY ĐỔI: Không reload trang, khởi tạo lại Album
+            window.initAlbumPage(); 
         } else {
-            // Nếu result undefined hoặc success = false
             alert("Lỗi: " + (result ? result.message : "Phản hồi từ server trống"));
         }
     })
     .catch(error => {
         console.error('Chi tiết lỗi:', error);
-        alert("Có lỗi xảy ra! Hãy kiểm tra tab Network để xem file PHP có lỗi cú pháp không.");
+        alert("Có lỗi xảy ra! Hãy kiểm tra tab Network.");
     });
-}
+};
 
-function prepareEditAlbum(id, title, artistId, year, image) {
-    currentEditAlbumId = id; // Gán ID để biết là đang sửa
-    
-    // Đổi tiêu đề modal
+window.prepareEditAlbum = function(id, title, artistId, year, image) {
+    currentEditAlbumId = id; 
     document.getElementById("admin-modal-title").innerText = "Chỉnh sửa Album";
-    
-    // Điền dữ liệu vào các ô input
     document.getElementById("adm-album-title").value = title;
     document.getElementById("adm-album-artist").value = artistId;
     document.getElementById("adm-album-year").value = year;
     document.getElementById("adm-album-image").value = image;
-    
-    // Hiển thị modal
     document.getElementById("album-admin-modal").style.display = "flex";
-}
-function deleteAlbum(id) {
+};
 
+window.deleteAlbum = function(id) {
     if (confirm("Bạn có chắc chắn muốn xóa album này?")) {
         fetch("../api/delete_album.php", {
             method: "POST",
@@ -243,38 +227,53 @@ function deleteAlbum(id) {
         })
         .then(res => res.json())
         .then(data => {
-            if (data.success) location.reload();
-            else alert("Lỗi khi xóa!");
+            if (data.success) {
+                // THAY ĐỔI: Không reload trang
+                window.initAlbumPage(); 
+            } else {
+                alert("Lỗi khi xóa!");
+            }
         });
     }
-}
-function refreshAlbumDisplay(data, isSearching = false) {
-    const featuredSec = document.getElementById("featured-albums");
-    const newSec = document.getElementById("new-albums");
-    const allList = document.getElementById("all-album-list");
+};
+
+window.refreshAlbumDisplay = function(data, isSearching = false, role) {
+    var featuredSec = document.getElementById("featured-albums");
+    var newSec = document.getElementById("new-albums");
+    var allList = document.getElementById("all-album-list");
 
     if (isSearching) {
-       
         if (featuredSec) featuredSec.style.display = "none";
         if (newSec) newSec.style.display = "none";
     } else {
-       
         if (featuredSec) featuredSec.style.display = "block";
         if (newSec) newSec.style.display = "block";
+        
+        var hotData = [];
+        var newData = [];
 
-        const hotData = MusicSearchEngine.process(data, { sortBy: 'hot', limit: 6 });
-        const newData = MusicSearchEngine.process(data, { sortBy: 'new', limit: 6 });
+    // Kiểm tra xem MusicSearchEngine đã load chưa, nếu chưa thì fallback mặc định
+        if (typeof window.MusicSearchEngine !== 'undefined') {
+            hotData = window.MusicSearchEngine.process(data, { sortBy: 'hot', limit: 6 });
+            newData = window.MusicSearchEngine.process(data, { sortBy: 'new', limit: 6 });
+        } else {
+            // Backup an toàn: lấy 6 album ngẫu nhiên/đầu tiên để tránh bị trống
+            hotData = data.slice(0, 6);
+            newData = data.slice(0, 6);
+        }
 
-        document.getElementById("featured-album-list").innerHTML = hotData.map(createAlbumHTML).join('');
-        document.getElementById("new-album-list").innerHTML = newData.map(createAlbumHTML).join('');
-    }
+        var featuredList = document.getElementById("featured-album-list");
+        var newList = document.getElementById("new-album-list");
 
-    // Mục Tất cả luôn hiển thị kết quả khớp với dữ liệu truyền vào
-    if (allList) allList.innerHTML = data.map(createAlbumHTML).join('');
-    
-    setTimeout(initScroll, 150);
-}
-function createAlbumHTML(album) {
+            if(featuredList) featuredList.innerHTML = hotData.map(a => window.createAlbumHTML(a, role)).join('');
+            if(newList) newList.innerHTML = newData.map(a => window.createAlbumHTML(a, role)).join('');
+        }
+
+    if (allList) allList.innerHTML = data.map(a => window.createAlbumHTML(a, role)).join('');
+    setTimeout(window.initScroll, 150);
+};
+
+window.createAlbumHTML = function(album, role) {
     return `
     <div class="album-card" onclick="openAlbumModal(${album.id}, '${album.title.replace(/'/g, "\\'")}', '${album.artist_name.replace(/'/g, "\\'")}', '${album.release_year}', '${album.cover_image}')">
         <div class="album-img">
@@ -295,13 +294,14 @@ function createAlbumHTML(album) {
             <span class="description">${album.artist_name} • ${album.release_year}</span>
         </div>
     </div>`;
-}
-function scrollToSection(id) {
-    const section = document.getElementById(id);
+};
+
+window.scrollToSection = function(id) {
+    var section = document.getElementById(id);
     if (section) {
         window.scrollTo({
-            top: section.offsetTop - 100, // Trừ đi khoảng cách Navbar
+            top: section.offsetTop - 100,
             behavior: "smooth"
         });
     }
-}
+};

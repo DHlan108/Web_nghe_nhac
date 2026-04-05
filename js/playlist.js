@@ -1,49 +1,49 @@
-document.addEventListener("DOMContentLoaded", () => {
+// Sử dụng var để lưu trạng thái toàn cục an toàn trong SPA
+var editPlaylistId = null;
+var currentPlaylistId = null;
 
-const playlistList = document.getElementById("playlist-list");
-const songList = document.getElementById("song-list");
-const title = document.getElementById("playlist-title");
+// =========================================================
+// 1. HÀM KHỞI TẠO TRANG PLAYLIST (Router sẽ gọi hàm này)
+// =========================================================
+window.initPlaylistPage = function() {
+    console.log("🚀 Đang khởi tạo trang Danh sách phát...");
 
-const modal = document.getElementById("playlist-modal");
-const closeModal = document.getElementById("close-playlist-modal");
-const saveBtn = document.getElementById("save-playlist-btn");
-const addBtn = document.getElementById("add-playlist-btn");
+    // Lấy các phần tử DOM (Phải lấy bên trong hàm để luôn lấy phần tử mới nhất)
+    var modal = document.getElementById("playlist-modal");
+    var closeModal = document.getElementById("close-playlist-modal");
+    var saveBtn = document.getElementById("save-playlist-btn");
+    var addBtn = document.getElementById("add-playlist-btn");
 
-const addSongBtn = document.getElementById("add-song-btn");
-const songModal = document.getElementById("song-modal");
-const closeSongModal = document.getElementById("close-song-modal");
-const songSelectList = document.getElementById("song-select-list");
+    var addSongBtn = document.getElementById("add-song-btn");
+    var songModal = document.getElementById("song-modal");
+    var closeSongModal = document.getElementById("close-song-modal");
+    var songSelectList = document.getElementById("song-select-list");
 
-let editPlaylistId = null;
-let currentPlaylistId = null;
+    // Reset trạng thái
+    currentPlaylistId = null;
 
-//them sua
-addBtn.onclick = () => {
-    console.log("CLICK ADD");
-    editPlaylistId = null;
-    document.getElementById("playlist-modal-title").innerText = "Tạo danh sách phát";
-    modal.classList.remove("hidden");
-};
+    // Các sự kiện cho Playlist Modal
+    if (addBtn) addBtn.onclick = () => {
+        editPlaylistId = null;
+        document.getElementById("playlist-modal-title").innerText = "Tạo danh sách phát";
+        if (modal) modal.classList.remove("hidden");
+    };
 
-closeModal.onclick = () => {
-    modal.classList.add("hidden");
-};
+    if (closeModal) closeModal.onclick = () => {
+        if (modal) modal.classList.add("hidden");
+    };
 
+    if (saveBtn) saveBtn.onclick = () => {
+        var name = document.getElementById("playlist-name").value;
+        var file = document.getElementById("playlist-image").files[0];
+        var formData = new FormData();
+        formData.append("name", name);
 
-saveBtn.onclick = () => {
-    const name = document.getElementById("playlist-name").value;
-    const file = document.getElementById("playlist-image").files[0];
-    const formData = new FormData();
-    formData.append("name", name);
+        if (file) {
+            formData.append("image", file);
+        }
 
-    if (file) {
-        formData.append("image", file);
-    }
-
-    let url = editPlaylistId
-        ? "../api/update_playlist.php"
-        : "../api/create_playlist.php";
-
+        var url = editPlaylistId ? "../api/update_playlist.php" : "../api/create_playlist.php";
         if (editPlaylistId) {
             formData.append("id", editPlaylistId);
         }
@@ -56,59 +56,77 @@ saveBtn.onclick = () => {
         .then(data => {
             alert(data.message);
             if (data.success) {
-                location.reload();
+                if (modal) modal.classList.add("hidden");
+                // THAY ĐỔI: Gọi loadPlaylists() thay vì location.reload()
+                window.loadPlaylists(); 
             }
         });
-};
+    };
 
+    // Các sự kiện cho Bài Hát Modal
+    if (addSongBtn) addSongBtn.onclick = () => {
+        if (!currentPlaylistId) {
+            alert("Chưa chọn danh sách phát");
+            return;
+        }
+        if (songModal) songModal.classList.remove("hidden");
 
-//them bai hat
-addSongBtn.onclick = () => {
-    if (!currentPlaylistId) {
-        alert("Chưa chọn danh sách phát");
-        return;
-    }
-    songModal.classList.remove("hidden");
+        fetch("../api/get_song.php")
+        .then(res => res.json())
+        .then(data => {
+            if (songSelectList) songSelectList.innerHTML = "";
+            data.forEach(song => {
+                var item = document.createElement("div");
+                item.className = "song-select-item";
 
-    fetch("../api/get_song.php")
-    .then(res => res.json())
-    .then(data => {
-        songSelectList.innerHTML = "";
-
-        data.forEach(song => {
-            songSelectList.innerHTML += `
-                <div class="song-select-item">
+                item.innerHTML = `
                     <div class="song-select-text">
                         <h5>${song.title}</h5>
                         <span>${song.artist_name}</span>
                     </div>
-                    <button class="add-song-small-btn" onclick="addSongToPlaylist(${song.id})">
+                    <button class="add-song-small-btn">
                         <i class="fa-solid fa-plus"></i>
                     </button>
-                </div>
                 `;
+
+                var btn = item.querySelector(".add-song-small-btn");
+                if (btn) {
+                    btn.onclick = function() {
+                        addSongToPlaylist(song.id);
+                    };
+                }
+
+                songSelectList.appendChild(item);
+            });
         });
-    });
+    };
+
+    if (closeSongModal) closeSongModal.onclick = () => {
+        if (songModal) songModal.classList.add("hidden");
+    };
+
+    // Tải danh sách phát khi vừa vào trang
+    window.loadPlaylists();
 };
 
-closeSongModal.onclick = () => {
-    songModal.classList.add("hidden");
-}
+// =========================================================
+// 2. CÁC HÀM RENDER & LOGIC (Gắn vào window)
+// =========================================================
+window.loadPlaylists = function() {
+    var playlistList = document.getElementById("playlist-list");
+    if (!playlistList) return;
 
-//load playlist
-function loadPlaylists() {
     fetch("../api/get_playlists.php")
     .then(res => res.json())
     .then(data => {
-        console.log("PLAYLIST:", data);
-
         playlistList.replaceChildren();
 
         data.forEach(pl => {
-            const div = document.createElement("div");
+            var div = document.createElement("div");
             div.className = "playlist-item";
             div.dataset.id = pl.id;
 
+            // Render HTML KHÔNG dùng onclick inline
             div.innerHTML = `
                 <div class="pl-cover">
                     <img src="../img/${pl.playlist_image || "default_playlist.jpg"}">
@@ -126,17 +144,25 @@ function loadPlaylists() {
                 </div>
             `;
 
-            div.querySelector(".edit-btn").addEventListener("click", (e) => {
-                e.stopPropagation();
-                editPlaylist(pl.id, pl.name);
-            });
+            // ===== GÁN EVENT AN TOÀN =====
+            var editBtn = div.querySelector(".edit-btn");
+            var deleteBtn = div.querySelector(".delete-btn");
 
-            div.querySelector(".delete-btn").addEventListener("click", (e) => {
-                e.stopPropagation();
-                deletePlaylist(e, pl.id);
-            });
+            if (editBtn) {
+                editBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    editPlaylist(pl.id, pl.name);
+                };
+            }
 
-            div.addEventListener("click", () => {
+            if (deleteBtn) {
+                deleteBtn.onclick = function(e) {
+                    deletePlaylist(e, pl.id);
+                };
+            }
+
+            // Click playlist
+            div.onclick = function() {
                 currentPlaylistId = pl.id;
 
                 document.querySelectorAll(".playlist-item")
@@ -144,31 +170,41 @@ function loadPlaylists() {
 
                 div.classList.add("active");
 
-                document.getElementById("playlist-view").classList.remove("hidden");
+                var view = document.getElementById("playlist-view");
+                if (view) view.classList.remove("hidden");
 
-                title.innerText = pl.name;
+                var title = document.getElementById("playlist-title");
+                if (title) title.innerText = pl.name;
 
-                const cover = document.getElementById("playlist-cover");
-                cover.src = "../img/" + (pl.playlist_image || "default_playlist.jpg");
+                var cover = document.getElementById("playlist-cover");
+                if (cover) {
+                    cover.src = "../img/" + (pl.playlist_image || "default_playlist.jpg");
+                }
 
-                loadSongs(pl.id);
-            });
+                window.loadSongs(pl.id);
+            };
 
             playlistList.appendChild(div);
         });
-    });
-}
-loadPlaylists();
+    })
+    .catch(err => console.error(err));
+};
 
-function loadSongs(playlistId) {
+window.loadSongs = function(playlistId) {
+    var songList = document.getElementById("song-list");
+    if (!songList) return;
+
     fetch(`../api/get_playlist_songs.php?playlist_id=${playlistId}`)
     .then(res => res.json())
     .then(songs => {
         songList.innerHTML = "";
 
         songs.forEach((song, index) => {
-            songList.innerHTML += `
-            <div class="song-row">
+            var div = document.createElement("div");
+            div.className = "song-row";
+            div.dataset.id = song.id;
+
+            div.innerHTML = `
                 <div class="song-left">
                     <span class="song-index">${index + 1}</span>
                     <div class="song-cover">
@@ -183,112 +219,118 @@ function loadSongs(playlistId) {
                     </div>
                 </div>
                 <div class="song-right">
-                    <button class="delete-song-btn" onclick="removeSongFromPlaylist(event, ${song.id})">
+                    <button class="delete-song-btn">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
-            </div>
             `;
+
+            // ===== GÁN EVENT =====
+            var playBtn = div.querySelector(".play-overlay");
+            if (playBtn) {
+                playBtn.onclick = function() {
+                    window.playSongDirectly(
+                        song.title,
+                        song.artist_name,
+                        '../' + song.file_path,
+                        '../img/' + song.image_path
+                    );
+                };
+            }
+
+            var deleteBtn = div.querySelector(".delete-song-btn");
+            if (deleteBtn) {
+                deleteBtn.onclick = function(e) {
+                    removeSongFromPlaylist(e, song.id);
+                };
+            }
+
+            songList.appendChild(div);
         });
-    });
-}
-
-window.editPlaylist = (id, name) => {
-    editPlaylistId = id;
-
-    document.getElementById("playlist-name").value = name;
-    document.getElementById("playlist-modal-title").innerText = "Sửa danh sách phát";
-    modal.classList.remove("hidden");
+    })
+    .catch(err => console.error(err));
 };
 
+window.editPlaylist = function(id, name) {
+    editPlaylistId = id;
+    document.getElementById("playlist-name").value = name;
+    document.getElementById("playlist-modal-title").innerText = "Sửa danh sách phát";
+    var modal = document.getElementById("playlist-modal");
+    if(modal) modal.classList.remove("hidden");
+};
 
-
-window.deletePlaylist = (e, id) => {
-
+window.deletePlaylist = function(e, id) {
     e.stopPropagation();
 
     if (!confirm("Xóa danh sách phát này?")) return;
 
     fetch("../api/delete_playlist.php", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: "id=" + id
     })
     .then(res => res.json())
     .then(data => {
-
-        console.log("DELETE:", data);
-
         if (data.success) {
             alert(data.message);
 
-            // ❗ XÓA UI
-            const item = document.querySelector(`.playlist-item[data-id='${id}']`);
+            // 1. Xóa giao diện
+            var item = document.querySelector(`.playlist-item[data-id='${id}']`);
             if (item) item.remove();
 
-            // ❗ RESET nếu đang chọn playlist đó
+            // 2. Reset nếu đang chọn playlist đó
             if (currentPlaylistId == id) {
                 currentPlaylistId = null;
-
-                document.getElementById("playlist-view").classList.add("hidden");
-                songList.innerHTML = "";
-                title.innerText = "";
+                var plView = document.getElementById("playlist-view");
+                if(plView) plView.classList.add("hidden");
+                
+                var songList = document.getElementById("song-list");
+                if(songList) songList.innerHTML = "";
+                
+                var title = document.getElementById("playlist-title");
+                if(title) title.innerText = "";
             }
 
-            // ❗ QUAN TRỌNG: reload lại list từ server
-            loadPlaylists();
+            // 3. Không reload trang, chỉ gọi lại loadPlaylists
+            window.loadPlaylists();
         }
     })
     .catch(err => console.error(err));
 };
 
-window.addSongToPlaylist = (songId) => {
+window.addSongToPlaylist = function(songId) {
     fetch("../api/add_song_to_playlist.php", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },    
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },    
         body: `playlist_id=${currentPlaylistId}&song_id=${songId}`
     })
     .then(res => res.json())
     .then(data => {
         alert(data.message);
         if (data.success) {
-            songModal.classList.add("hidden");
-            loadSongs(currentPlaylistId);
+            var songModal = document.getElementById("song-modal");
+            if(songModal) songModal.classList.add("hidden");
+            // Render lại danh sách bài hát
+            window.loadSongs(currentPlaylistId);
         }
     });
 };
 
-window.removeSongFromPlaylist = (e, songId) => {
-
+window.removeSongFromPlaylist = function(e, songId) {
     e.stopPropagation();
 
     if (!confirm("Xóa bài hát này khỏi danh sách phát?")) return;
 
     fetch("../api/remove_song_from_playlist.php", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `playlist_id=${currentPlaylistId}&song_id=${songId}`
     })
     .then(res => res.json())
     .then(data => {
         alert(data.message);
         if (data.success) {
-            loadSongs(currentPlaylistId);
+            window.loadSongs(currentPlaylistId);
         }
     });
 };
-
-
-document.addEventListener("click", function(e) {
-    if (e.target.closest(".pl-actions")) {
-        e.stopPropagation();
-    }
-});
-
-});

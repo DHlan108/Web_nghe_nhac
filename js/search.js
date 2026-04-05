@@ -1,4 +1,4 @@
-const MusicSearchEngine = {
+var MusicSearchEngine = {
     // 1. HÀM XỬ LÝ DỮ LIỆU (PHỄU LỌC)
     // data: mảng gốc, config: { keyword, sortBy, limit }
     process: function(data, config = {}) {
