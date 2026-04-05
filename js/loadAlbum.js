@@ -49,62 +49,8 @@ window.initAlbumPage = function() {
                     holder.innerHTML = btnAdd;
                 }
             }
-            
-            setTimeout(() => { window.initScroll(); }, 100);
         })
         .catch(err => console.error("Lỗi khi tải album:", err));
-};
-
-// ================= LOGIC CUỘN & DRAG =================
-window.initScroll = function() {
-    document.querySelectorAll(".album-wrapper").forEach((wrapper) => {
-        var container = wrapper.querySelector(".pro-container");
-        var btnLeft = wrapper.querySelector(".scroll-btn.left");
-        var btnRight = wrapper.querySelector(".scroll-btn.right");
-
-        if (!container) return;
-
-        function checkScrollStatus() {
-            if (btnLeft && btnRight) {
-                btnLeft.style.visibility = container.scrollLeft <= 0 ? "hidden" : "visible";
-                var maxScrollLeft = container.scrollWidth - container.clientWidth;
-                btnRight.style.visibility = container.scrollLeft >= maxScrollLeft - 2 ? "hidden" : "visible";
-            }
-        }
-
-        // Xóa event listener cũ nếu có (bằng cách clone node hoặc ghi đè onclick)
-        if(btnRight) btnRight.onclick = () => {
-            container.scrollBy({ left: 400, behavior: "smooth" });
-            setTimeout(checkScrollStatus, 350);
-        };
-
-        if(btnLeft) btnLeft.onclick = () => {
-            container.scrollBy({ left: -400, behavior: "smooth" });
-            setTimeout(checkScrollStatus, 350);
-        };
-
-        container.onscroll = checkScrollStatus;
-        checkScrollStatus();
-
-        var isDown = false; var startX; var scrollLeft;
-        container.onmousedown = (e) => {
-            isDown = true;
-            startX = e.pageX - container.offsetLeft;
-            scrollLeft = container.scrollLeft;
-        };
-        container.onmouseleave = () => (isDown = false);
-        container.onmouseup = () => {
-            isDown = false;
-            setTimeout(checkScrollStatus, 50);
-        };
-        container.onmousemove = (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            var x = e.pageX - container.offsetLeft;
-            var walk = (x - startX) * 2;
-            container.scrollLeft = scrollLeft - walk;
-        };
-    });
 };
 
 // ================= OPEN MODAL CHI TIẾT ALBUM =================
@@ -270,8 +216,12 @@ window.refreshAlbumDisplay = function(data, isSearching = false, role) {
         }
 
     if (allList) allList.innerHTML = data.map(a => window.createAlbumHTML(a, role)).join('');
-    setTimeout(window.initScroll, 150);
+    setTimeout(() => {
+    window.initHorizontalScroll(".album-wrapper");
+}, 150);
 };
+
+window.initHorizontalScroll(".album-wrapper");
 
 window.createAlbumHTML = function(album, role) {
     return `

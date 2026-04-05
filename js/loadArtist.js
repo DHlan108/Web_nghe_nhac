@@ -48,16 +48,7 @@ window.initArtistPage = function() {
             addBtn.onclick = window.openArtistModal; 
             section.appendChild(addBtn);
         }
-        container.style.display = "grid";
-        container.style.gridTemplateRows = "repeat(2, auto)"; 
-        container.style.gridAutoFlow = "column";            
-        container.style.gridAutoColumns = "max-content";    
-        container.style.gap = "20px";
-        container.style.overflowX = "auto";                
-        container.style.overflowY = "hidden";              
-        container.style.paddingBottom = "20px";
-        container.style.scrollBehavior = "smooth";
-        
+
         if (arrowsBox) {
             arrowsBox.style.display = "flex";
             arrowsBox.style.justifyContent = "flex-end"; 
@@ -66,7 +57,7 @@ window.initArtistPage = function() {
         }
     }
 };
-
+window.initHorizontalScroll(".artist-wrapper");
 // =========================================================
 // 2. CÁC HÀM RENDER GIAO DIỆN VÀ LOGIC
 // =========================================================
