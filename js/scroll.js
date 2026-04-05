@@ -6,6 +6,9 @@ window.initHorizontalScroll = function(wrapperSelector) {
 
         if (!container) return;
 
+        if (container.dataset.scrollInit === "true") return;
+        container.dataset.scrollInit = "true";
+
         const check = () => {
             const max = container.scrollWidth - container.clientWidth;
             const left = container.scrollLeft;
@@ -26,33 +29,39 @@ window.initHorizontalScroll = function(wrapperSelector) {
         };
 
         // SCROLL
-        container.onscroll = check;
-
+        container.addEventListener("scroll", check);
         // DRAG
         let isDown = false;
         let startX;
         let scrollLeft;
 
-        container.onmousedown = (e) => {
+        container.addEventListener("mousedown", (e) => {
             isDown = true;
+            container.classList.add("dragging");
             startX = e.pageX - container.offsetLeft;
             scrollLeft = container.scrollLeft;
-        };
+        });
 
-        container.onmouseleave = () => isDown = false;
-        container.onmouseup = () => {
+        container.addEventListener("mouseleave", () => {
             isDown = false;
-            setTimeout(check, 50);
-        };
+            container.classList.remove("dragging");
+        });
 
-        container.onmousemove = (e) => {
+        container.addEventListener("mouseup", () => {
+            isDown = false;
+            container.classList.remove("dragging");
+            setTimeout(check, 50);
+        });
+
+        container.addEventListener("mousemove", (e) => {
             if (!isDown) return;
             e.preventDefault();
             const x = e.pageX - container.offsetLeft;
-            const walk = (x - startX) * 2;
+            const walk = (x - startX) * 1.8; //
             container.scrollLeft = scrollLeft - walk;
-        };
+        });
 
-        check();
+        // ===== INIT =====
+        setTimeout(check, 100); // 👉 fix render chưa xong
     });
 };

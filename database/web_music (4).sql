@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 28, 2026 at 09:21 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th4 05, 2026 lúc 08:27 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `web_music`
+-- Cơ sở dữ liệu: `web_music`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `albums`
+-- Cấu trúc bảng cho bảng `albums`
 --
 
 CREATE TABLE `albums` (
@@ -36,7 +36,7 @@ CREATE TABLE `albums` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `albums`
+-- Đang đổ dữ liệu cho bảng `albums`
 --
 
 INSERT INTO `albums` (`id`, `title`, `artist_id`, `release_year`, `cover_image`) VALUES
@@ -51,7 +51,7 @@ INSERT INTO `albums` (`id`, `title`, `artist_id`, `release_year`, `cover_image`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `artists`
+-- Cấu trúc bảng cho bảng `artists`
 --
 
 CREATE TABLE `artists` (
@@ -62,7 +62,7 @@ CREATE TABLE `artists` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `artists`
+-- Đang đổ dữ liệu cho bảng `artists`
 --
 
 INSERT INTO `artists` (`id`, `name`, `country`, `avatar`) VALUES
@@ -78,7 +78,7 @@ INSERT INTO `artists` (`id`, `name`, `country`, `avatar`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notifications`
+-- Cấu trúc bảng cho bảng `notifications`
 --
 
 CREATE TABLE `notifications` (
@@ -89,10 +89,81 @@ CREATE TABLE `notifications` (
   `is_active` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `title`, `content`, `created_at`, `is_active`) VALUES
+(1, 'test', 'kiểm tra mục thông báo', '2026-03-30 03:46:05', 1),
+(2, 'test', 'test thông báo', '2026-03-30 17:45:47', 1),
+(3, 'test 3', 'test 3', '2026-03-30 17:58:41', 1),
+(4, 'test 4', 'test 4\r\n', '2026-03-30 18:18:25', 1),
+(5, 'test 5', 'test 5\r\n', '2026-03-30 18:19:00', 1),
+(6, 'test 6', 'test 6\r\n', '2026-03-30 18:19:22', 1),
+(7, 'test 7', '7', '2026-03-30 18:19:34', 1),
+(8, 'test 8', '8', '2026-03-30 18:19:49', 1),
+(9, 'test', 'mệt quáaaaaaaaa', '2026-04-05 15:28:22', 1),
+(10, 'test', '123', '2026-04-05 17:34:19', 1),
+(11, 't', 't', '2026-04-05 17:34:32', 1),
+(12, 'getg', 'gẻgyhr', '2026-04-05 17:34:41', 1),
+(13, 'fdg', 'dg', '2026-04-05 17:34:48', 1),
+(14, 'gfdg', 'gdg', '2026-04-05 17:34:53', 1),
+(15, 'gfdg', 'fgdg', '2026-04-05 17:35:00', 1),
+(16, 'fdgfdbf', 'fhyty', '2026-04-05 17:35:10', 1),
+(17, 'gfbb', 'hfbn', '2026-04-05 17:35:24', 1),
+(18, 'fgb', 'bfg', '2026-04-05 17:35:32', 1),
+(19, 'fgnb', 'vcyt', '2026-04-05 17:35:38', 1),
+(20, 'gbv', 'mjkj', '2026-04-05 17:35:45', 1),
+(21, 'f', 'f', '2026-04-05 17:43:55', 1);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `playlists`
+-- Cấu trúc bảng cho bảng `notification_users`
+--
+
+CREATE TABLE `notification_users` (
+  `id` int(11) NOT NULL,
+  `notification_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `is_read` tinyint(4) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `notification_users`
+--
+
+INSERT INTO `notification_users` (`id`, `notification_id`, `user_id`, `is_read`, `created_at`) VALUES
+(1, 10, 2, 0, '2026-04-05 17:34:19'),
+(2, 10, 3, 1, '2026-04-05 17:34:20'),
+(3, 11, 2, 0, '2026-04-05 17:34:32'),
+(4, 11, 3, 1, '2026-04-05 17:34:32'),
+(5, 12, 2, 0, '2026-04-05 17:34:41'),
+(6, 12, 3, 1, '2026-04-05 17:34:41'),
+(7, 13, 2, 0, '2026-04-05 17:34:48'),
+(8, 13, 3, 1, '2026-04-05 17:34:48'),
+(9, 14, 2, 0, '2026-04-05 17:34:53'),
+(10, 14, 3, 1, '2026-04-05 17:34:53'),
+(11, 15, 2, 0, '2026-04-05 17:35:01'),
+(12, 15, 3, 1, '2026-04-05 17:35:01'),
+(13, 16, 2, 0, '2026-04-05 17:35:10'),
+(14, 16, 3, 1, '2026-04-05 17:35:10'),
+(15, 17, 2, 0, '2026-04-05 17:35:24'),
+(16, 17, 3, 1, '2026-04-05 17:35:24'),
+(17, 18, 2, 0, '2026-04-05 17:35:32'),
+(18, 18, 3, 1, '2026-04-05 17:35:32'),
+(19, 19, 2, 0, '2026-04-05 17:35:38'),
+(20, 19, 3, 1, '2026-04-05 17:35:38'),
+(21, 20, 2, 0, '2026-04-05 17:35:45'),
+(22, 20, 3, 1, '2026-04-05 17:35:45'),
+(23, 21, 2, 0, '2026-04-05 17:43:55'),
+(24, 21, 3, 1, '2026-04-05 17:43:55');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `playlists`
 --
 
 CREATE TABLE `playlists` (
@@ -103,7 +174,7 @@ CREATE TABLE `playlists` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `playlists`
+-- Đang đổ dữ liệu cho bảng `playlists`
 --
 
 INSERT INTO `playlists` (`id`, `user_id`, `name`, `playlist_image`) VALUES
@@ -114,7 +185,7 @@ INSERT INTO `playlists` (`id`, `user_id`, `name`, `playlist_image`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `playlist_songs`
+-- Cấu trúc bảng cho bảng `playlist_songs`
 --
 
 CREATE TABLE `playlist_songs` (
@@ -123,7 +194,7 @@ CREATE TABLE `playlist_songs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `playlist_songs`
+-- Đang đổ dữ liệu cho bảng `playlist_songs`
 --
 
 INSERT INTO `playlist_songs` (`playlist_id`, `song_id`) VALUES
@@ -137,7 +208,7 @@ INSERT INTO `playlist_songs` (`playlist_id`, `song_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `songs`
+-- Cấu trúc bảng cho bảng `songs`
 --
 
 CREATE TABLE `songs` (
@@ -153,7 +224,7 @@ CREATE TABLE `songs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `songs`
+-- Đang đổ dữ liệu cho bảng `songs`
 --
 
 INSERT INTO `songs` (`id`, `title`, `artist_id`, `album_id`, `duration`, `release_date`, `file_path`, `image_path`, `listens`) VALUES
@@ -176,7 +247,7 @@ INSERT INTO `songs` (`id`, `title`, `artist_id`, `album_id`, `duration`, `releas
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -189,7 +260,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `ava_user`) VALUES
@@ -198,44 +269,50 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `ava_user`) 
 (3, 'maichi', 'mchi17082005@gmail.com', '$2y$10$f8oBZ4ZrLW3Y7Kv52EYZM.ZuV.6Oq3pFhqyws1v27nC7dTSgeVVUq', 'user', 'avatar_1774424371.webp');
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `albums`
+-- Chỉ mục cho bảng `albums`
 --
 ALTER TABLE `albums`
   ADD PRIMARY KEY (`id`),
   ADD KEY `artist_id` (`artist_id`);
 
 --
--- Indexes for table `artists`
+-- Chỉ mục cho bảng `artists`
 --
 ALTER TABLE `artists`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `notifications`
+-- Chỉ mục cho bảng `notifications`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `playlists`
+-- Chỉ mục cho bảng `notification_users`
+--
+ALTER TABLE `notification_users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `playlists`
 --
 ALTER TABLE `playlists`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `playlist_songs`
+-- Chỉ mục cho bảng `playlist_songs`
 --
 ALTER TABLE `playlist_songs`
   ADD PRIMARY KEY (`playlist_id`,`song_id`),
   ADD KEY `song_id` (`song_id`);
 
 --
--- Indexes for table `songs`
+-- Chỉ mục cho bảng `songs`
 --
 ALTER TABLE `songs`
   ADD PRIMARY KEY (`id`),
@@ -243,7 +320,7 @@ ALTER TABLE `songs`
   ADD KEY `album_id` (`album_id`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -251,70 +328,76 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `albums`
+-- AUTO_INCREMENT cho bảng `albums`
 --
 ALTER TABLE `albums`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `artists`
+-- AUTO_INCREMENT cho bảng `artists`
 --
 ALTER TABLE `artists`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `notifications`
+-- AUTO_INCREMENT cho bảng `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT for table `playlists`
+-- AUTO_INCREMENT cho bảng `notification_users`
+--
+ALTER TABLE `notification_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT cho bảng `playlists`
 --
 ALTER TABLE `playlists`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT for table `songs`
+-- AUTO_INCREMENT cho bảng `songs`
 --
 ALTER TABLE `songs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `albums`
+-- Các ràng buộc cho bảng `albums`
 --
 ALTER TABLE `albums`
   ADD CONSTRAINT `albums_ibfk_1` FOREIGN KEY (`artist_id`) REFERENCES `artists` (`id`);
 
 --
--- Constraints for table `playlists`
+-- Các ràng buộc cho bảng `playlists`
 --
 ALTER TABLE `playlists`
   ADD CONSTRAINT `playlists_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `playlist_songs`
+-- Các ràng buộc cho bảng `playlist_songs`
 --
 ALTER TABLE `playlist_songs`
   ADD CONSTRAINT `playlist_songs_ibfk_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlists` (`id`),
   ADD CONSTRAINT `playlist_songs_ibfk_2` FOREIGN KEY (`song_id`) REFERENCES `songs` (`id`);
 
 --
--- Constraints for table `songs`
+-- Các ràng buộc cho bảng `songs`
 --
 ALTER TABLE `songs`
   ADD CONSTRAINT `songs_ibfk_1` FOREIGN KEY (`artist_id`) REFERENCES `artists` (`id`),

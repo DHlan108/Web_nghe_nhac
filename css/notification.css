@@ -3,6 +3,7 @@
     position: relative;
     margin-right: 20px;
     cursor: pointer;
+    overflow: visible;
 }
 
 #bell-icon {
@@ -62,14 +63,29 @@
     top: 45px;
     right: 0;
     width: 300px;
-    max-height: 400px;
+
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    z-index: 10001; /* Đảm bảo cao hơn header [cite: 262] */
-    overflow-y: auto;
+    z-index: 10001;
+
+    overflow: hidden; /* ❗ QUAN TRỌNG */
 }
+
+#user-notification-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#user-notification-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+#user-notification-list::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
 .notification-list-container h4 {
     padding: 10px;
     border-bottom: 1px solid #eee;
@@ -81,3 +97,16 @@
     font-size: 13px;
 }
 .noti-item:hover { background: #f9f9f9; }
+
+.noti-header {
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+
+#list-items {
+    max-height: 300px;
+    overflow-y: auto;
+}

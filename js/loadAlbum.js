@@ -16,12 +16,12 @@ window.initAlbumPage = function() {
     }
 
     // Xử lý đóng modal khi click ra ngoài (Dùng onclick để không bị chồng chéo event trong SPA)
-    window.onclick = function(e) {
+    window.addEventListener("click", function(e) {
         var modal = document.getElementById("album-modal");
         var adminModal = document.getElementById("album-admin-modal");
         if (e.target === modal) window.closeAlbumModal();
         if (e.target === adminModal) window.closeAlbumModalAdmin();
-    };
+    });
 
     fetch("/Web_nghe_nhac/api/get_album.php")
         .then(res => res.json())
@@ -218,10 +218,8 @@ window.refreshAlbumDisplay = function(data, isSearching = false, role) {
     if (allList) allList.innerHTML = data.map(a => window.createAlbumHTML(a, role)).join('');
     setTimeout(() => {
     window.initHorizontalScroll(".album-wrapper");
-}, 150);
+}, 300);
 };
-
-window.initHorizontalScroll(".album-wrapper");
 
 window.createAlbumHTML = function(album, role) {
     return `

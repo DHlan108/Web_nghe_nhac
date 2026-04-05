@@ -27,12 +27,19 @@ window.initArtistPage = function() {
             globalArtists = data.artists; 
             window.renderArtistList(globalArtists, false, userRole);
 
+            setTimeout(() => {
+            window.initHorizontalScroll(".artist-wrapper");
+        }, 100);
+
             // Tích hợp thanh tìm kiếm
             if (typeof window.MusicSearchEngine !== 'undefined') {
                 window.MusicSearchEngine.initGlobalSearch((keyword) => {
                     var isTyping = keyword.trim() !== "";
                     var filtered = window.MusicSearchEngine.process(globalArtists, { keyword: keyword });
                     window.renderArtistList(filtered, isTyping, userRole);
+                    setTimeout(() => {
+                    window.initHorizontalScroll(".artist-wrapper");
+                }, 100);
                 });
             }
         })
@@ -57,7 +64,9 @@ window.initArtistPage = function() {
         }
     }
 };
-window.initHorizontalScroll(".artist-wrapper");
+if (typeof window.initHorizontalScroll === "function") {
+    window.initHorizontalScroll(".artist-wrapper");
+}
 // =========================================================
 // 2. CÁC HÀM RENDER GIAO DIỆN VÀ LOGIC
 // =========================================================
@@ -133,7 +142,9 @@ window.renderArtistList = function(artists, isSearching = false, role) {
         container.appendChild(div);
     });
 };
-
+requestAnimationFrame(() => {
+    window.initHorizontalScroll(".artist-wrapper");
+});
 // Khai báo một biến tạm để chứa danh sách nhạc của nghệ sĩ
 window.currentArtistSongs = [];
 

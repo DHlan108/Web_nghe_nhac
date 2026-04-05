@@ -137,6 +137,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  overflow: hidden;
 }
 .scroll-btn {
   position: absolute;
@@ -168,11 +169,11 @@
 }
 
 .scroll-btn.left {
-  left: -50px; /* Thụt ra ngoài một chút */
+  left: 10px;
 }
 
 .scroll-btn.right {
-  right: -50px;
+  right: 10px;
 }
 /* --- MODAL ALBUM DETAIL --- */
 .album-modal-overlay {
@@ -279,6 +280,7 @@
   flex: 0 0 200px;
   width: 200px;
   min-width: 200px;
+  height: 260px;
   background: var(--border-light);
   padding: 18px;
   border-radius: 12px;
@@ -499,21 +501,21 @@
 
 /* NÚT THÊM ARTIST */
 #artist-container {
-    margin-top: -10px; 
+    margin-top: 0px; 
     margin-left: 20px;
     z-index: 1; 
 }
 #product1 {
     position: relative;
-    padding-top: 135px; 
+    padding-top: 80px; 
     
 }
 
 .admin-add-btn-artist {
     position: absolute;   
     margin-bottom: 0px;
-    top: 120px;
-    right: 90px;
+    top: 20px;
+    right: 20px;
     background: linear-gradient(135deg, #002aff 0%, #ff0080 100%);
     color: white;
     border: none;

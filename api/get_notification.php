@@ -4,11 +4,22 @@ header('Content-Type: application/json; charset=utf-8');
 require_once 'db_connect.php';
 
 // =======================
+// CHECK LOGIN
+// =======================
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["error" => "Unauthorized"]);
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+$role = $_SESSION['role'] ?? 'guest';
+
+// =======================
 // 1. TRẢ ROLE USER
 // =======================
 if (isset($_GET['action']) && $_GET['action'] === 'get_role') {
     echo json_encode([
-        "role" => $_SESSION['role'] ?? 'guest'
+        "role" => $role
     ]);
     exit;
 }
@@ -18,7 +29,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_role') {
 // =======================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    if ($role !== 'admin') {
         echo json_encode([
             "status" => "error",
             "message" => "Không có quyền"
@@ -30,9 +41,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $content = $_POST['content'] ?? '';
 
     if ($title && $content) {
+
+        // 1. Tạo thông báo
         $stmt = $conn->prepare("INSERT INTO notifications (title, content, is_active) VALUES (?, ?, 1)");
         $stmt->bind_param("ss", $title, $content);
         $stmt->execute();
+
+        $notification_id = $stmt->insert_id;
+
+        // 2. Gửi cho tất cả USER (KHÔNG gửi admin)
+        $users = $conn->query("SELECT id FROM users WHERE role = 'user'");
+
+        while ($u = $users->fetch_assoc()) {
+            $stmt2 = $conn->prepare("INSERT INTO notification_users (notification_id, user_id, is_read) VALUES (?, ?, 0)");
+            $stmt2->bind_param("ii", $notification_id, $u['id']);
+            $stmt2->execute();
+        }
 
         echo json_encode([
             "status" => "success",
@@ -49,25 +73,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // =======================
-// 3. USER LẤY THÔNG BÁO
+// 3. LẤY DANH SÁCH THÔNG BÁO (USER)
 // =======================
-// Nếu là action lấy danh sách cũ (tất cả thông báo)
 if (isset($_GET['action']) && $_GET['action'] === 'get_all') {
-    $sql = "SELECT * FROM notifications WHERE is_active = 1 ORDER BY id DESC LIMIT 5";
-    $result = $conn->query($sql);
+
+    $sql = "
+    SELECT n.*, nu.is_read 
+    FROM notifications n
+    JOIN notification_users nu ON n.id = nu.notification_id
+    WHERE nu.user_id = ?
+    ORDER BY n.id DESC
+    LIMIT 5
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
     $list = [];
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $list[] = $row;
     }
+
     echo json_encode($list);
     exit;
 }
 
-// Mặc định: Lấy thông báo mới nhất (dùng cho vòng lặp 5 giây) 
+// =======================
+// 4. ĐÁNH DẤU ĐÃ ĐỌC
+// =======================
+if (isset($_GET['action']) && $_GET['action'] === 'mark_read') {
+
+    $stmt = $conn->prepare("UPDATE notification_users SET is_read = 1 WHERE user_id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    echo json_encode(["status" => "success"]);
+    exit;
+}
+
+// =======================
+// 5. ĐẾM CHƯA ĐỌC (BADGE)
+// =======================
+if (isset($_GET['action']) && $_GET['action'] === 'count_unread') {
+
+    $stmt = $conn->prepare("
+        SELECT COUNT(*) as unread 
+        FROM notification_users 
+        WHERE user_id = ? AND is_read = 0
+    ");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    echo json_encode($result);
+    exit;
+}
+
+// =======================
+// 6. LẤY THÔNG BÁO MỚI NHẤT (POLLING 5s)
+// =======================
 $last_id = isset($_GET['last_id']) ? (int)$_GET['last_id'] : 0;
-$sql = "SELECT * FROM notifications WHERE is_active = 1 AND id > ? ORDER BY id DESC LIMIT 1";
+
+$sql = "
+SELECT n.*, nu.is_read
+FROM notifications n
+JOIN notification_users nu ON n.id = nu.notification_id
+WHERE nu.user_id = ? AND n.id > ?
+ORDER BY n.id DESC
+LIMIT 1
+";
+
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $last_id);
+$stmt->bind_param("ii", $user_id, $last_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
 echo json_encode($result->fetch_assoc());
