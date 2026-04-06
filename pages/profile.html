@@ -1,71 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-    <head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>My Music</title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="../css/profile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/component.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
 
-</head>
+  <body>
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div id="sidebar-container"></div>
 
-<body>
-
-<div class="layout">
-
-    <!-- SIDEBAR -->
-    <div id="sidebar-container"></div>
-
-    <!-- MAIN -->
-    <div class="main">
-
+      <!-- MAIN -->
+      <div class="main">
         <!-- HEADER -->
         <div id="navbar-container"></div>
 
         <!-- CONTENT -->
-    <main class="content" id="main-content">
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="profile-avatar">
-                <img id="avatar" src="../img/default.jpg">
-            </div>
+        <main class="content" id="main-content">
+          <div class="profile-container">
+            <div class="profile-header">
+              <div class="profile-avatar">
+                <img id="avatar" src="../img/default.jpg" />
+              </div>
 
-        <div class="profile-info">
-            <p class="profile-label">Hồ sơ</p>
-            <h1><span id="username"></span></h1>
-            <div class="profile-detail">
-                <p>Email: <span id="email"></span></p>
-                <p>Vai trò: <span id="role"></span></p>
+              <div class="profile-info">
+                <p class="profile-label">Hồ sơ</p>
+                <h1><span id="username"></span></h1>
+                <div class="profile-detail">
+                  <p>Email: <span id="email"></span></p>
+                  <p>Vai trò: <span id="role"></span></p>
+                </div>
+              </div>
+              <button id="edit-btn" class="edit-btn">Chỉnh sửa</button>
             </div>
-        </div>
-        <button id="edit-btn" class="edit-btn">Chỉnh sửa</button>
-        </div>
-    </div>
+          </div>
 
-    <div id="edit-modal" class="modal hidden">
-        <div class="modal-content">
-            <button id="cancel-btn" class="close-btn">
+          <div id="edit-modal" class="modal hidden">
+            <div class="modal-content">
+              <button id="cancel-btn" class="close-btn">
                 <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h2>Chỉnh sửa hồ sơ</h2>
+              </button>
+              <h2>Chỉnh sửa hồ sơ</h2>
 
-            <input type="file" id="edit-avatar" accept="image/*">
-            <input type="text" id="edit-username" placeholder="Tên người dùng">
-            <input type="email" id="edit-email" placeholder="Email">
+              <input type="file" id="edit-avatar" accept="image/*" />
+              <input
+                type="text"
+                id="edit-username"
+                placeholder="Tên người dùng"
+              />
+              <input type="email" id="edit-email" placeholder="Email" />
 
-            <div class="modal-actions">
-        <button id="save-btn">Lưu</button>
-        </div>
+              <div class="modal-actions">
+                <button id="save-btn">Lưu</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-</div>
-</main>
-</div>
-</div>
-    
+
     <div id="player-container"></div>
     <script src="../js/loadComponent.js" defer></script>
     <script src="../js/loadProfile.js" defer></script>
-</body>
+  </body>
 </html>

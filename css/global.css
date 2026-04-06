@@ -1,5 +1,4 @@
-
-html{
+html {
   scroll-behavior: smooth;
 }
 
@@ -11,14 +10,17 @@ html{
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
 }
-body{
-  margin:0;
-  padding:0;
-  overflow-x:hidden;
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-x: hidden;
+  background-color: var(--bg-input);
 }
-.layout{
+.layout {
   display: flex;
-  width:100%;
+  width: 100%;
+  min-height: 100vh;
 }
 #header {
   position: fixed;
@@ -34,34 +36,34 @@ body{
   background: #ccc;
   z-index: 10000;
 }
-#sidebar{
+#sidebar {
   width: 200px;
   position: fixed;
   height: 100vh;
   left: 0;
   top: 0;
+  z-index: 10001;
 }
 .main {
   flex: 1;
   display: flex;
   min-width: 0;
   flex-direction: column;
+  margin-left: 200px;
 }
 
-.content{
+.content {
   flex: 1;
-  overflow-x: auto;
-  width:100%;
+  width: 100%;
+  margin-top: 70px;
+  margin-bottom: 70px;
+  padding: 0px;
 }
 
 /* hero section */
 
 #hero {
-  background: linear-gradient(
-    -45deg,
-    var(--primary-pink),
-    var(--primary-blue)
-  );
+  background: linear-gradient(-45deg, var(--primary-pink), var(--primary-blue));
   height: 90vh;
   width: 100%;
   background-size: cover;
@@ -104,5 +106,8 @@ body{
 .play-btn:hover {
   background-color: #2d2d39;
   transform: scale(1.15);
-  box-shadow: 0 0 20px #40c9ff, 0 0 40px #00dbde, 0 0 60px #45f3ff;
+  box-shadow:
+    0 0 20px #40c9ff,
+    0 0 40px #00dbde,
+    0 0 60px #45f3ff;
 }
