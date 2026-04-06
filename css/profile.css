@@ -15,20 +15,20 @@
   font-size: 70px;
   font-weight: 900;
   margin: 10px 0;
-  color: var(--text-main) !important;
+  color: #ffffff !important;
 }
 
 .profile-label {
   font-size: 14px;
   opacity: 0.8;
-  color: var(--text-main) !important;
+  color: #ffffff !important;
 }
 
 .profile-detail {
   padding-top: 10px;
   font-size: 15px;
   opacity: 0.9;
-  color: var(--text-main) !important;
+  color: #ffffff !important;
 }
 
 .edit-btn {
