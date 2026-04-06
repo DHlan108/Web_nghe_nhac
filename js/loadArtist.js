@@ -1,44 +1,37 @@
-// Sử dụng var để tránh lỗi "Identifier has already been declared" khi chuyển trang qua lại
 var globalArtists = [];
 var currentEditArtistId = null;
 var scrollWaitCount = 0;
 function safeInitScroll() {
   if (typeof window.initHorizontalScroll === "function") {
     window.initHorizontalScroll(".artist-wrapper");
-    console.log("✅ Scroll đã init");
+    console.log(" Scroll đã init");
   } else {
-    // Nếu chưa có thì đợi một chút rồi thử lại (đề phòng)
     setTimeout(safeInitScroll, 100);
   }
 }
-// =========================================================
-// 1. HÀM KHỞI TẠO TRANG NGHỆ SĨ (Router sẽ gọi hàm này)
-// =========================================================
+
+// 1. HÀM KHỞI TẠO TRANG NGHỆ SĨ 
+
 window.initArtistPage = function () {
   if (typeof window.initHorizontalScroll !== "function") {
     if (scrollWaitCount < 20) {
-      // Đợi tối đa 20 lần (khoảng 1 giây)
       scrollWaitCount++;
       console.log(`⏳ Đang đợi scroll.js tải xong... (Lần ${scrollWaitCount})`);
       setTimeout(window.initArtistPage, 50);
       return;
     } else {
-      console.error("❌ Đã quá thời gian chờ scroll.js. Bỏ qua khởi tạo cuộn.");
-      // Bạn có thể reset lại biến để lần sau vào lại trang nó đếm lại từ đầu
+      console.error(" Đã quá thời gian chờ scroll.js. Bỏ qua khởi tạo cuộn.");
       scrollWaitCount = 0;
-      // Không return ở đây nữa để các code bên dưới (như tải API) vẫn được chạy
     }
   } else {
-    // Reset biến đếm nếu đã thấy hàm
-    scrollWaitCount = 0;
+        scrollWaitCount = 0;
   }
   console.log("🚀 Đang khởi tạo trang Nghệ Sĩ...");
 
   var userRole = localStorage.getItem("role") || "user";
   var container = document.getElementById("artist-container");
   var arrowsBox = document.querySelector(".arrows-box");
-
-  // Đóng Modal khi click ra ngoài vùng xám
+  
   if (!window._artistClickBound) {
     window._artistClickBound = true;
 
@@ -94,9 +87,8 @@ window.initArtistPage = function () {
   }
 };
 
-// =========================================================
 // 2. CÁC HÀM RENDER GIAO DIỆN VÀ LOGIC
-// =========================================================
+
 window.renderArtistList = function (artists, isSearching = false, role) {
   var container = document.getElementById("artist-container");
   var songSection = document.querySelector(".song-section");
@@ -222,7 +214,7 @@ window.loadArtistSongs = function (id, name) {
     .catch((err) => console.error("Lỗi fetch bài hát:", err));
 };
 
-// HÀM: Phát nhạc từ danh sách của nghệ sĩ
+// Phát nhạc từ danh sách của nghệ sĩ
 window.playArtistSong = function (id, artistName) {
   var song = window.currentArtistSongs.find((s) => s.id == id);
   if (song) {
@@ -234,10 +226,7 @@ window.playArtistSong = function (id, artistName) {
     );
   }
 };
-
-// =========================================================
 // 3. QUẢN LÝ ADMIN (THÊM, SỬA, XÓA)
-// =========================================================
 window.openArtistModal = function () {
   currentEditArtistId = null;
   document.getElementById("admin-artist-modal-title").innerText =

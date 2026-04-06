@@ -502,7 +502,7 @@
 /* NÚT THÊM ARTIST */
 #artist-container {
     margin-top: 0px; 
-    margin-left: 20px;
+    margin-left: 0px;
     z-index: 1; 
 }
 #product1 {
@@ -514,8 +514,8 @@
 .admin-add-btn-artist {
     position: absolute;   
     margin-bottom: 0px;
-    top: 20px;
-    right: 20px;
+    top: 30px;
+    right: 80px;
     background: linear-gradient(135deg, #002aff 0%, #ff0080 100%);
     color: white;
     border: none;
@@ -524,7 +524,7 @@
     font-weight: bold;
     font-size: 15px; 
     cursor: pointer;
-    z-index: 100;
+    z-index: 1000;
     transition: 0.3s ease;
     min-width: 150px;
 }
