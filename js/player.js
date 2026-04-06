@@ -1,18 +1,35 @@
-var currentPlaylist = [];
-var currentSongIndex = 0;
+// =======================================================
+// BIẾN TOÀN CỤC QUẢN LÝ HÀNG ĐỢI (QUEUE) DUY NHẤT
+// =======================================================
+window.currentSongQueue = []; // Mảng chứa danh sách bài hát hiện tại (có thể là mặc định hoặc playlist)
+window.currentSongIndex = 0;  // Vị trí bài hát đang phát trong mảng
+
+// Hàm MỚI: Nhận 1 danh sách bài hát (từ playlist) và bắt đầu phát từ vị trí startIndex
+window.playPlaylistQueue = function(songsArray, startIndex) {
+    window.currentSongQueue = songsArray; // Cập nhật hàng đợi thành playlist mới
+    window.currentSongIndex = startIndex; // Cập nhật vị trí bắt đầu
+    
+    var song = window.currentSongQueue[window.currentSongIndex];
+    
+    // Gọi hàm phát nhạc gốc
+    window.playSongDirectly(
+        song.title, 
+        song.artist_name || song.artist, 
+        '../' + song.file_path, 
+        '../img/' + song.image_path
+    );
+};
 
 // =======================================================
-// 1. HÀM TOÀN CỤC CHẠY NHẠC (ĐỂ NGOÀI CÙNG ĐỂ HTML LUÔN GỌI ĐƯỢC)
+// 1. HÀM TOÀN CỤC CHẠY NHẠC (ĐỂ NGOÀI CÙNG)
 // =======================================================
 window.playSongDirectly = function(title, artist, src, img) {
-    // Luôn lấy DOM mới nhất mỗi khi được gọi
     var audio = document.getElementById('main-audio');
     var playBtn = document.getElementById('play-btn');
     var playerTitle = document.getElementById('player-title');
     var playerArtist = document.getElementById('player-artist');
     var playerImg = document.getElementById('player-img');
 
-    // Nếu HTML của Player chưa được đắp vào web thì báo lỗi nhẹ và thoát
     if (!audio) {
         console.warn("Đang tải thanh Player, vui lòng đợi...");
         return;
@@ -23,33 +40,24 @@ window.playSongDirectly = function(title, artist, src, img) {
     playerArtist.innerText = artist;
     playerImg.src = img;
     audio.src = src;
-    
-    // Đồng bộ Index để các nút Next/Prev biết đang ở bài số mấy
-    var foundIndex = currentPlaylist.findIndex(s => s.title === title);
-    if (foundIndex !== -1) {
-        currentSongIndex = foundIndex;
-    }
 
     // Play nhạc và đổi icon sang nút Pause
     audio.play().catch(e => console.log("Trình duyệt chặn Autoplay tạm thời:", e));
     if (playBtn) playBtn.innerHTML = '<i class="fas fa-pause"></i>';
 };
 
-
 // =======================================================
-// 2. HÀM KHỞI TẠO CÁC SỰ KIỆN CHO THANH PLAYER (CHỜ HTML LOAD XONG)
+// 2. HÀM KHỞI TẠO CÁC SỰ KIỆN CHO THANH PLAYER
 // =======================================================
 function initAudioPlayer() {
     var audio = document.getElementById('main-audio');
     var playBtn = document.getElementById('play-btn');
     
-    // NẾU CHƯA TÌM THẤY (Do HTML chưa fetch về kịp) -> Chờ 50ms rồi tự gọi lại chính mình
     if (!audio || !playBtn) {
         setTimeout(initAudioPlayer, 50);
         return; 
     }
 
-    // NẾU ĐÃ TÌM THẤY -> Bắt đầu gắn biến và các sự kiện
     var prevBtn = document.getElementById('prev-btn');
     var nextBtn = document.getElementById('next-btn');
     var progressBar = document.getElementById('progress-bar');
@@ -57,27 +65,25 @@ function initAudioPlayer() {
     var playerArtist = document.getElementById('player-artist');
     var playerImg = document.getElementById('player-img');
 
-    // Lấy danh sách nhạc từ API (Dùng làm danh sách phát mặc định)
+    // Lấy danh sách nhạc mặc định từ API khi mới vào web
     fetch('../api/get_song.php')
         .then(res => res.json())
         .then(data => {
-            currentPlaylist = data;
-            // Hiển thị sẵn bài đầu tiên nhưng không tự động Play
-            if (currentPlaylist.length > 0) {
-                loadSong(currentPlaylist[currentSongIndex]);
+            window.currentSongQueue = data; // Lưu vào biến hàng đợi chung
+            window.currentSongIndex = 0;
+            
+            // Hiển thị sẵn bài đầu tiên lên giao diện nhưng không tự động Play
+            if (window.currentSongQueue.length > 0) {
+                var song = window.currentSongQueue[0];
+                playerTitle.innerText = song.title;
+                playerArtist.innerText = song.artist_name || song.artist; 
+                playerImg.src = "../img/" + song.image_path;
+                audio.src = "../" + song.file_path;
             }
         })
         .catch(err => console.error("Lỗi load nhạc:", err));
 
-    function loadSong(song) {
-        if (!song) return;
-        playerTitle.innerText = song.title;
-        playerArtist.innerText = song.artist_name || song.artist; 
-        playerImg.src = "../img/" + song.image_path;
-        audio.src = "../" + song.file_path;
-    }
-
-    // Nút Play/Pause chính trên thanh Player
+    // Nút Play/Pause chính
     playBtn.onclick = () => {
         if (audio.paused) {
             audio.play();
@@ -88,30 +94,45 @@ function initAudioPlayer() {
         }
     };
 
-    function playNextSong() {
-        if (currentPlaylist.length === 0) return;
-        currentSongIndex = (currentSongIndex + 1) % currentPlaylist.length;
-        loadSong(currentPlaylist[currentSongIndex]);
-        audio.play();
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    }
+    // Hàm chuyển bài tiếp theo (Dùng chung cho cả nút Next và khi Hết bài)
+    window.playNextSong = function() {
+        if (window.currentSongQueue.length === 0) return;
+        
+        // Tự động quay lại bài 1 nếu đang ở bài cuối (Loop)
+        window.currentSongIndex = (window.currentSongIndex + 1) % window.currentSongQueue.length;
+        var nextSong = window.currentSongQueue[window.currentSongIndex];
+        
+        window.playSongDirectly(
+            nextSong.title, 
+            nextSong.artist_name || nextSong.artist, 
+            '../' + nextSong.file_path, 
+            '../img/' + nextSong.image_path
+        );
+    };
 
-    function playPrevSong() {
-        if (currentPlaylist.length === 0) return;
-        currentSongIndex = (currentSongIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-        loadSong(currentPlaylist[currentSongIndex]);
-        audio.play();
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    }
+    // Hàm lùi bài hát
+    window.playPrevSong = function() {
+        if (window.currentSongQueue.length === 0) return;
+        
+        window.currentSongIndex = (window.currentSongIndex - 1 + window.currentSongQueue.length) % window.currentSongQueue.length;
+        var prevSong = window.currentSongQueue[window.currentSongIndex];
+        
+        window.playSongDirectly(
+            prevSong.title, 
+            prevSong.artist_name || prevSong.artist, 
+            '../' + prevSong.file_path, 
+            '../img/' + prevSong.image_path
+        );
+    };
 
-    // Sự kiện nút chuyển bài
-    nextBtn.onclick = playNextSong;
-    prevBtn.onclick = playPrevSong;
+    // Gắn sự kiện cho nút Next/Prev
+    nextBtn.onclick = window.playNextSong;
+    prevBtn.onclick = window.playPrevSong;
 
-    // Tự động chuyển bài khi bài hiện tại chạy hết
-    audio.onended = playNextSong;
+    // === ĐÂY LÀ PHẦN XỬ LÝ KHI BÀI HÁT KẾT THÚC (ENDED) ===
+    audio.onended = window.playNextSong;
 
-    // Cập nhật thanh tiến trình chạy theo bài nhạc
+    // Tiến trình nhạc
     audio.ontimeupdate = () => {
         if (audio.duration) {
             var progressPercent = (audio.currentTime / audio.duration) * 100;
@@ -119,7 +140,6 @@ function initAudioPlayer() {
         }
     };
 
-    // Cho phép người dùng click/kéo để tua nhạc
     progressBar.oninput = () => {
         if (audio.duration) {
             audio.currentTime = (progressBar.value * audio.duration) / 100;
