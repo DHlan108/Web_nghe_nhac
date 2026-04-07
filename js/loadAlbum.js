@@ -26,7 +26,6 @@ window.initAlbumPage = function () {
       window.closeAlbumModal();
       window.closeAlbumModalAdmin();
     }
-
     });
   }
 

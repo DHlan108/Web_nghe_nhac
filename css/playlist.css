@@ -140,6 +140,7 @@
   display: flex;
   gap: 6px;
   opacity: 0; 
+  opacity: 0; /* ẩn mặc định */
   transition: 0.25s;
 }
 
@@ -158,6 +159,10 @@
 
   width: 25px;
   height: 25px;
+  font-size: 14px;
+
+  width: 28px;
+  height: 28px;
   border-radius: 6px;
 
   display: flex;
