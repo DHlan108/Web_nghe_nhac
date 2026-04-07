@@ -1,44 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Music Web</title>
-    <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="../css/auth.css">
-</head>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/auth.css" />
+  </head>
 
-<body>
-
-  <div class="container">
-    <div class="box">
-      <div class="inner-box">
-        <div class="form">
-          <h2>
-            Đăng nhập
-          </h2>
-          <input type="text" id="username" name="username" placeholder="Tên đăng nhập">
-          <input type="password" id="password" name="password" placeholder="Mật khẩu">
-          <div class="role-group">
+  <body>
+    <div class="container">
+      <div class="box">
+        <div class="inner-box">
+          <div class="form">
+            <h2>Đăng nhập</h2>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Tên đăng nhập"
+            />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Mật khẩu"
+            />
+            <div class="role-group">
               <select id="login-role" name="role" required>
-                  <option value="">-- Chọn vai trò --</option>
-                  <option value="user">Người dùng</option>
-                  <option value="admin">Quản trị hệ thống</option>
+                <option value="">-- Chọn vai trò --</option>
+                <option value="user">Người dùng</option>
+                <option value="admin">Quản trị hệ thống</option>
               </select>
-          </div>
+            </div>
 
-          <input type="submit" id="btnLogin" onclick="event.preventDefault(); xulyDangnhap()" value="Đăng nhập" />
-          
-          <div class="btns">
-            <a href="forgot_password.html">Quên mật khẩu?</a>
-            <span>
-              Bạn chưa có tài khoản?<a href="register.html">Đăng ký</a>
-            </span>
+            <input
+              type="submit"
+              id="btnLogin"
+              onclick="
+                event.preventDefault();
+                xulyDangnhap();
+              "
+              value="Đăng nhập"
+            />
+
+            <div class="btns">
+              <a href="forgot_password.html">Quên mật khẩu?</a>
+              <span>
+                Bạn chưa có tài khoản?<a href="register.html">Đăng ký</a>
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <script src="../js/auth.js"></script>
-</body>
-
+    <script src="../js/auth.js"></script>
+  </body>
 </html>

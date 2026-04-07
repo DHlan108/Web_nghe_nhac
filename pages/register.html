@@ -1,38 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Music Web</title>
-    <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="../css/auth.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/auth.css" />
+  </head>
+  <body>
     <div class="container">
-        <div class="box">
-            <div class="inner-box">
-                <div class="form register-form">
-                    <h2>Đăng ký</h2>
-                    
-                    <input type="text" id="reg-username" placeholder="Tên đăng nhập">
-                    <input type="email" id="reg-email" placeholder="Email">
-                    <input type="password" id="reg-password" placeholder="Mật khẩu">
-                    <div class="role-group">
-                        <select id="reg-role" name="role" required>
-                            <option value="">-- Chọn vai trò --</option>
-                            <option value="user">Người dùng</option>
-                            <option value="admin">Quản trị hệ thống</option>
-                        </select>
-                    </div>
-                    <input type="submit" id="btnRegister" onclick="event.preventDefault(); xulyDangky()" value="Đăng ký" />
-                    
-                    <div class="btns">
-                        <span>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></span>
-                    </div>
-                </div>
+      <div class="box">
+        <div class="inner-box">
+          <div class="form register-form">
+            <h2>Đăng ký</h2>
+            <input type="text" id="reg-username" placeholder="Tên đăng nhập" />
+            <input type="email" id="reg-email" placeholder="Email" />
+            <input type="password" id="reg-password" placeholder="Mật khẩu" />
+            <div class="role-group">
+              <select id="reg-role" name="role" required>
+                <option value="">-- Chọn vai trò --</option>
+                <option value="user">Người dùng</option>
+                <option value="admin">Quản trị hệ thống</option>
+              </select>
             </div>
-        </div>
-    </div>
 
+            <input
+              type="submit"
+              id="btnRegister"
+              onclick="
+                event.preventDefault();
+                xulyDangky();
+              "
+              value="Đăng ký"
+            />
+
+            <div class="btns">
+              <span
+                >Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="../js/auth.js"></script>
-</body>
+  </body>
 </html>

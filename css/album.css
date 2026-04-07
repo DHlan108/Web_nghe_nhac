@@ -524,7 +524,7 @@
     font-weight: bold;
     font-size: 15px; 
     cursor: pointer;
-    z-index: 1000;
+    z-index: 100;
     transition: 0.3s ease;
     min-width: 150px;
 }

@@ -238,18 +238,23 @@
   font-size: 14px;
 }
 
+.playlist-actions {
+  display: flex;
+  flex-direction: row; 
+  align-items: center; 
+  gap: 15px;
+  margin-top: 15px; 
+}
+
 .add-song-btn {
   margin: 0 40px 20px;
-
   padding: 10px 20px;
   border-radius: 999px;
   border: none;
-
   background: var(--gradient-main);
   color: white;
   box-shadow: 0 4px 20px rgba(232, 28, 255, 0.3);
   font-weight: bold;
-
   cursor: pointer;
   transition: 0.2s;
 }
@@ -257,6 +262,28 @@
 .add-song-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 25px rgba(54, 201, 255, 0.5);
+}
+
+.play-all-btn {
+  margin-bottom: 15px ;
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-main);
+  border: none; 
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff; 
+  font-size: 18px; 
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+  cursor: pointer; 
+} 
+
+.play-all-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(54, 201, 255, 0.5);
 }
 
 .song-list {

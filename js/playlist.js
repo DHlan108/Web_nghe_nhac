@@ -224,6 +224,7 @@ window.loadSongsInPlaylist = function (playlistId) {
   fetch(`../api/get_playlist_songs.php?playlist_id=${playlistId}`)
     .then((res) => res.json())
     .then((songs) => {
+      window.currentPlaylistSongs = songs;
       songListContainer.innerHTML =
         songs.length === 0 ? "<p>Chưa có bài hát nào.</p>" : "";
       songs.forEach((song, index) => {
@@ -248,16 +249,31 @@ window.loadSongsInPlaylist = function (playlistId) {
                     </div>
                 `;
         div.querySelector(".play-overlay").onclick = () => {
-          if (window.playSongDirectly)
+          if (window.playPlaylistQueue) {
+            // Truyền toàn bộ mảng bài hát và vị trí bài vừa click
+            window.playPlaylistQueue(songs, index);
+          } else if (window.playSongDirectly) {
+            console.warn("Chưa có hàm playPlaylistQueue, đang phát bài lẻ.");
             window.playSongDirectly(
               song.title,
               song.artist_name,
               "../" + song.file_path,
               "../img/" + song.image_path,
             );
+          }
         };
         songListContainer.appendChild(div);
       });
+      const playAllBtn = document.getElementById("play-all-btn");
+      if (playAllBtn) {
+        playAllBtn.onclick = () => {
+          if (songs.length > 0 && window.playPlaylistQueue) {
+            window.playPlaylistQueue(songs, 0); 
+          } else if (songs.length === 0) {
+            alert("Danh sách phát hiện chưa có bài hát nào!");
+          }
+        };
+      }
     });
 };
 

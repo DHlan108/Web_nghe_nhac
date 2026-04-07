@@ -9,7 +9,6 @@ window.initAlbumPage = function () {
   console.log("🚀 Đang khởi tạo trang Album...");
   var role = localStorage.getItem("role") || "user";
 
-  // Chỉ gán sự kiện đóng modal một lần duy nhất (Tránh lỗi SPA gán chồng sự kiện)
   if (!window._albumEventsBound) {
     window._albumEventsBound = true;
     window.addEventListener("click", function (e) {
@@ -21,7 +20,6 @@ window.initAlbumPage = function () {
       if (e.target === adminModal) window.closeAlbumModalAdmin();
 
       // 2. Nếu click vào dấu X -> Đóng modal
-      // (Hàm closest sẽ tự động dò tìm xem chỗ bạn click có chứa class của dấu X không)
     if (e.target.closest(".close-album-modal") || e.target.closest(".close-modal")) {
       window.closeAlbumModal();
       window.closeAlbumModalAdmin();

@@ -1,6 +1,6 @@
 /*đăng nhập*/
 async function xulyDangnhap() {
-    // 1. Lấy dữ liệu từ 2 ô input
+    // Lấy dữ liệu 
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
     const role = document.getElementById("login-role").value;
@@ -13,12 +13,12 @@ async function xulyDangnhap() {
     alert("Vui lòng chọn vai trò!");
     return;
     }
-    // 2. Gói dữ liệu để gửi đi
+    // Gói dữ liệu để gửi đi
     const formData = new FormData();
     formData.append('username', user);
     formData.append('password', pass);
     formData.append('role', role);
-    // 3. Gửi sang PHP bằng Fetch API
+    // Gửi sang PHP bằng Fetch API
     try {
         const response = await fetch('../api/login.php', {
             method: 'POST',
@@ -27,7 +27,7 @@ async function xulyDangnhap() {
         
         const result = await response.json(); // Đọc kết quả PHP trả về
 
-        // 4. Xử lý kết quả
+        // Xử lý kết quả
         if (result.success) {
             // Lưu vào localStorage để các trang khác lấy được
             localStorage.setItem("role", result.role);
@@ -35,7 +35,7 @@ async function xulyDangnhap() {
             localStorage.setItem("username", result.username);
             
             alert("Đăng nhập thành công với quyền: " + result.role);
-            // Chuyển hướng sang trang chủ (bộ khung index.html)
+            // Chuyển hướng sang trang chủ 
             window.location.href = "home.html"; 
         } else {
             alert("Đăng nhập thất bại: " + result.message);
@@ -47,24 +47,24 @@ async function xulyDangnhap() {
 }
 //đăng ký
 async function xulyDangky() {
-    // 1. Lấy dữ liệu từ các ô input đăng ký
+    // Lấy dữ liệu từ các ô input đăng ký
     const user = document.getElementById("reg-username").value;
     const email = document.getElementById("reg-email").value;
     const pass = document.getElementById("reg-password").value;
     const role = document.getElementById("reg-role").value;
-    // 2. Kiểm tra không được để trống
+    // Kiểm tra không được để trống
     if (user === "" || email === "" || pass === ""|| role === "") {
         alert("Vui lòng điền đầy đủ thông tin!");
         return;
     }
 
-    // 3. Gói dữ liệu
+    // Gói dữ liệu
     const formData = new FormData();
     formData.append('username', user);
     formData.append('email', email);
     formData.append('password', pass);
     formData.append('role', role);
-    // 4. Gửi sang file PHP
+    // Gửi sang file PHP
     try {
         const response = await fetch('../api/register.php', {
             method: 'POST',
