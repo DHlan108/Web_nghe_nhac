@@ -4,7 +4,6 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap");
 :root {
-
   /* ===== BACKGROUND ===== */
   --bg-main: #252432;
   --bg-card: #2d2d39;
@@ -33,8 +32,8 @@
   --text-dark: #111111;
 
   /* ===== BORDER / SHADOW ===== */
-  --border-light: rgba(255,255,255,0.5);
-  --shadow-inner: inset 0 10px 20px rgba(0,0,0,0.5);
+  --border-light: rgba(255, 255, 255, 0.5);
+  --shadow-inner: inset 0 10px 20px rgba(0, 0, 0, 0.5);
 
   /* ===== RADIUS ===== */
   --radius-lg: 20px;

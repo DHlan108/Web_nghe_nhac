@@ -1,94 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-    <head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>My Music</title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="../css/playlist.css">
-    <link rel="stylesheet" href="../css/player.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/component.css" />
+    <link rel="stylesheet" href="../css/playlist.css" />
+    <link rel="stylesheet" href="../css/player.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
 
-</head>
+  <body>
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div id="sidebar-container"></div>
 
-<body>
-
-<div class="layout">
-
-    <!-- SIDEBAR -->
-    <div id="sidebar-container"></div>
-
-    <!-- MAIN -->
-    <div class="main">
-
+      <!-- MAIN -->
+      <div class="main">
         <!-- HEADER -->
         <div id="navbar-container"></div>
 
         <!-- CONTENT -->
         <main class="content" id="main-content">
-            <section id="library" class="library">
-                <!-- LEFT: PLAYLIST -->
-                <div class="library-sidebar">
-                    <button id="add-playlist-btn" class="add-playlist-btn">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Tạo mới</span>
-                    </button>
-                    <h3>Danh sách phát</h3>
-                    <div class="playlist-list" id="playlist-list">
-                        <!-- render bằng JS -->
-                    </div>
-                </div>
-
-                <!-- RIGHT: SONG LIST -->
-                <div class="library-content">
-                    <div id="playlist-view" class="hidden">
-                        <div class="playlist-header">
-                            <img id="playlist-cover">
-                            <div class="playlist-meta">
-                                <h2 id="playlist-title"> </h2>
-                            </div>
-                        </div>
-
-                        <button id="add-song-btn" class="add-song-btn">
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Thêm bài hát</span>
-                        </button>
-
-                        <div class="song-list" id="song-list"></div>
-                        <!-- render bài hát -->
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-</div>
-    <div id="playlist-modal" class="modal hidden">
-        <div class="modal-content">
-            <button id="close-playlist-modal" class="close-btn">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h2 id="playlist-modal-title">Tạo mới</h2>
-            <input type="file" id="playlist-image">
-            <input type="text" id="playlist-name" placeholder="Tên danh sách phát">
-            <div class="modal-actions">
-                <button id="save-playlist-btn">Lưu</button>
+          <section id="library" class="library">
+            <!-- LEFT: PLAYLIST -->
+            <div class="library-sidebar">
+              <button id="add-playlist-btn" class="add-playlist-btn">
+                <i class="fa-solid fa-plus"></i>
+                <span>Tạo mới</span>
+              </button>
+              <h3>Danh sách phát</h3>
+              <div class="playlist-list" id="playlist-list">
+                <!-- render bằng JS -->
+              </div>
             </div>
-        </div>
-    </div>
 
-    <div id="song-modal" class="modal hidden">
-        <div class="modal-content">
-            <button id="close-song-modal" class="close-btn">
+            <!-- RIGHT: SONG LIST -->
+            <div class="library-content">
+              <div id="playlist-view" class="hidden">
+                <div class="playlist-header">
+                  <img id="playlist-cover" />
+                  <div class="playlist-meta">
+                    <h2 id="playlist-title"></h2>
+                  </div>
+                </div>
+
+                <button id="add-song-btn" class="add-song-btn">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Thêm bài hát</span>
+                </button>
+
+                <div class="song-list" id="song-list"></div>
+                <!-- render bài hát -->
+              </div>
+            </div>
+          </section>
+          <!-- phần nút ở admin -->
+          <div id="playlist-modal" class="modal hidden">
+            <div class="modal-content">
+              <button id="close-playlist-modal" class="close-btn">
                 <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h2>Thêm bài hát</h2>
-            <div id="song-select-list"></div>
-        </div>
+              </button>
+              <h2 id="playlist-modal-title">Tạo mới</h2>
+              <input type="file" id="playlist-image" />
+              <input
+                type="text"
+                id="playlist-name"
+                placeholder="Tên danh sách phát"
+              />
+              <div class="modal-actions">
+                <button id="save-playlist-btn">Lưu</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="song-modal" class="modal hidden">
+            <div class="modal-content">
+              <button id="close-song-modal" class="close-btn">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+              <h2>Thêm bài hát</h2>
+              <div id="song-select-list"></div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
 
     <div id="player-container"></div>
     <script src="../js/loadComponent.js"></script>
     <script src="../js/playlist.js"></script>
-</body>
+  </body>
 </html>
