@@ -7,7 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = intval($_POST['id']);
 
     if ($id > 0) {
-        // Lệnh SQL: Cập nhật cột listens = listens + 1
         $sql = "UPDATE songs SET listens = listens + 1 WHERE id = ?";
         
         $stmt = $conn->prepare($sql);

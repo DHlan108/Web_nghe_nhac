@@ -2,7 +2,7 @@
 var currentEditId = null;
 var globalSongs = [];
 // =========================================================
-// HÀM CUỘN TRANG MƯỢT MÀ (Dùng cho các nút click chuyển section)
+// HÀM CUỘN TRANG MƯỢT MÀ 
 // =========================================================
 window.scrollToSection = function (sectionId) {
   var element = document.getElementById(sectionId);
@@ -14,13 +14,13 @@ window.scrollToSection = function (sectionId) {
   }
 };
 // =========================================================
-// 1. HÀM KHỞI TẠO TRANG (Router sẽ gọi hàm này khi vào trang)
+// HÀM KHỞI TẠO TRANG 
 // =========================================================
 window.initSongPage = function () {
   console.log("🚀 Đang khởi tạo trang Bài Hát...");
   var role = localStorage.getItem("role") || "user";
 
-  // 1.1 Hiển thị nút Admin
+  // Hiển thị nút Admin
   var adminTools = document.getElementById("admin-tools");
   if (role === "admin" && adminTools) {
     adminTools.innerHTML = `
@@ -29,7 +29,7 @@ window.initSongPage = function () {
         </button>`;
   }
 
-  // 1.2 Fetch dữ liệu bài hát
+  // Fetch dữ liệu bài hát
   fetch("../api/get_song.php")
     .then((res) => {
       if (!res.ok) throw new Error("Sai đường dẫn API hoặc lỗi Server!");
@@ -39,7 +39,7 @@ window.initSongPage = function () {
       globalSongs = data;
       refreshSongDisplay(globalSongs, role); // Truyền role vào để render
 
-      // 1.3 Kích hoạt tìm kiếm
+      // Kích hoạt tìm kiếm
       if (typeof window.MusicSearchEngine !== "undefined") {
         window.MusicSearchEngine.initGlobalSearch((keyword) => {
           var featuredSection = document.getElementById("featured-songs");
@@ -73,7 +73,7 @@ window.initSongPage = function () {
 };
 
 // =========================================================
-// 2. CÁC HÀM RENDER & LOGIC (Gắn vào window để HTML gọi được)
+// 2. CÁC HÀM RENDER & LOGIC 
 // =========================================================
 
 window.createSong = function (song, role) {
@@ -112,7 +112,7 @@ window.createSong = function (song, role) {
     `;
 };
 
-// HÀM: Dùng ID để tìm dữ liệu và phát nhạc
+// Dùng ID để tìm dữ liệu và phát nhạc
 window.playSongFromList = function (id) {
   // globalSongs đã được fetch ở đầu file
   var song = globalSongs.find((s) => s.id == id);
@@ -133,7 +133,6 @@ window.playSongFromList = function (id) {
       .then((data) => {
         if (data.status === "success") {
           console.log(`✅ Đã cộng 1 lượt nghe cho bài: ${song.title}`);
-
           // Tự động cập nhật số liệu trên RAM để nếu ấn filter/search nó không bị tuột lại số cũ
           song.listens = (parseInt(song.listens) || 0) + 1;
         }
@@ -147,16 +146,15 @@ window.refreshSongDisplay = function (data, role) {
   var newsong = document.getElementById("new-list");
   var allsong = document.getElementById("all-list");
 
-  // 🛠️ BƯỚC BẢO VỆ: Nếu thẻ HTML chưa kịp xuất hiện, bắt JS đợi 50ms rồi thử lại
   if (!featured || !newsong || !allsong) {
     console.warn("⏳ Giao diện chưa sẵn sàng, đang đợi 50ms...");
     setTimeout(function () {
       window.refreshSongDisplay(data, role);
     }, 50);
-    return; // Dừng lại, không chạy tiếp code bên dưới
+    return;
   }
 
-  // 1. SẮP XẾP BÀI HÁT NỔI BẬT (Theo listens giảm dần)
+  // SẮP XẾP BÀI HÁT NỔI BẬT (Theo listens giảm dần)
   var hotData = [...data]
     .sort(function (a, b) {
       var listenA = parseInt(a.listens) || 0;
@@ -165,7 +163,7 @@ window.refreshSongDisplay = function (data, role) {
     })
     .slice(0, 6);
 
-  // 2. SẮP XẾP BÀI HÁT MỚI RA (Theo release_date mới nhất)
+  // SẮP XẾP BÀI HÁT MỚI RA (Theo release_date mới nhất)
   var newData = [...data]
     .sort(function (a, b) {
       var dateA = new Date(a.release_date || 0).getTime();
@@ -221,7 +219,6 @@ window.deleteSong = function (id) {
       .then((res) => res.json())
       .then((data) => {
         alert(data.message);
-        // THAY ĐỔI QUAN TRỌNG: Không reload trang, chỉ gọi lại hàm khởi tạo
         window.initSongPage();
       });
   }
@@ -286,7 +283,6 @@ window.submitSong = function () {
       alert(data.message);
       if (data.success) {
         closeModal();
-        // THAY ĐỔI QUAN TRỌNG: Gọi lại hàm render thay vì reload trang
         window.initSongPage();
       }
     });

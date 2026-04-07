@@ -42,14 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($title && $content) {
 
-        // 1. Tạo thông báo
+        // Tạo thông báo
         $stmt = $conn->prepare("INSERT INTO notifications (title, content, is_active) VALUES (?, ?, 1)");
         $stmt->bind_param("ss", $title, $content);
         $stmt->execute();
 
         $notification_id = $stmt->insert_id;
 
-        // 2. Gửi cho tất cả USER (KHÔNG gửi admin)
+        // Gửi cho tất cả USER 
         $users = $conn->query("SELECT id FROM users WHERE role = 'user'");
 
         while ($u = $users->fetch_assoc()) {
@@ -132,7 +132,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'count_unread') {
 }
 
 // =======================
-// 6. LẤY THÔNG BÁO MỚI NHẤT (POLLING 5s)
+// 6. LẤY THÔNG BÁO MỚI NHẤT 
 // =======================
 $last_id = isset($_GET['last_id']) ? (int)$_GET['last_id'] : 0;
 

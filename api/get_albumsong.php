@@ -7,11 +7,9 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Lỗi kết nối CSDL: " . $conn->connect_error]);
     exit;
 }
-
-// Set charset utf8mb4 để hiển thị tiếng Việt có dấu không bị lỗi
 $conn->set_charset("utf8mb4");
 
-// Lấy album_id từ tham số URL (GET request)
+// Lấy album_id từ tham số URL 
 if (!isset($_GET['album_id']) || empty($_GET['album_id'])) {
     echo json_encode(["success" => false, "message" => "Không tìm thấy mã Album!"]);
     exit;
@@ -19,7 +17,7 @@ if (!isset($_GET['album_id']) || empty($_GET['album_id'])) {
 
 $album_id = intval($_GET['album_id']);
 
-// 3. Truy vấn lấy các bài hát thuộc album này
+// Truy vấn lấy các bài hát thuộc album này
 $sql = "SELECT id, title, file_path, duration, listens FROM songs WHERE album_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $album_id);
@@ -31,7 +29,7 @@ while ($row = $result->fetch_assoc()) {
     $songs[] = $row;
 }
 
-// 4. Trả về kết quả cho JavaScript xử lý
+// Trả về kết quả cho JavaScript xử lý
 if (count($songs) > 0) {
     echo json_encode(["success" => true, "songs" => $songs]);
 } else {

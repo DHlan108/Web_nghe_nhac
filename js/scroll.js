@@ -8,21 +8,20 @@ window.initHorizontalScroll = function (wrapperSelector) {
 
     if (!container) return;
 
-    // Đánh dấu đã init để tránh lặp (cho SPA)
+    // Đánh dấu đã init để tránh lặp cho SPA
     container.dataset.scrollInit = "true";
 
-    // --- 1. LOGIC KIỂM TRA HIỆN NÚT ---
+    // --- LOGIC KIỂM TRA HIỆN NÚT ---
     const check = () => {
       const max = container.scrollWidth - container.clientWidth;
       const left = container.scrollLeft;
 
-      // Dùng độ lệch 10px để tính toán chính xác hơn trên các trình duyệt khác nhau
       if (btnLeft) btnLeft.style.visibility = left <= 10 ? "hidden" : "visible";
       if (btnRight)
         btnRight.style.visibility = left >= max - 10 ? "hidden" : "visible";
     };
 
-    // --- 2. LOGIC CLICK NÚT ---
+    // --- LOGIC CLICK NÚT ---
     if (btnRight) {
       btnRight.onclick = (e) => {
         e.preventDefault();
@@ -37,7 +36,7 @@ window.initHorizontalScroll = function (wrapperSelector) {
       };
     }
 
-    // --- 3. LOGIC KÉO CHUỘT (DRAG) ---
+    // ---  LOGIC KÉO CHUỘT (DRAG) ---
     let isDown = false;
     let startX;
     let scrollLeft;
@@ -57,7 +56,7 @@ window.initHorizontalScroll = function (wrapperSelector) {
     container.addEventListener("mouseup", () => {
       isDown = false;
       container.classList.remove("dragging");
-      check(); // Kiểm tra lại nút sau khi thả chuột
+      check(); 
     });
 
     container.addEventListener("mousemove", (e) => {
@@ -68,19 +67,15 @@ window.initHorizontalScroll = function (wrapperSelector) {
       container.scrollLeft = scrollLeft - walk;
     });
 
-    // --- 4. THEO DÕI THAY ĐỔI LAYOUT (QUAN TRỌNG NHẤT) ---
+    // --- THEO DÕI THAY ĐỔI LAYOUT ---
     container.addEventListener("scroll", check);
-
-    // Theo dõi khi nội dung bên trong thay đổi (do API đổ dữ liệu vào chậm)
     const resizeObserver = new ResizeObserver(() => {
       check();
     });
     resizeObserver.observe(container);
 
-    // Chạy lần đầu tiên ngay khi render xong nhịp đầu
     requestAnimationFrame(check);
 
-    // Backup thêm một lần nữa sau 300ms đề phòng ảnh tải chậm
     setTimeout(check, 300);
   });
 };

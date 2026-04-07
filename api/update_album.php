@@ -13,7 +13,6 @@ if (empty($id)) {
     exit;
 }
 
-// Sửa câu lệnh SQL dùng dấu backtick để tránh lỗi Unknown column
 $sql = "UPDATE `albums` SET 
         `title` = '$title', 
         `artist_id` = '$artist_id', 
@@ -24,7 +23,6 @@ $sql = "UPDATE `albums` SET
 if (mysqli_query($conn, $sql)) {
     echo json_encode(["success" => true, "message" => "Cập nhật album thành công"]);
 } else {
-    // Nếu vẫn lỗi, dòng này sẽ in ra câu SQL để bạn copy vào phpMyAdmin chạy thử
     echo json_encode(["success" => false, "message" => "Lỗi SQL: " . mysqli_error($conn)]);
 }
 ?>

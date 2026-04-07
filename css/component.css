@@ -60,23 +60,23 @@
 /* ===== SEARCH DROPDOWN ===== */
 #search-dropdown {
   position: absolute;
-  top: 100%; /* Đẩy xuống ngay dưới mép của search-box */
+  top: 100%; 
   margin-top: 15px;
   left: 0;
-  width: 100%; /* Rộng bằng đúng thanh search */
-  background: #2d2d39; /* Trùng màu với sidebar/nền tối */
+  width: 100%; 
+  background: #2d2d39; 
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   max-height: 400px;
   overflow-y: auto;
   z-index: 1000;
-  display: none; /* Mặc định ẩn, chỉ hiện khi gõ */
+  display: none; 
   flex-direction: column;
   padding: 10px;
-  border: 1px solid rgba(232, 28, 255, 0.2); /* Viền mờ màu hồng */
+  border: 1px solid rgba(232, 28, 255, 0.2); 
 }
 
-/* Tùy chỉnh thanh cuộn cho dropdown */
+/* dropdown */
 #search-dropdown::-webkit-scrollbar {
   width: 6px;
 }
@@ -97,7 +97,7 @@
 }
 
 .dropdown-item:hover {
-  background: rgba(232, 28, 255, 0.15); /* Hover lên màu hồng nhạt */
+  background: rgba(232, 28, 255, 0.15); 
 }
 
 .dropdown-item img {
@@ -149,12 +149,12 @@
 
 /* ===== SIDEBAR ===== */
 #sidebar {
-  position: fixed; /* Đổi thành fixed để ổn định layout */
+  position: fixed; 
   top: 0;
   left: 0;
   height: calc(
     100vh - 70px
-  ); /* Trừ đi 70px của Player ở đáy để không bị che khuất menu */
+  ); 
   width: 200px;
   background-color: #2d2d39;
   display: flex;

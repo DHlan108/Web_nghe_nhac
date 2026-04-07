@@ -10,7 +10,7 @@ if (empty($email) || empty($new_pass)) {
     exit;
 }
 
-// 1. Kiểm tra xem Email có tồn tại trong hệ thống không
+// Kiểm tra xem Email có tồn tại trong hệ thống không
 $check_sql = "SELECT id FROM users WHERE email = ?";
 $stmt_check = $conn->prepare($check_sql);
 $stmt_check->bind_param("s", $email);
@@ -25,10 +25,10 @@ if ($stmt_check->num_rows === 0) {
 }
 $stmt_check->close();
 
-// 2. Băm mật khẩu mới (Giống hệt lúc đăng ký)
+// Băm mật khẩu mới
 $hashed_password = password_hash($new_pass, PASSWORD_BCRYPT);
 
-// 3. Cập nhật mật khẩu mới vào cơ sở dữ liệu
+// Cập nhật mật khẩu mới vào cơ sở dữ liệu
 $update_sql = "UPDATE users SET password = ? WHERE email = ?";
 $stmt = $conn->prepare($update_sql);
 $stmt->bind_param("ss", $hashed_password, $email);

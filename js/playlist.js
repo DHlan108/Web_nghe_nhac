@@ -9,9 +9,7 @@ var currentPlaylistId = null;
 // =========================================================
 window.initPlaylistPage = function () {
   console.log("🚀 Đang khởi tạo trang Danh sách phát...");
-
-  // SỬ DỤNG setTimeout để đẩy logic xuống hàng chờ,
-  // đợi trình duyệt render xong HTML hoàn toàn mới chạy JS.
+// html xong mới đến js
   setTimeout(() => {
     const role = localStorage.getItem("role") || "user";
 
@@ -68,10 +66,8 @@ window.initPlaylistPage = function () {
         if (songModal) songModal.classList.add("hidden");
       };
     }
-
-    // Tải danh sách playlist từ server
     window.loadPlaylists();
-  }, 50); // Đợi 50ms để DOM ổn định
+  }, 50); 
 };
 
 // =========================================================
@@ -188,10 +184,10 @@ window.deletePlaylist = function (id) {
       if (data.success) {
         alert("Đã xóa playlist thành công!");
 
-        // 1. Tải lại danh sách bên trái
+        // Tải lại danh sách bên trái
         window.loadPlaylists();
 
-        // 2. KIỂM TRA: Nếu playlist đang xóa chính là cái đang mở bên phải
+        // Nếu playlist đang xóa chính là cái đang mở bên phải
         if (currentPlaylistId == id) {
           currentPlaylistId = null; // Reset ID hiện tại
 
