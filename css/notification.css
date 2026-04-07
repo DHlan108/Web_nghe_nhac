@@ -1,0 +1,112 @@
+
+.notification-wrapper {
+    position: relative;
+    margin-right: 20px;
+    cursor: pointer;
+    overflow: visible;
+}
+
+#bell-icon {
+    font-size: 20px;
+}
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 10px; 
+    padding: 2px 5px;    
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 15px;     
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+    z-index: 11000;
+}
+.notification-popup {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 250px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.notification-popup input,
+.notification-popup textarea {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 5px;
+}
+
+.notification-popup button {
+    width: 100%;
+    padding: 6px;
+    background: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#user-notification-list {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: 300px;
+
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 10001;
+
+    overflow: hidden; /* ❗ QUAN TRỌNG */
+}
+
+#user-notification-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#user-notification-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+#user-notification-list::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.notification-list-container h4 {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+.noti-item {
+    padding: 10px;
+    border-bottom: 1px dotted #eee;
+    font-size: 13px;
+}
+.noti-item:hover { background: #f9f9f9; }
+
+.noti-header {
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+
+#list-items {
+    max-height: 300px;
+    overflow-y: auto;
+}

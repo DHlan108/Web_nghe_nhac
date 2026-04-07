@@ -1,0 +1,64 @@
+/* ===== PLAYER FOOTER ===== */
+.player-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: linear-gradient(90deg, #7303c0, #ec38bc); /* Tím sang hồng */
+  display: flex;
+  align-items: center;
+  z-index: 9999; /* Đảm bảo nằm trên cùng */
+  color: white;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.player-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.player-song-info {
+  display: flex;
+  align-items: center;
+  flex: 1; /* Cân bằng layout 2 bên */
+}
+
+.player-main-controls {
+  flex: 2; /* Chiếm nhiều diện tích nhất ở giữa */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; /* Đảm bảo nút play/pause nằm chính giữa màn hình */
+  gap: 20px;
+}
+
+.controls-btns {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.controls-btns button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  margin: 0 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.controls-btns button:hover {
+  transform: scale(1.1);
+  color: #40c9ff;
+}
+
+.progress-slider {
+  width: 80%;
+  cursor: pointer;
+  accent-color: #ffffff;
+}
