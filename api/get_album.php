@@ -7,7 +7,10 @@ if ($conn->connect_error) {
     exit;
 }
 
-$sql = "SELECT al.*, ar.name as artist_name FROM albums al, artists ar where al.artist_id = ar.id ORDER BY release_year DESC";
+$sql = "SELECT al.*, ar.name as artist_name 
+        FROM albums al 
+        JOIN artists ar ON al.artist_id = ar.id 
+        ORDER BY al.release_year DESC";
 $result = $conn->query($sql);
 
 if ($result) {

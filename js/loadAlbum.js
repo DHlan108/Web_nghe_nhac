@@ -15,8 +15,22 @@ window.initAlbumPage = function () {
     window.addEventListener("click", function (e) {
       var modal = document.getElementById("album-modal");
       var adminModal = document.getElementById("album-admin-modal");
+
+      // 1. Nếu click ra vùng tối bên ngoài -> Đóng modal
       if (e.target === modal) window.closeAlbumModal();
       if (e.target === adminModal) window.closeAlbumModalAdmin();
+
+      // 2. Nếu click vào dấu X -> Đóng modal
+      // (Hàm closest sẽ tự động dò tìm xem chỗ bạn click có chứa class của dấu X không)
+      if (
+        e.target.closest(".fa-xmark") ||
+        e.target.closest(".fa-x") ||
+        e.target.closest(".close") ||
+        e.target.closest("button")
+      ) {
+        window.closeAlbumModal();
+        window.closeAlbumModalAdmin();
+      }
     });
   }
 
@@ -122,6 +136,22 @@ window.openAlbumModal = function (albumId, title, artist, year, cover) {
     "<p style='color:#a7a7a7;'>Đang tải bài hát...</p>";
   modal.classList.add("show");
 
+  fetch("../api/update_album_listen.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "id=" + albumId,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        console.log(`✅ Đã cộng 1 lượt xem cho Album: ${title}`);
+        // Cập nhật số liệu trên RAM để cỗ máy Search/Sort không bị sai lệch
+        var alb = globalAlbums.find((a) => a.id == albumId);
+        if (alb) alb.listens = (parseInt(alb.listens) || 0) + 1;
+      }
+    })
+    .catch((err) => console.error("Lỗi khi cộng lượt xem album:", err));
+
   fetch(`/Web_nghe_nhac/api/get_albumsong.php?album_id=${albumId}`)
     .then((res) => res.json())
     .then((data) => {
@@ -157,6 +187,7 @@ window.closeAlbumModal = function () {
 
 // ================= 4. GIAO DIỆN ADMIN =================
 window.createAlbumHTML = function (album, role) {
+  var listensCount = album.listens || 0;
   return `
     <div class="album-card" onclick="openAlbumModal(${album.id}, '${album.title.replace(/'/g, "\\'")}', '${album.artist_name.replace(/'/g, "\\'")}', '${album.release_year}', '${album.cover_image}')">
         <div class="album-img">

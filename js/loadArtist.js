@@ -271,3 +271,42 @@ window.loadArtistSongs = function (id, name) {
         window.scrollTo({ top: songSec.offsetTop - 80, behavior: "smooth" });
     });
 };
+
+// =========================================================
+// 4. HÀM PHÁT NHẠC CỦA NGHỆ SĨ
+// =========================================================
+window.playArtistSong = function (songId, artistName) {
+  // 1. Tìm vị trí bài hát trong danh sách bài hát của nghệ sĩ (đã lưu ở window.currentArtistSongs)
+  if (!window.currentArtistSongs) return;
+
+  var songIndex = window.currentArtistSongs.findIndex((s) => s.id == songId);
+  if (songIndex === -1) return;
+
+  var song = window.currentArtistSongs[songIndex];
+
+  console.log("Đang phát nhạc của nghệ sĩ:", song.title);
+
+  // 2. Đẩy danh sách xuống Player (dùng hàng đợi queue để có thể Next/Prev)
+  if (typeof window.playPlaylistQueue === "function") {
+    // Sửa lại artist_name cho đúng cấu trúc queue yêu cầu
+    var queueData = window.currentArtistSongs.map((s) => {
+      return { ...s, artist_name: artistName };
+    });
+    window.playPlaylistQueue(queueData, songIndex);
+  } else if (typeof window.playSongDirectly === "function") {
+    // Fallback nếu không có hàm Queue
+    window.playSongDirectly(
+      song.title,
+      artistName,
+      "../" + song.file_path,
+      "../img/" + song.image_path,
+    );
+  }
+
+  // 3. Gọi API cộng 1 lượt nghe (Chạy ngầm)
+  fetch("../api/update_listen.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "id=" + songId,
+  }).catch((err) => console.error("Lỗi khi cộng lượt nghe:", err));
+};
