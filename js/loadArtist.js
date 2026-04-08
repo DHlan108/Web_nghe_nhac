@@ -3,7 +3,7 @@ var globalArtists = [];
 var currentEditArtistId = null;
 
 // =========================================================
-// 1. HÀM KHỞI TẠO TRANG NGHỆ SĨ
+// HÀM KHỞI TẠO TRANG NGHỆ SĨ
 // =========================================================
 window.initArtistPage = function () {
   console.log("🚀 Đang khởi tạo trang Nghệ Sĩ...");
@@ -11,7 +11,7 @@ window.initArtistPage = function () {
   var userRole = localStorage.getItem("role") || "user";
   var container = document.getElementById("artist-container");
 
-  // Xử lý đóng Modal Admin khi click ra ngoài (Chỉ gán 1 lần)
+  // đóng Modal Admin khi click ra ngoài 
   if (!window._artistClickBound) {
     window._artistClickBound = true;
     window.addEventListener("click", function (e) {
@@ -57,19 +57,16 @@ window.initArtistPage = function () {
     })
     .catch((err) => console.error("Lỗi fetch Artist:", err));
 
-  // --- XỬ LÝ NÚT THÊM CHO ADMIN ---
+  // --- NÚT THÊM CHO ADMIN ---
   if (userRole === "admin") {
     var section = document.getElementById("product1");
     if (section) {
-      // Xóa nút cũ để tránh bị lặp nút khi chuyển trang qua lại trong SPA
       const oldBtn = section.querySelector(".admin-add-btn-artist");
       if (oldBtn) oldBtn.remove();
 
       var addBtn = document.createElement("button");
       addBtn.className = "admin-add-btn-artist";
       addBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Thêm Nghệ Sĩ';
-
-      // Gán trực tiếp qua addEventListener để đảm bảo không bị chặn
       addBtn.addEventListener("click", function () {
         window.openArtistModal();
       });
@@ -80,7 +77,7 @@ window.initArtistPage = function () {
 };
 
 // =========================================================
-// 2. RENDER GIAO DIỆN
+// RENDER GIAO DIỆN
 // =========================================================
 window.renderArtistList = function (artists, isSearching = false, role) {
   var container = document.getElementById("artist-container");
@@ -148,13 +145,11 @@ window.renderArtistList = function (artists, isSearching = false, role) {
 };
 
 // =========================================================
-// 3. QUẢN LÝ MODAL & ADMIN LOGIC (LỖI THƯỜNG Ở ĐÂY)
+// QUẢN LÝ MODAL & ADMIN LOGIC
 // =========================================================
 
 window.openArtistModal = function () {
   const modal = document.getElementById("artist-admin-modal");
-
-  // Kiểm tra an toàn: Nếu không có HTML Modal thì báo lỗi ngay
   if (!modal) {
     console.error("❌ LỖI: Không tìm thấy ID 'artist-admin-modal' trong HTML!");
     alert("Thiếu giao diện Modal Admin trong file HTML của bạn.");
@@ -217,7 +212,6 @@ window.submitArtist = function () {
     .catch((err) => console.error("Lỗi submit:", err));
 };
 
-// ... Các hàm loadArtistSongs và deleteArtist giữ nguyên logic cũ ...
 window.deleteArtist = function (id) {
   if (confirm("Bạn có chắc chắn muốn xóa nghệ sĩ này không?")) {
     fetch("../api/delete_artist.php", {
@@ -245,7 +239,7 @@ window.loadArtistSongs = function (id, name) {
       container.innerHTML = "";
       if (!data.songs || data.songs.length === 0) {
         container.innerHTML =
-          "<p style='color: white;'>Nghệ sĩ này chưa có bài hát.</p>";
+          "<p style='color: #222; font-size: 20px; font-weight: 500; padding: 20px 0;'>Nghệ sĩ này chưa có bài hát.</p>";
         return;
       }
       window.currentArtistSongs = data.songs;
@@ -273,28 +267,25 @@ window.loadArtistSongs = function (id, name) {
 };
 
 // =========================================================
-// 4. HÀM PHÁT NHẠC CỦA NGHỆ SĨ
+// HÀM PHÁT NHẠC CỦA NGHỆ SĨ
 // =========================================================
 window.playArtistSong = function (songId, artistName) {
-  // 1. Tìm vị trí bài hát trong danh sách bài hát của nghệ sĩ (đã lưu ở window.currentArtistSongs)
+  // Tìm vị trí bài hát trong danh sách bài hát của nghệ sĩ 
   if (!window.currentArtistSongs) return;
 
   var songIndex = window.currentArtistSongs.findIndex((s) => s.id == songId);
   if (songIndex === -1) return;
 
   var song = window.currentArtistSongs[songIndex];
-
   console.log("Đang phát nhạc của nghệ sĩ:", song.title);
 
-  // 2. Đẩy danh sách xuống Player (dùng hàng đợi queue để có thể Next/Prev)
+  // Đẩy danh sách xuống Player 
   if (typeof window.playPlaylistQueue === "function") {
-    // Sửa lại artist_name cho đúng cấu trúc queue yêu cầu
     var queueData = window.currentArtistSongs.map((s) => {
       return { ...s, artist_name: artistName };
     });
     window.playPlaylistQueue(queueData, songIndex);
   } else if (typeof window.playSongDirectly === "function") {
-    // Fallback nếu không có hàm Queue
     window.playSongDirectly(
       song.title,
       artistName,
@@ -303,7 +294,7 @@ window.playArtistSong = function (songId, artistName) {
     );
   }
 
-  // 3. Gọi API cộng 1 lượt nghe (Chạy ngầm)
+  // Gọi API cộng 1 lượt nghe 
   fetch("../api/update_listen.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },

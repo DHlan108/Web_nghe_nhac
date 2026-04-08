@@ -48,12 +48,16 @@
                     <h2 id="playlist-title"></h2>
                   </div>
                 </div>
+                <div class="playlist-actions">
+                  <button id="add-song-btn" class="add-song-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Thêm bài hát</span>
+                  </button>
 
-                <button id="add-song-btn" class="add-song-btn">
-                  <i class="fa-solid fa-plus"></i>
-                  <span>Thêm bài hát</span>
-                </button>
-
+                  <button id="play-all-btn" class="play-all-btn">
+                    <i class="fa-solid fa-play"></i>
+                  </button>
+                </div>
                 <div class="song-list" id="song-list"></div>
                 <!-- render bài hát -->
               </div>
@@ -90,7 +94,7 @@
         </main>
       </div>
     </div>
-
+    <!-- PLAYER -->
     <div id="player-container"></div>
     <script src="../js/loadComponent.js"></script>
     <script src="../js/playlist.js"></script>

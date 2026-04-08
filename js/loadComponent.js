@@ -38,10 +38,6 @@ function triggerPageLogic(url) {
     document.body.appendChild(script);
   }
 }
-
-// =======================
-// LOAD SPA KHÔNG RELOAD
-// =======================
 // =========================================================
 // HÀM LOAD NỘI DUNG SPA (KHÔNG RELOAD TRANG)
 // =========================================================
@@ -57,23 +53,18 @@ function loadMainContentSPA(url) {
 
       if (newContent && target) {
         target.innerHTML = newContent.innerHTML;
-        window.scrollTo({ top: 0, behavior: "instant" }); // Thêm dòng này
+        window.scrollTo({ top: 0, behavior: "instant" }); 
       }
-
-      // --- 2. XỬ LÝ ĐỢI CSS TẢI XONG ---
       const styles = doc.querySelectorAll('link[rel="stylesheet"]');
       const stylePromises = [];
 
       styles.forEach((style) => {
         const href = style.getAttribute("href");
 
-        // Chỉ nạp nếu CSS này chưa tồn tại trong <head>
         if (href && !document.querySelector(`link[href="${href}"]`)) {
           const link = document.createElement("link");
           link.rel = "stylesheet";
           link.href = href;
-
-          // Tạo Promise để theo dõi trạng thái tải của file CSS
           const p = new Promise((resolve) => {
             link.onload = () => {
               console.log(`✅ Loaded CSS: ${href}`);
@@ -81,7 +72,7 @@ function loadMainContentSPA(url) {
             };
             link.onerror = () => {
               console.error(`❌ Failed to load CSS: ${href}`);
-              resolve(); // Vẫn resolve để không làm treo toàn bộ trang
+              resolve(); 
             };
           });
           stylePromises.push(p);
@@ -94,8 +85,6 @@ function loadMainContentSPA(url) {
         await Promise.all(stylePromises);
       }
 
-      // --- 3. CHẠY LOGIC JAVASCRIPT ---
-      // Dùng requestAnimationFrame để chắc chắn trình duyệt đã render xong CSS vào DOM
       requestAnimationFrame(() => {
         console.log("🚀 CSS ready, triggering Page Logic...");
         triggerPageLogic(url);
@@ -108,7 +97,6 @@ function loadMainContentSPA(url) {
 // SỰ KIỆN BACK/FORWARD (POPSTATE)
 // =========================================================
 window.addEventListener("popstate", () => {
-  // Khi nhấn nút Back/Forward, gọi hàm load SPA để nạp lại nội dung
   loadMainContentSPA(window.location.pathname);
 });
 
@@ -116,17 +104,14 @@ window.addEventListener("popstate", () => {
 // KHỞI TẠO LẦN ĐẦU
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // Lần đầu load trang (F5), chỉ cần chạy trigger logic vì HTML đã có sẵn
   triggerPageLogic(window.location.pathname);
 });
 
 // =======================
 // LOAD NAVBAR & TÍCH HỢP SEARCH
 // =======================
-
-// Biến lưu trữ dữ liệu bài hát để không phải gọi API liên tục mỗi khi gõ phím
+let cachedSearchData = null; 
 let cachedSongs = null;
-
 fetch("../component/navbar.html")
   .then((res) => res.text())
   .then((data) => {
@@ -136,124 +121,174 @@ fetch("../component/navbar.html")
     initLogoutLogic();
 
     // KÍCH HOẠT THANH TÌM KIẾM
-    if (typeof MusicSearchEngine !== "undefined") {
-      MusicSearchEngine.initGlobalSearch(async (keyword) => {
-        const searchBox = document.querySelector(".search-box");
-        let searchDropdown = document.getElementById("search-dropdown");
+function initSearchWhenReady() {
+  if (typeof MusicSearchEngine !== "undefined") {
+    MusicSearchEngine.initGlobalSearch(async (keyword) => {
+      const searchBox = document.querySelector(".search-box");
+      let searchDropdown = document.getElementById("search-dropdown");
 
-        // Nếu chưa có thẻ dropdown thì tự động tạo ra và nhét vào dưới search-box
-        if (!searchDropdown) {
-          searchDropdown = document.createElement("div");
-          searchDropdown.id = "search-dropdown";
-          searchBox.appendChild(searchDropdown);
+      if (!searchDropdown) {
+        searchDropdown = document.createElement("div");
+        searchDropdown.id = "search-dropdown";
+        searchBox.appendChild(searchDropdown);
 
-          // Sự kiện: Click ra ngoài khu vực search thì ẩn dropdown đi
-          document.addEventListener("click", (e) => {
-            if (!searchBox.contains(e.target)) {
-              searchDropdown.style.display = "none";
-            }
-          });
+        document.addEventListener("click", (e) => {
+          if (!searchBox.contains(e.target)) {
+            searchDropdown.style.display = "none";
+          }
+        });
 
-          // Khi click lại vào ô input mà có chữ thì hiện lại dropdown
-          const searchInput = searchBox.querySelector("input");
+        const searchInput = searchBox.querySelector("input");
+        if (searchInput) {
           searchInput.addEventListener("click", () => {
             if (searchInput.value.trim() !== "") {
               searchDropdown.style.display = "flex";
             }
           });
         }
+      }
 
-        // 1. Nếu người dùng xóa trắng ô search -> Ẩn dropdown
-        if (!keyword.trim()) {
-          searchDropdown.style.display = "none";
+      if (!keyword.trim()) {
+        searchDropdown.style.display = "none";
+        return;
+      }
+
+      searchDropdown.style.display = "flex";
+      searchDropdown.innerHTML = `<div style="color: #aaa; padding: 15px; text-align: center;">Đang tìm kiếm...</div>`;
+
+      if (!cachedSearchData) {
+        try {
+          // Lấy dữ liệu bài hát
+          const resSong = await fetch("../api/get_song.php");
+          const songs = await resSong.json();
+          const mappedSongs = songs.map(s => ({ ...s, type: 'song' }));
+
+          // Lấy dữ liệu album 
+          const resAlbum = await fetch("../api/get_album.php"); 
+          const albumData = await resAlbum.json();
+          // Gắn thêm nhãn type = 'album'
+          const mappedAlbums = (albumData.albums || []).map(a => ({ ...a, type: 'album' }));
+
+          // Gộp chung cả 2 mảng lại
+          cachedSearchData = [...mappedSongs, ...mappedAlbums];
+        } catch (error) {
+          console.error("Lỗi khi tải dữ liệu tìm kiếm:", error);
+          searchDropdown.innerHTML = `<div style="color: #ff4d4d; padding: 15px; text-align: center;">Lỗi tải dữ liệu!</div>`;
           return;
         }
+      }
 
-        // Bắt đầu gõ -> Hiện dropdown và báo đang tìm
-        searchDropdown.style.display = "flex";
-        searchDropdown.innerHTML = `<div style="color: #aaa; padding: 15px; text-align: center;">Đang tìm kiếm...</div>`;
+      // XỬ LÝ TÌM KIẾM DỰA TRÊN TỪ KHÓA
+      const results = MusicSearchEngine.process(cachedSearchData, {
+        keyword: keyword,
+        sortBy: "hot",
+        limit: 8,
+      });
 
-        // 2. Load data (chỉ load 1 lần)
-        if (!cachedSongs) {
-          try {
-            const response = await fetch("../api/get_song.php");
-            cachedSongs = await response.json();
-          } catch (error) {
-            console.error("Lỗi khi tải dữ liệu bài hát:", error);
-            searchDropdown.innerHTML = `<div style="color: #ff4d4d; padding: 15px; text-align: center;">Lỗi tải dữ liệu!</div>`;
-            return;
-          }
+      if (results.length === 0) {
+        searchDropdown.innerHTML = `<div style="color: #aaa; padding: 15px; text-align: center;">Không tìm thấy bài hát hoặc album: "${keyword}"</div>`;
+        return;
+      }
+
+      // HIỂN THỊ KẾT QUẢ THEO TYPE (SONG VÀ ALBUM)
+      let htmlContent = "";
+      results.forEach((item) => {
+        let imgPath = "../img/default-song.jpg"; 
+        let path = item.image_path || item.cover_image; 
+        
+        if (path) {
+          imgPath = path.includes("/") ? path : "../img/" + path;
         }
 
-        // 3. Đưa dữ liệu vào phễu lọc
-        const results = MusicSearchEngine.process(cachedSongs, {
-          keyword: keyword,
-          sortBy: "hot",
-          limit: 8, // Dropdown thì chỉ nên hiện khoảng 8 bài thôi cho gọn
-        });
-
-        // 4. In kết quả vào hộp dropdown
-        if (results.length === 0) {
-          searchDropdown.innerHTML = `<div style="color: #aaa; padding: 15px; text-align: center;">Không tìm thấy bài hát hoặc nghệ sĩ: "${keyword}"</div>`;
-          return;
-        }
-
-        // Tạo HTML danh sách bài hát rút gọn
-        let htmlContent = "";
-        results.forEach((song) => {
-          // Xử lý đường dẫn ảnh cho chuẩn với thư mục của bạn
-          let imgPath = "../img/default-song.jpg"; // Ảnh mặc định
-          if (song.image_path) {
-            // Nếu trong database đã có chữ "img/" hoặc "http" rồi thì giữ nguyên
-            // Nếu chỉ lưu tên file (vd: bai1.jpg) thì tự động nối thêm "../img/"
-            imgPath = song.image_path.includes("/")
-              ? song.image_path
-              : "../img/" + song.image_path;
-          }
-
+        if (item.type === 'song') {
           htmlContent += `
-            <div class="dropdown-item" onclick="triggerSearchPlay(${song.id})">
-              <img src="${imgPath}" alt="${song.title}">
+            <div class="dropdown-item" onclick="triggerSearchPlay('${item.id}')">
+              <img src="${imgPath}" alt="${item.title}">
               <div class="dropdown-info">
-                <h4>${song.title}</h4>
-                <p>${song.artist_name} • ${song.listens || 0} lượt nghe</p>
+                <h4>${item.title}</h4>
+                <p>Bài hát • ${item.artist_name} • ${item.listens || 0} lượt nghe</p>
               </div>
             </div>
           `;
-        });
-
-        searchDropdown.innerHTML = htmlContent;
+        } else if (item.type === 'album') {
+          // Thêm sự kiện click riêng cho Album
+          htmlContent += `
+            <div class="dropdown-item" onclick="triggerSearchAlbum(${item.id}, '${item.title.replace(/'/g, "\\'")}', '${item.artist_name.replace(/'/g, "\\'")}', '${item.release_year}', '${item.cover_image}')">
+              <img src="${imgPath}" alt="${item.title}">
+              <div class="dropdown-info">
+                <h4>${item.title}</h4>
+                <p>Album • ${item.artist_name} • ${item.release_year}</p>
+              </div>
+            </div>
+          `;
+        }
       });
-    } else {
-      console.error("Không tìm thấy MusicSearchEngine.");
-    }
+
+      searchDropdown.innerHTML = htmlContent;
+    });
+  } else {
+    setTimeout(initSearchWhenReady, 50);
+  }
+}
+initSearchWhenReady();
     // =========================================================
     // HÀM XỬ LÝ KHI CLICK VÀO BÀI HÁT TRÊN THANH TÌM KIẾM
     // =========================================================
     window.triggerSearchPlay = function (songId) {
-      // 1. Tìm vị trí (index) của bài hát trong mảng cachedSongs
-      const songIndex = cachedSongs.findIndex((s) => s.id == songId);
-      if (songIndex === -1) return; // Không tìm thấy thì thoát
+      // Kiểm tra xem dữ liệu tìm kiếm đã được tải chưa
+      if (!cachedSearchData) return;
 
-      const song = cachedSongs[songIndex];
+      // Lọc ra danh sách chỉ chứa BÀI HÁT 
+      const onlySongs = cachedSearchData.filter(item => item.type === 'song');
 
-      // 2. Ẩn khung dropdown tìm kiếm đi
+      // Tìm vị trí của bài hát được click trong mảng onlySongs
+      const songIndex = onlySongs.findIndex((s) => s.id == songId);
+      
+      if (songIndex === -1) {
+          console.error("Không tìm thấy bài hát trong danh sách!");
+          return;
+      }
+
+      const song = onlySongs[songIndex];
+
+      // Ẩn khung dropdown tìm kiếm đi
       const searchDropdown = document.getElementById("search-dropdown");
       if (searchDropdown) {
         searchDropdown.style.display = "none";
       }
-
-      // 3. Xóa chữ trong thanh search đi cho gọn gàng (Giống Spotify)
+      
+      // Xóa chữ trong thanh search đi cho gọn gàng 
       const searchInput = document.querySelector(".search-box input");
       if (searchInput) searchInput.value = "";
 
-      // 4. GỌI HÀM PHÁT NHẠC TỪ PLAYER.JS
-      // Sử dụng hàm playPlaylistQueue của bạn để phát nhạc và cập nhật luôn Queue
+      // Đẩy vào Player
       if (typeof window.playPlaylistQueue === "function") {
-        window.playPlaylistQueue(cachedSongs, songIndex);
+        window.playPlaylistQueue(onlySongs, songIndex);
         console.log("Đã phát bài và cập nhật Queue:", song.title);
       } else {
         console.error("Không tìm thấy hàm playPlaylistQueue trong player.js");
+      }
+    };
+    window.triggerSearchAlbum = function (albumId, title, artist, year, cover) {
+      // Ẩn dropdown và xóa chữ tìm kiếm
+      const searchDropdown = document.getElementById("search-dropdown");
+      if (searchDropdown) searchDropdown.style.display = "none";
+      const searchInput = document.querySelector(".search-box input");
+      if (searchInput) searchInput.value = "";
+
+      // Kiểm tra xem người dùng có đang ở trang Album không
+      if (window.location.pathname.includes("album.html") && typeof window.openAlbumModal === "function") {
+        // Nếu đang ở trang Album -> Mở luôn Modal chi tiết
+        window.openAlbumModal(albumId, title, artist, year, cover);
+      } else {
+        // Nếu đang ở trang khác (Home, Bài hát...) -> Chuyển hướng sang trang Album
+        const url = "album.html";
+        document.querySelectorAll("#sidebar a").forEach((a) => a.classList.remove("active"));
+        const albumLink = document.querySelector(`#sidebar a[href="${url}"]`);
+        if(albumLink) albumLink.classList.add("active");
+
+        window.history.pushState({}, "", url);
+        loadMainContentSPA(url);
       }
     };
   });
@@ -392,7 +427,6 @@ function initNotificationLogic() {
         }
       };
 
-      // USER mới polling
       if (role !== "admin") {
         setInterval(checkNotification, 5000);
       }

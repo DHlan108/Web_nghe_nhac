@@ -28,8 +28,6 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     
     // kiểm tra mật khẩu
-    // password_verify: Kiểm tra nếu pass là Bcrypt chuẩn
-    // $pass === $row['password']: Cho phép test bằng chữ thường (VD: 123456)
     if (password_verify($pass, $row['password']) || $pass === $row['password']) {
         
         //kiểm tra role

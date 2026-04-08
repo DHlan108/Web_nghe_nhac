@@ -1,10 +1,9 @@
 // =========================================================
-// HÀM KHỞI TẠO TRANG PROFILE (Router sẽ gọi hàm này)
+// HÀM KHỞI TẠO TRANG PROFILE 
 // =========================================================
 window.initProfilePage = function () {
   console.log("🚀 Đang khởi tạo trang Hồ Sơ...");
 
-  // Lấy các phần tử DOM bên trong hàm để luôn bắt được DOM mới nhất
   var avatar = document.getElementById("avatar");
   var editBtn = document.getElementById("edit-btn");
   var modal = document.getElementById("edit-modal");

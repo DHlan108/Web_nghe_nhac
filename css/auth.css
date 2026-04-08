@@ -96,7 +96,7 @@ body {
 /* REGISTER PAGE ONLY */
 
 .register-form {
-  gap: 6px;   /* giảm khoảng cách */
+  gap: 6px;  
 }
 
 .register-form input,

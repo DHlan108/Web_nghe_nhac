@@ -12,7 +12,7 @@
   cursor: grab;
 }
 .pro-container:active {
-  cursor: grabbing; /* Đổi con trỏ khi đang kéo */
+  cursor: grabbing; 
 }
 /* Ẩn thanh cuộn cho Chrome/Safari */
 .pro-container::-webkit-scrollbar {
@@ -30,7 +30,6 @@
   flex: 0 0 180px;
   width: 180px;
   min-width: 180px;
-  /* Dùng màu xám đen trong suốt để màu gradient của trang lọt qua */
   background: var(--border-light);
   padding: 16px;
   border-radius: 8px;
@@ -44,7 +43,7 @@
 }
 
 .album-card:hover {
-  background: rgba(255, 255, 255, 0.1); /* Sáng lên một chút khi hover */
+  background: rgba(255, 255, 255, 0.1); 
 }
 
 /* Phần chứa ảnh */
@@ -55,6 +54,7 @@
   margin-bottom: 16px;
   border-radius: 6px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
 }
 
 .album-img img {
@@ -62,6 +62,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: 6px;
+  display: block;
 }
 
 /* Nút Play */
@@ -84,7 +85,6 @@
   z-index: 2;
 }
 
-/* Thêm hiệu ứng phát sáng khi hover trực tiếp vào nút Play */
 .album-play:hover {
   transform: scale(1.05);
   box-shadow: 0 0 15px var(--hover-glow);
@@ -115,7 +115,7 @@
   margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Cắt ngang tiêu đề 1 dòng */
+  text-overflow: ellipsis;
 }
 
 .album-info .description {
@@ -133,7 +133,7 @@
   white-space: normal;
 }
 .album-wrapper, .artist-wrapper {
-  position: relative; /* Để định vị nút cuộn absolute theo khung này */
+  position: relative; 
   display: flex;
   align-items: center;
   width: 100%;
@@ -177,7 +177,7 @@
 }
 /* --- MODAL ALBUM DETAIL --- */
 .album-modal-overlay {
-    display: none; /* Ẩn mặc định */
+    display: none; 
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.8);
@@ -420,7 +420,7 @@
 }
 
 .admin-modal-content {
-    background: #181818; /* Màu tối chuẩn Spotify */
+    background: #181818; 
     width: 100%;
     max-width: 450px;
     padding: 30px;
@@ -455,12 +455,12 @@
 .input-wrapper i {
     position: absolute;
     left: 15px;
-    color: #1db954; /* Màu xanh lá làm điểm nhấn */
+    color: #1db954;
 }
 
 .input-wrapper input {
     width: 100%;
-    padding: 12px 12px 12px 45px; /* Chừa khoảng trống bên trái cho icon */
+    padding: 12px 12px 12px 45px; 
     background: #282828;
     border: 1px solid transparent;
     border-radius: 8px;
@@ -524,7 +524,7 @@
     font-weight: bold;
     font-size: 15px; 
     cursor: pointer;
-    z-index: 1000;
+    z-index: 100;
     transition: 0.3s ease;
     min-width: 150px;
 }

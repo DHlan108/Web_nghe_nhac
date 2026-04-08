@@ -5,13 +5,10 @@ session_destroy();
 
 echo json_encode(["success" => true]);
 
-
-
 session_unset();
 
 session_destroy();
 
 http_response_code(200);
 echo json_encode(["message" => "Đăng xuất thành công"]);
-
 ?>

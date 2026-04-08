@@ -2,7 +2,6 @@
 header('Content-Type: application/json; charset=utf-8');
 require_once 'db_connect.php';
 
-// Dùng JOIN để lấy tên ca sĩ từ bảng artists dựa vào artist_id
 $sql = "SELECT 
             songs.id,
             songs.title,

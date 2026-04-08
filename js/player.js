@@ -34,7 +34,6 @@ window.playSongDirectly = function (title, artist, src, img) {
   playerImg.src = img;
   audio.src = src;
 
-  // Sửa lỗi sai tên biến ở đây
   if (vBar) {
     audio.volume = vBar.value / 100;
   }
@@ -132,7 +131,7 @@ function initAudioPlayer() {
     }
   };
 
-  // QUAN TRỌNG: XỬ LÝ ÂM LƯỢNG KHI TRƯỢT
+  // XỬ LÝ ÂM LƯỢNG KHI TRƯỢT
   if (volumeBar) {
     volumeBar.oninput = function () {
       audio.volume = this.value / 100;
