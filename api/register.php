@@ -11,7 +11,7 @@ if (empty($user) || empty($email) || empty($pass)) {
     exit;
 }
 
-// Kiểm tra xem username hoặc email đã bị người khác đăng ký chưa
+// Kiểm tra 
 $check_sql = "SELECT id FROM users WHERE username = ? OR email = ?";
 $stmt_check = $conn->prepare($check_sql);
 $stmt_check->bind_param("ss", $user, $email);
@@ -28,7 +28,7 @@ $stmt_check->close();
 
 // Băm mật khẩu 
 $hashed_password = password_hash($pass, PASSWORD_BCRYPT);
-$role = 'user'; // Mặc định người mới đăng ký sẽ có quyền user
+$role = 'user'; 
 
 // Lưu vào Database
 $sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";

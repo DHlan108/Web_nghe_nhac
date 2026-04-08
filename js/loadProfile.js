@@ -2,7 +2,7 @@
 // HÀM KHỞI TẠO TRANG PROFILE 
 // =========================================================
 window.initProfilePage = function () {
-  console.log("🚀 Đang khởi tạo trang Hồ Sơ...");
+  console.log("Đang khởi tạo trang Hồ Sơ...");
 
   var avatar = document.getElementById("avatar");
   var editBtn = document.getElementById("edit-btn");
@@ -10,21 +10,21 @@ window.initProfilePage = function () {
   var cancelBtn = document.getElementById("cancel-btn");
   var saveBtn = document.getElementById("save-btn");
 
-  // Bật form
+  // Bật
   if (editBtn) {
     editBtn.onclick = () => {
       if (modal) modal.classList.remove("hidden");
     };
   }
 
-  // Tắt form
+  // Tắt
   if (cancelBtn) {
     cancelBtn.onclick = () => {
       if (modal) modal.classList.add("hidden");
     };
   }
 
-  // LOAD PROFILE TỪ API
+  // LOAD PROFILE
   fetch("../api/profile.php", {
     credentials: "include",
   })
@@ -37,16 +37,15 @@ window.initProfilePage = function () {
         var editUName = document.getElementById("edit-username");
         var editUEmail = document.getElementById("edit-email");
 
-        // Hiển thị ra ngoài
+        // Hiển thị
         if (uName) uName.innerText = data.user.username;
         if (uEmail) uEmail.innerText = data.user.email;
         if (uRole) uRole.innerText = data.user.role;
 
-        // Đổ dữ liệu vào form sửa
         if (editUName) editUName.value = data.user.username;
         if (editUEmail) editUEmail.value = data.user.email;
 
-        // Xử lý Avatar
+        //avatar
         if (avatar) {
           if (data.user.ava_user) {
             avatar.src = "../img/" + data.user.ava_user;
@@ -56,12 +55,12 @@ window.initProfilePage = function () {
         }
       } else {
         alert("Bạn chưa đăng nhập!");
-        window.location.href = "login.html"; // Chuyển hướng hoàn toàn ra trang ngoài
+        window.location.href = "login.html"; 
       }
     })
     .catch((err) => console.error("Lỗi fetch profile:", err));
 
-  // XỬ LÝ LƯU (SAVE)
+  // SAVE
   if (saveBtn) {
     saveBtn.onclick = () => {
       var avatarInput = document.getElementById("edit-avatar");
@@ -90,7 +89,6 @@ window.initProfilePage = function () {
           if (data.success) {
             alert("Cập nhật hồ sơ thành công!");
 
-            // Cập nhật lại UI ngay lập tức
             var uName = document.getElementById("username");
             var uEmail = document.getElementById("email");
             if (uName) uName.innerText = username;

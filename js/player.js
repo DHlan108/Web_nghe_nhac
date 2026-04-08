@@ -25,7 +25,7 @@ window.playSongDirectly = function (title, artist, src, img) {
   var playerTitle = document.getElementById("player-title");
   var playerArtist = document.getElementById("player-artist");
   var playerImg = document.getElementById("player-img");
-  var vBar = document.getElementById("volume-bar"); // Đã lấy đúng ID
+  var vBar = document.getElementById("volume-bar");
 
   if (!audio) return;
 
@@ -139,7 +139,7 @@ function initAudioPlayer() {
     };
   }
 
-  console.log("✅ Player đã sẵn sàng!");
+  console.log("Player đã sẵn sàng!");
 }
 
 initAudioPlayer();

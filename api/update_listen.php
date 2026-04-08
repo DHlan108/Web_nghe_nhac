@@ -2,7 +2,7 @@
 header('Content-Type: application/json; charset=utf-8');
 require_once 'db_connect.php';
 
-// Kiểm tra xem có nhận được ID bài hát từ JS gửi lên không
+// Kiểm tra ID bài hát 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = intval($_POST['id']);
 

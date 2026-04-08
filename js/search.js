@@ -19,10 +19,10 @@ var MusicSearchEngine = {
 
         // SẮP XẾP ĐA DẠNG (Sort)
         if (config.sortBy === 'hot') {
-            // Xếp theo lượt nghe (listens) hoặc lượt xem của Album
+            // Xếp theo lượt nghe
             result.sort((a, b) => (b.listens || b.views || 0) - (a.listens || a.views || 0));
         } else if (config.sortBy === 'new') {
-            // Xếp theo ngày phát hành hoặc năm
+            // Xếp theo ngày phát hành
             result.sort((a, b) => {
                 const dateA = a.release_date || a.release_year || 0;
                 const dateB = b.release_date || b.release_year || 0;
@@ -40,10 +40,9 @@ var MusicSearchEngine = {
     },
 
 
-    // 2. HÀM LẮNG NGHE THANH SEARCH TRÊN NAVBAR
-    // Hàm sẽ chạy khi người dùng gõ phím
+    // 2. HÀM THANH SEARCH TRÊN NAVBAR
     initGlobalSearch: function(callback) {
-        // Đợi navbar load xong (vì navbar dùng loadComponent)
+        
         const checkExist = setInterval(() => {
             const searchInput = document.querySelector(".search-box input");
             if (searchInput) {

@@ -4,7 +4,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once 'db_connect.php';
 
-// kiểm tra đã đăng nhập chưa
+// kiểm tra
 $user_id = $_SESSION['user_id'] ?? null;
 
 if (!$user_id) {

@@ -20,7 +20,7 @@ if (empty($title) || empty($artist_id)) {
     exit;
 }
 
-// Chuẩn bị câu lệnh SQL để tránh SQL Injection
+// Câu lệnh SQL tránh SQL Injection
 $sql = "INSERT INTO albums (title, artist_id, release_year, cover_image) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("siis", $title, $artist_id, $release_year, $cover_image);

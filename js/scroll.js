@@ -8,7 +8,7 @@ window.initHorizontalScroll = function (wrapperSelector) {
 
     if (!container) return;
 
-    // Đánh dấu đã init để tránh lặp cho SPA
+    
     container.dataset.scrollInit = "true";
 
     // --- LOGIC KIỂM TRA HIỆN NÚT ---

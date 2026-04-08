@@ -7,7 +7,6 @@ var globalSongs = [];
 window.scrollToSection = function (sectionId) {
   var element = document.getElementById(sectionId);
   if (element) {
-    // Cuộn mượt mà đến vị trí của thẻ có ID tương ứng
     element.scrollIntoView({ behavior: "smooth", block: "start" });
   } else {
     console.warn("Không tìm thấy khu vực nào có ID là: " + sectionId);
@@ -17,10 +16,10 @@ window.scrollToSection = function (sectionId) {
 // HÀM KHỞI TẠO TRANG 
 // =========================================================
 window.initSongPage = function () {
-  console.log("🚀 Đang khởi tạo trang Bài Hát...");
+  console.log("Đang khởi tạo trang Bài Hát...");
   var role = localStorage.getItem("role") || "user";
 
-  // Hiển thị nút Admin
+
   var adminTools = document.getElementById("admin-tools");
   if (role === "admin" && adminTools) {
     adminTools.innerHTML = `
@@ -29,7 +28,7 @@ window.initSongPage = function () {
         </button>`;
   }
 
-  // Fetch dữ liệu bài hát
+
   fetch("../api/get_song.php")
     .then((res) => {
       if (!res.ok) throw new Error("Sai đường dẫn API hoặc lỗi Server!");
@@ -37,9 +36,9 @@ window.initSongPage = function () {
     })
     .then((data) => {
       globalSongs = data;
-      refreshSongDisplay(globalSongs, role); // Truyền role vào để render
+      refreshSongDisplay(globalSongs, role);
 
-      // Kích hoạt tìm kiếm
+      // nút cuộn
       if (typeof window.MusicSearchEngine !== "undefined") {
         window.MusicSearchEngine.initGlobalSearch((keyword) => {
           var featuredSection = document.getElementById("featured-songs");
@@ -47,10 +46,8 @@ window.initSongPage = function () {
           var allList = document.getElementById("all-list");
 
           if (keyword.trim() !== "") {
-            // Tự động cuộn xuống
             if (typeof scrollToSection === "function")
               scrollToSection("all-songs");
-            // Ẩn các phần không liên quan
             if (featuredSection) featuredSection.style.display = "none";
             if (newSection) newSection.style.display = "none";
           } else {
@@ -58,7 +55,6 @@ window.initSongPage = function () {
             if (newSection) newSection.style.display = "block";
           }
 
-          // Lọc và render lại
           var filtered = window.MusicSearchEngine.process(globalSongs, {
             keyword: keyword,
           });
@@ -112,9 +108,8 @@ window.createSong = function (song, role) {
     `;
 };
 
-// Dùng ID để tìm dữ liệu và phát nhạc
+
 window.playSongFromList = function (id) {
-  // globalSongs đã được fetch ở đầu file
   var song = globalSongs.find((s) => s.id == id);
   if (song) {
     console.log("Đang phát nhạc:", song.title);
@@ -132,8 +127,7 @@ window.playSongFromList = function (id) {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "success") {
-          console.log(`✅ Đã cộng 1 lượt nghe cho bài: ${song.title}`);
-          // Tự động cập nhật số liệu trên RAM để nếu ấn filter/search nó không bị tuột lại số cũ
+          console.log(`Đã cộng 1 lượt nghe cho bài: ${song.title}`);
           song.listens = (parseInt(song.listens) || 0) + 1;
         }
       })
@@ -147,14 +141,14 @@ window.refreshSongDisplay = function (data, role) {
   var allsong = document.getElementById("all-list");
 
   if (!featured || !newsong || !allsong) {
-    console.warn("⏳ Giao diện chưa sẵn sàng, đang đợi 50ms...");
+    console.warn("Giao diện chưa sẵn sàng, đang đợi...");
     setTimeout(function () {
       window.refreshSongDisplay(data, role);
     }, 50);
     return;
   }
 
-  // SẮP XẾP BÀI HÁT NỔI BẬT (Theo listens giảm dần)
+  // SẮP XẾP BÀI HÁT NỔI BẬT (Theo lượt nghe giảm dần)
   var hotData = [...data]
     .sort(function (a, b) {
       var listenA = parseInt(a.listens) || 0;
@@ -163,7 +157,7 @@ window.refreshSongDisplay = function (data, role) {
     })
     .slice(0, 6);
 
-  // SẮP XẾP BÀI HÁT MỚI RA (Theo release_date mới nhất)
+  // SẮP XẾP BÀI HÁT MỚI RA (Theo ngày ra mắt mới nhất)
   var newData = [...data]
     .sort(function (a, b) {
       var dateA = new Date(a.release_date || 0).getTime();
@@ -172,7 +166,7 @@ window.refreshSongDisplay = function (data, role) {
     })
     .slice(0, 6);
 
-  // Render ra HTML
+  // Render
   featured.innerHTML = hotData.map((s) => createSong(s, role)).join("");
   newsong.innerHTML = newData.map((s) => createSong(s, role)).join("");
   allsong.innerHTML = data.map((s) => createSong(s, role)).join("");

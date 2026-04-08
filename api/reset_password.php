@@ -10,7 +10,7 @@ if (empty($email) || empty($new_pass)) {
     exit;
 }
 
-// Kiểm tra xem Email có tồn tại trong hệ thống không
+// Kiểm tra Email 
 $check_sql = "SELECT id FROM users WHERE email = ?";
 $stmt_check = $conn->prepare($check_sql);
 $stmt_check->bind_param("s", $email);

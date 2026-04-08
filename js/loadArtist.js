@@ -6,12 +6,11 @@ var currentEditArtistId = null;
 // HÀM KHỞI TẠO TRANG NGHỆ SĨ
 // =========================================================
 window.initArtistPage = function () {
-  console.log("🚀 Đang khởi tạo trang Nghệ Sĩ...");
+  console.log("Đang khởi tạo trang Nghệ Sĩ...");
 
   var userRole = localStorage.getItem("role") || "user";
   var container = document.getElementById("artist-container");
 
-  // đóng Modal Admin khi click ra ngoài 
   if (!window._artistClickBound) {
     window._artistClickBound = true;
     window.addEventListener("click", function (e) {
@@ -38,7 +37,7 @@ window.initArtistPage = function () {
         }
       });
 
-      // Tích hợp tìm kiếm
+      // tìm kiếm
       if (typeof window.MusicSearchEngine !== "undefined") {
         window.MusicSearchEngine.initGlobalSearch((keyword) => {
           var isTyping = keyword.trim() !== "";
@@ -267,10 +266,9 @@ window.loadArtistSongs = function (id, name) {
 };
 
 // =========================================================
-// HÀM PHÁT NHẠC CỦA NGHỆ SĨ
+// HÀM PHÁT NHẠC
 // =========================================================
 window.playArtistSong = function (songId, artistName) {
-  // Tìm vị trí bài hát trong danh sách bài hát của nghệ sĩ 
   if (!window.currentArtistSongs) return;
 
   var songIndex = window.currentArtistSongs.findIndex((s) => s.id == songId);
@@ -294,7 +292,7 @@ window.playArtistSong = function (songId, artistName) {
     );
   }
 
-  // Gọi API cộng 1 lượt nghe 
+  // cộng 1 lượt nghe 
   fetch("../api/update_listen.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },

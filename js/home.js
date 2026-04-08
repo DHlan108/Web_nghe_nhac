@@ -10,16 +10,16 @@ function triggerPageLogic(url) {
     }
   };
 
-  // Kiểm tra nếu script của trang đó đã tồn tại chưa
+  // Kiểm tra script
   const existingScript = document.querySelector(
     `script[src="${config.jsFile}"]`,
   );
 
   if (existingScript) {
-    // Nếu đã có script (đã từng load), chạy luôn init
+   
     runInit();
   } else {
-    // Nếu chưa có, tạo script mới và đợi load xong mới init
+    
     const script = document.createElement("script");
     script.src = config.jsFile;
     script.onload = runInit;

@@ -51,9 +51,8 @@ async function xulyDangky() {
     const user = document.getElementById("reg-username").value;
     const email = document.getElementById("reg-email").value;
     const pass = document.getElementById("reg-password").value;
-    const role = document.getElementById("reg-role").value;
     // Kiểm tra không được để trống
-    if (user === "" || email === "" || pass === ""|| role === "") {
+    if (user === "" || email === "" || pass === "") {
         alert("Vui lòng điền đầy đủ thông tin!");
         return;
     }
@@ -63,7 +62,7 @@ async function xulyDangky() {
     formData.append('username', user);
     formData.append('email', email);
     formData.append('password', pass);
-    formData.append('role', role);
+
     // Gửi sang file PHP
     try {
         const response = await fetch('../api/register.php', {

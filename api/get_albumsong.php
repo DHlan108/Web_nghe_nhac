@@ -17,7 +17,7 @@ if (!isset($_GET['album_id']) || empty($_GET['album_id'])) {
 
 $album_id = intval($_GET['album_id']);
 
-// Truy vấn lấy các bài hát thuộc album này
+// Truy vấn lấy các bài hát thuộc album
 $sql = "SELECT id, title, file_path, duration, listens FROM songs WHERE album_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $album_id);

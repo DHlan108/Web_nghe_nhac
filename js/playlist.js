@@ -8,26 +8,26 @@ var currentPlaylistId = null;
 // 1. HÀM KHỞI TẠO TRANG PLAYLIST
 // =========================================================
 window.initPlaylistPage = function () {
-  console.log("🚀 Đang khởi tạo trang Danh sách phát...");
-// html xong mới đến js
+  console.log("Đang khởi tạo trang Danh sách phát...");
+
   setTimeout(() => {
     const role = localStorage.getItem("role") || "user";
 
-    // --- LẤY CÁC PHẦN TỬ DOM ---
+    // DOM
     const addPlaylistBtn = document.getElementById("add-playlist-btn");
     const savePlaylistBtn = document.getElementById("save-playlist-btn");
     const closePlaylistBtn = document.getElementById("close-playlist-modal");
     const addSongBtn = document.getElementById("add-song-btn");
     const closeSongModalBtn = document.getElementById("close-song-modal");
 
-    // --- PHÂN QUYỀN VÀ XỬ LÝ NÚT TẠO MỚI ---
+    //PHÂN QUYỀN
+
     if (addPlaylistBtn) {
       addPlaylistBtn.style.display = role === "user" ? "flex" : "none";
 
       addPlaylistBtn.onclick = () => {
         editPlaylistId = null;
 
-        // Lấy lại phần tử mỗi khi click để đảm bảo không bị mất reference trong SPA
         const modalTitle = document.getElementById("playlist-modal-title");
         const nameInput = document.getElementById("playlist-name");
         const modal = document.getElementById("playlist-modal");
@@ -36,7 +36,7 @@ window.initPlaylistPage = function () {
           modalTitle.innerText = "Tạo mới danh sách";
         } else {
           console.error(
-            "Lỗi: Không tìm thấy ID 'playlist-modal-title' lúc nhấn nút",
+            "Lỗi: Không tìm thấy ID lúc nhấn nút",
           );
         }
 
@@ -45,7 +45,7 @@ window.initPlaylistPage = function () {
       };
     }
 
-    // Đóng Playlist Modal
+  
     if (closePlaylistBtn) {
       closePlaylistBtn.onclick = () => {
         const modal = document.getElementById("playlist-modal");
@@ -53,13 +53,13 @@ window.initPlaylistPage = function () {
       };
     }
 
-    // Lưu Playlist
+    // Lưu
     if (savePlaylistBtn) savePlaylistBtn.onclick = window.submitPlaylist;
 
-    // Mở Modal thêm bài hát
+    // thêm bài hát
     if (addSongBtn) addSongBtn.onclick = window.openSongModal;
 
-    // Đóng Modal bài hát
+    // đóng
     if (closeSongModalBtn) {
       closeSongModalBtn.onclick = () => {
         const songModal = document.getElementById("song-modal");
@@ -71,7 +71,7 @@ window.initPlaylistPage = function () {
 };
 
 // =========================================================
-// 2. LOGIC XỬ LÝ PLAYLIST
+// XỬ LÝ PLAYLIST
 // =========================================================
 
 window.loadPlaylists = function () {
@@ -184,19 +184,16 @@ window.deletePlaylist = function (id) {
       if (data.success) {
         alert("Đã xóa playlist thành công!");
 
-        // Tải lại danh sách bên trái
         window.loadPlaylists();
 
-        // Nếu playlist đang xóa chính là cái đang mở bên phải
         if (currentPlaylistId == id) {
-          currentPlaylistId = null; // Reset ID hiện tại
+          currentPlaylistId = null; 
 
           const view = document.getElementById("playlist-view");
           if (view) {
-            view.classList.add("hidden"); // Ẩn khung bên phải đi
+            view.classList.add("hidden"); 
           }
 
-          // Xóa trắng tiêu đề và danh sách bài hát cũ
           const title = document.getElementById("playlist-title");
           const songList = document.getElementById("song-list");
           if (title) title.innerText = "";
@@ -210,7 +207,7 @@ window.deletePlaylist = function (id) {
 };
 
 // =========================================================
-// 3. LOGIC XỬ LÝ BÀI HÁT
+// XỬ LÝ BÀI HÁT
 // =========================================================
 
 window.loadSongsInPlaylist = function (playlistId) {
@@ -246,7 +243,6 @@ window.loadSongsInPlaylist = function (playlistId) {
                 `;
         div.querySelector(".play-overlay").onclick = () => {
           if (window.playPlaylistQueue) {
-            // Truyền toàn bộ mảng bài hát và vị trí bài vừa click
             window.playPlaylistQueue(songs, index);
           } else if (window.playSongDirectly) {
             console.warn("Chưa có hàm playPlaylistQueue, đang phát bài lẻ.");

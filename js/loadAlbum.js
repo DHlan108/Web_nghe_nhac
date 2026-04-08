@@ -6,7 +6,7 @@ var currentEditAlbumId = null;
 // 1. HÀM KHỞI TẠO TRANG ALBUM
 // =========================================================
 window.initAlbumPage = function () {
-  console.log("🚀 Đang khởi tạo trang Album...");
+  console.log("Đang khởi tạo trang Album...");
   var role = localStorage.getItem("role") || "user";
 
   if (!window._albumEventsBound) {
@@ -15,11 +15,10 @@ window.initAlbumPage = function () {
       var modal = document.getElementById("album-modal");
       var adminModal = document.getElementById("album-admin-modal");
 
-      // 1. Nếu click ra vùng tối bên ngoài -> Đóng modal
       if (e.target === modal) window.closeAlbumModal();
       if (e.target === adminModal) window.closeAlbumModalAdmin();
 
-      // 2. Nếu click vào dấu X -> Đóng modal
+
     if (e.target.closest(".close-album-modal") || e.target.closest(".close-modal")) {
       window.closeAlbumModal();
       window.closeAlbumModalAdmin();
@@ -137,7 +136,7 @@ window.openAlbumModal = function (albumId, title, artist, year, cover) {
     .then((res) => res.json())
     .then((data) => {
       if (data.status === "success") {
-        console.log(`✅ Đã cộng 1 lượt xem cho Album: ${title}`);
+        console.log(`Đã cộng 1 lượt xem cho Album: ${title}`);
         // Cập nhật số liệu trên RAM để cỗ máy Search/Sort không bị sai lệch
         var alb = globalAlbums.find((a) => a.id == albumId);
         if (alb) alb.listens = (parseInt(alb.listens) || 0) + 1;

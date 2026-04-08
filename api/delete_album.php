@@ -9,7 +9,6 @@ if (empty($id)) {
     exit;
 }
 
-// Xóa bài hát trước, xóa album sau để tránh lỗi khóa ngoại
 $conn->query("DELETE FROM songs WHERE album_id = $id");
 $sql = "DELETE FROM albums WHERE id = $id";
 

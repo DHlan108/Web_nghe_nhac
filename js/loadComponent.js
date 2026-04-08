@@ -39,7 +39,7 @@ function triggerPageLogic(url) {
   }
 }
 // =========================================================
-// HÀM LOAD NỘI DUNG SPA (KHÔNG RELOAD TRANG)
+// HÀM LOAD NỘI DUNG SPA
 // =========================================================
 function loadMainContentSPA(url) {
   fetch(url)
@@ -67,11 +67,11 @@ function loadMainContentSPA(url) {
           link.href = href;
           const p = new Promise((resolve) => {
             link.onload = () => {
-              console.log(`✅ Loaded CSS: ${href}`);
+              console.log(`Loaded CSS: ${href}`);
               resolve();
             };
             link.onerror = () => {
-              console.error(`❌ Failed to load CSS: ${href}`);
+              console.error(`Failed to load CSS: ${href}`);
               resolve(); 
             };
           });
@@ -80,13 +80,12 @@ function loadMainContentSPA(url) {
         }
       });
 
-      // ĐỢI TẤT CẢ FILE CSS MỚI TẢI XONG HOÀN TOÀN
       if (stylePromises.length > 0) {
         await Promise.all(stylePromises);
       }
 
       requestAnimationFrame(() => {
-        console.log("🚀 CSS ready, triggering Page Logic...");
+        console.log("CSS ready, triggering Page Logic...");
         triggerPageLogic(url);
       });
     })
@@ -169,7 +168,7 @@ function initSearchWhenReady() {
           // Gắn thêm nhãn type = 'album'
           const mappedAlbums = (albumData.albums || []).map(a => ({ ...a, type: 'album' }));
 
-          // Gộp chung cả 2 mảng lại
+          // Gộp
           cachedSearchData = [...mappedSongs, ...mappedAlbums];
         } catch (error) {
           console.error("Lỗi khi tải dữ liệu tìm kiếm:", error);
@@ -178,7 +177,7 @@ function initSearchWhenReady() {
         }
       }
 
-      // XỬ LÝ TÌM KIẾM DỰA TRÊN TỪ KHÓA
+      // TÌM KIẾM DỰA TRÊN TỪ KHÓA
       const results = MusicSearchEngine.process(cachedSearchData, {
         keyword: keyword,
         sortBy: "hot",
@@ -190,7 +189,7 @@ function initSearchWhenReady() {
         return;
       }
 
-      // HIỂN THỊ KẾT QUẢ THEO TYPE (SONG VÀ ALBUM)
+      // HIỂN THỊ KẾT QUẢ THEO SONG VÀ ALBUM
       let htmlContent = "";
       results.forEach((item) => {
         let imgPath = "../img/default-song.jpg"; 
@@ -211,7 +210,7 @@ function initSearchWhenReady() {
             </div>
           `;
         } else if (item.type === 'album') {
-          // Thêm sự kiện click riêng cho Album
+
           htmlContent += `
             <div class="dropdown-item" onclick="triggerSearchAlbum(${item.id}, '${item.title.replace(/'/g, "\\'")}', '${item.artist_name.replace(/'/g, "\\'")}', '${item.release_year}', '${item.cover_image}')">
               <img src="${imgPath}" alt="${item.title}">
@@ -235,13 +234,10 @@ initSearchWhenReady();
     // HÀM XỬ LÝ KHI CLICK VÀO BÀI HÁT TRÊN THANH TÌM KIẾM
     // =========================================================
     window.triggerSearchPlay = function (songId) {
-      // Kiểm tra xem dữ liệu tìm kiếm đã được tải chưa
       if (!cachedSearchData) return;
 
-      // Lọc ra danh sách chỉ chứa BÀI HÁT 
       const onlySongs = cachedSearchData.filter(item => item.type === 'song');
 
-      // Tìm vị trí của bài hát được click trong mảng onlySongs
       const songIndex = onlySongs.findIndex((s) => s.id == songId);
       
       if (songIndex === -1) {
@@ -251,17 +247,14 @@ initSearchWhenReady();
 
       const song = onlySongs[songIndex];
 
-      // Ẩn khung dropdown tìm kiếm đi
       const searchDropdown = document.getElementById("search-dropdown");
       if (searchDropdown) {
         searchDropdown.style.display = "none";
       }
       
-      // Xóa chữ trong thanh search đi cho gọn gàng 
       const searchInput = document.querySelector(".search-box input");
       if (searchInput) searchInput.value = "";
 
-      // Đẩy vào Player
       if (typeof window.playPlaylistQueue === "function") {
         window.playPlaylistQueue(onlySongs, songIndex);
         console.log("Đã phát bài và cập nhật Queue:", song.title);
@@ -270,18 +263,15 @@ initSearchWhenReady();
       }
     };
     window.triggerSearchAlbum = function (albumId, title, artist, year, cover) {
-      // Ẩn dropdown và xóa chữ tìm kiếm
+
       const searchDropdown = document.getElementById("search-dropdown");
       if (searchDropdown) searchDropdown.style.display = "none";
       const searchInput = document.querySelector(".search-box input");
       if (searchInput) searchInput.value = "";
 
-      // Kiểm tra xem người dùng có đang ở trang Album không
       if (window.location.pathname.includes("album.html") && typeof window.openAlbumModal === "function") {
-        // Nếu đang ở trang Album -> Mở luôn Modal chi tiết
         window.openAlbumModal(albumId, title, artist, year, cover);
       } else {
-        // Nếu đang ở trang khác (Home, Bài hát...) -> Chuyển hướng sang trang Album
         const url = "album.html";
         document.querySelectorAll("#sidebar a").forEach((a) => a.classList.remove("active"));
         const albumLink = document.querySelector(`#sidebar a[href="${url}"]`);
